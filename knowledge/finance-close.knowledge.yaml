@@ -19,6 +19,7 @@ embedding: default
 classification:
   level: confidential
   categories: ["Finance"]
+  auto: false
 access:
   roles: [finance-analysts]
 egress:

@@ -13,5 +13,6 @@ splitter:
 embedding: default
 classification:
   level: internal
+  auto: false
 search:
   defaultK: 5

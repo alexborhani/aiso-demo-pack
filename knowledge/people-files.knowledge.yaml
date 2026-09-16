@@ -19,6 +19,7 @@ embedding: default
 classification:
   level: confidential
   categories: ["HR"]
+  auto: false
 access:
   roles: [hr-partners]
 egress:

@@ -91,3 +91,6 @@ graph:
         target: Genre
         sourceIdColumn: track_id
         targetIdColumn: genre_id
+
+classification:
+  auto: false

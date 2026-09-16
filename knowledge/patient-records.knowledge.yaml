@@ -18,3 +18,6 @@ embedding: default
 
 search:
   defaultK: 5
+
+classification:
+  auto: false

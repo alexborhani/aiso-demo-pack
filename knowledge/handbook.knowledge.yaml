@@ -18,6 +18,7 @@ embedding: default
 
 classification:
   level: public
+  auto: false
 
 egress:
   allowFrontier: true

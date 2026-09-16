@@ -1,10 +1,10 @@
 {
   "id": "aiso-demo-pack",
   "name": "AI Stackops demo pack",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "publisher": "AI Stack Ops",
   "tier": "certified",
-  "description": "Meridian Works, a fictional company, for evaluating the whole platform as different people: six accounts with different tiers, roles and clearances, a classification policy, knowledge stores at every level, agents scoped to them, an all-hands store with notices at every level for the classification demo (enforcement starts off: switch to monitor, then enforce), an organisation with tickets and an agent CEO, routing objectives, a tool that needs approval, evals — plus the former sample agents, stores, functions, skills and workflows. Nothing in it is real.",
+  "description": "Meridian Works, a fictional company, for evaluating the whole platform as different people: six accounts with different tiers, roles and clearances, a classification policy, knowledge stores at every level, agents scoped to them, an all-hands store with notices at every level for the classification demo (enforcement starts off: switch to monitor, then enforce), an unlabelled site-notes store for the classifier, an organisation with tickets and an agent CEO, routing objectives, a tool that needs approval, evals — plus the former sample agents, stores, functions, skills and workflows. Nothing in it is real.",
   "readOnly": false,
   "resources": {
     "agents": [
@@ -47,7 +47,8 @@
       "knowledge/scratchpad.knowledge.yaml",
       "knowledge/security-incidents.knowledge.yaml",
       "knowledge/transcripts.knowledge.yaml",
-      "knowledge/web-docs.knowledge.yaml"
+      "knowledge/web-docs.knowledge.yaml",
+      "knowledge/site-notes.knowledge.yaml"
     ],
     "bundles": [
       "data/all-hands",
@@ -62,7 +63,8 @@
       "data/pet-store",
       "data/scratchpad",
       "data/security-incidents",
-      "data/transcripts"
+      "data/transcripts",
+      "data/site-notes"
     ],
     "workflows": [
       "workflows/customer-notice.workflow.yaml",
@@ -230,6 +232,6 @@
     "alg": "ed25519",
     "keyId": "a4470c96bdcc103c",
     "publicKey": "q2F/I5FwWGRdIG/Jhwgl6eGo1WMy0DKS0U05m0ROSIA=",
-    "signature": "F0Baa+b7ik1I87FkxlAU+F28HVanpTUtThMVVUftFg0EpYYCMZKPemRgyjz/96fF+LAQV2S9uxMdb/qLwxJ5DQ=="
+    "signature": "1Y5A1IVSZiUQhPLXLmqeFsLNSkF1WffOMxRfDHrLsYDllly3FUA+agk094tGR9bIUi8TUD0sJ4tf6emV8/6SAA=="
   }
 }

@@ -79,3 +79,6 @@ graph:
         target: Breed
         sourceIdColumn: pet_id
         targetIdColumn: breed_id
+
+classification:
+  auto: false

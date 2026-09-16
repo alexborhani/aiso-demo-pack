@@ -19,6 +19,7 @@ embedding: default
 classification:
   level: restricted
   categories: ["Security"]
+  auto: false
 access:
   minRole: admin
 egress:

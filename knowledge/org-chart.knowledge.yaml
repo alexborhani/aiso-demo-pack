@@ -51,3 +51,6 @@ graph:
         target: Employee
         sourceIdColumn: employee_id
         targetIdColumn: manager_id
+
+classification:
+  auto: false

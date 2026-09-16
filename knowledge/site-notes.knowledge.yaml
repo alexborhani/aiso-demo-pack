@@ -1,0 +1,30 @@
+name: site-notes
+description: "Riverside service centre site notes — a shared folder as staff wrote it, nothing labelled: the classifier demo store"
+
+source:
+  type: directory
+  path: bundles/aiso-demo-pack/site-notes
+  pattern: "*.md"
+
+loader:
+  type: okf
+
+splitter:
+  type: recursive
+  chunkSize: 700
+  chunkOverlap: 80
+
+embedding: default
+
+# No document carries a label. Until the classifier (or a person on the Sources panel) decides,
+# every note reads at the store default below. `auto: true` puts new documents in front of the
+# background classifier once a classifier model is set in the taxonomy.
+classification:
+  level: internal
+  auto: true
+
+egress:
+  allowFrontier: false
+
+search:
+  defaultK: 5
