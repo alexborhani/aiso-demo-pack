@@ -2,6 +2,9 @@
 levels: [public, internal, confidential, restricted]
 categories: [HR, Finance, Legal, Security]
 default: internal
+# Read-time enforcement: off | monitor | enforce. The demo ships OFF so the policy can be watched
+# doing nothing, then switched to monitor (refusals recorded) and enforce (refusals applied).
+enforcement: off
 tierClearance:
   member: public
   builder: internal

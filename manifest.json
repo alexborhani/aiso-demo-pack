@@ -1,13 +1,14 @@
 {
   "id": "aiso-demo-pack",
   "name": "AI Stackops demo pack",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "publisher": "AI Stack Ops",
   "tier": "certified",
-  "description": "Meridian Works, a fictional company, for evaluating the whole platform as different people: six accounts with different tiers, roles and clearances, a classification policy, knowledge stores at every level, agents scoped to them, an organisation with tickets and an agent CEO, routing objectives, a tool that needs approval, evals — plus the former sample agents, stores, functions, skills and workflows. Nothing in it is real.",
+  "description": "Meridian Works, a fictional company, for evaluating the whole platform as different people: six accounts with different tiers, roles and clearances, a classification policy, knowledge stores at every level, agents scoped to them, an all-hands store with notices at every level for the classification demo (enforcement starts off: switch to monitor, then enforce), an organisation with tickets and an agent CEO, routing objectives, a tool that needs approval, evals — plus the former sample agents, stores, functions, skills and workflows. Nothing in it is real.",
   "readOnly": false,
   "resources": {
     "agents": [
+      "agents/announcements.agent.yaml",
       "agents/actor.agent.yaml",
       "agents/architect.agent.yaml",
       "agents/canvas.agent.yaml",
@@ -33,6 +34,7 @@
       "agents/writer.agent.yaml"
     ],
     "knowledge": [
+      "knowledge/all-hands.knowledge.yaml",
       "knowledge/finance-close.knowledge.yaml",
       "knowledge/handbook.knowledge.yaml",
       "knowledge/it-runbooks.knowledge.yaml",
@@ -48,6 +50,7 @@
       "knowledge/web-docs.knowledge.yaml"
     ],
     "bundles": [
+      "data/all-hands",
       "data/finance-close",
       "data/handbook",
       "data/it-runbooks",
@@ -227,6 +230,6 @@
     "alg": "ed25519",
     "keyId": "a4470c96bdcc103c",
     "publicKey": "q2F/I5FwWGRdIG/Jhwgl6eGo1WMy0DKS0U05m0ROSIA=",
-    "signature": "a2mQ2bCoUD4evmVddwhSbJWAvoz9YfsDV++K8x0jxgwsSiat2XPxP1SZq97PFQDrqWfKYinhyOmLTZBd6e8rDg=="
+    "signature": "F0Baa+b7ik1I87FkxlAU+F28HVanpTUtThMVVUftFg0EpYYCMZKPemRgyjz/96fF+LAQV2S9uxMdb/qLwxJ5DQ=="
   }
 }

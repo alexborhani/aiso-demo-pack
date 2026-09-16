@@ -28,6 +28,16 @@ Packs tab → Install → source `https://github.com/alexborhani/aiso-demo-pack`
 
 Then sign out and back in as each person to see what changes. The Setup checklist notes the demo accounts until the pack is uninstalled.
 
+## Classification demo: off → monitor → enforce
+
+The pack ships with the classification policy adopted but **enforcement off**, so the same questions can be asked three times and the answers compared. The store for it is `all-hands`: eight notices in one public store, each labelled in its own frontmatter — two public, two internal, two confidential (one HR, one Finance) and two restricted (Security, Legal). The `announcements` agent reads it and everyone may use it. Jordan, the contractor, clears public only.
+
+1. **Off.** As **Dana**, open Admin → Policy → Classification: the Enforcement panel shows *Off* in red, the Setup checklist warns, and *Check now* under Compliance lists it as the first finding. Sign in as **Jordan** and ask the announcements agent its sample questions. Every answer comes back: the town hall, the Riverside restructuring memo with the severance terms, the Q3 figures, the plant USB incident, the regulator inquiry. Nothing is recorded.
+2. **Monitor.** As Dana, set *Monitor*. As Jordan, ask the same questions: the answers are the same. Back as Dana, refresh the panel — it now counts the reads the policy would have refused — and open Admin → Audit filtered by action `classification.monitor`: one row per search naming Jordan, the store, the levels involved and why each would have been refused. Nothing was withheld yet.
+3. **Enforce.** As Dana, set *Enforce*. As Jordan, ask again: only the town hall and the open day come back; the memo, the results, the incident and the inquiry are "not announced". As **Marcus** (HR partner, confidential within HR) the restructuring memo is readable but the Q3 figures are not; as **Lena** (finance analyst) it is the reverse; as Dana everything is.
+
+The switch changes only the clearance and model-ceiling checks. The role-locked stores (people files, finance close, legal, security) stay locked in every mode, because their access blocks are RBAC, not classification.
+
 ## Uninstall
 
 Removes everything it created: the accounts and everything they did, the roles and key, the organisation, the stores and their indexed data, the files, the fragments, and restores the previous taxonomy. Audit rows stay.
@@ -35,7 +45,7 @@ Removes everything it created: the accounts and everything they did, the roles a
 ## Evaluation walk-through
 
 1. As **Jordan** (contractor): ask the helpdesk about leave; then try the people-partner agent — it is not listed, and a knowledge search of `people-files` is refused with `knowledge_access_denied`.
-2. As **Marcus**: ask the people-partner for the senior engineer band. As **Lena**: ask the finance-analyst for Q2 revenue.
+2. Run the classification demo below, then as **Marcus**: ask the people-partner for the senior engineer band. As **Lena**: ask the finance-analyst for Q2 revenue.
 3. As **Dana**: ask the security-lead to revoke the contractor from INC-2026-021 — an approval card appears; approve it under Approvals.
 4. As **Dana**: Admin → Policy → Classification shows the adopted policy and a compliance check; Admin → Usage shows each person's calls.
 5. Run the `customer-notice` workflow, open Organisations → Meridian Works, and `ai-stackops eval helpdesk`.

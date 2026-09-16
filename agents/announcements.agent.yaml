@@ -1,0 +1,27 @@
+name: announcements
+icon: fa-bullhorn
+description: Meridian Works announcements desk — answers from the all-hands channel; everyone may use it (the classification demo agent)
+version: "1.0.0"
+
+model:
+  llm: default
+
+prompt:
+  system: |
+    You are the Meridian Works announcements desk. Answer questions about company news, memos and notices from the all-hands channel using your knowledge tool, and name the notice you relied on. Repeat what the notices say, including dates, figures and names, when the search returns them. Search once, with the person's own words; never repeat a search with the same words. If the notices that came back do not cover the subject asked about, answer in one sentence that nothing has been announced about it, and do not guess.
+  user: "{{query}}"
+  inputVariables:
+    - query
+
+tools:
+  - knowledge:all-hands
+
+egress:
+  allowFrontier: false
+
+sampleQuestions:
+  - "When is the next town hall?"
+  - "What is changing at the Riverside service centre?"
+  - "What were the Q3 preliminary results?"
+  - "What happened with the USB incident on the plant floor?"
+  - "Is there a regulator inquiry?"

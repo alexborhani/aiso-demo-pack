@@ -1,0 +1,29 @@
+name: all-hands
+description: "Meridian Works all-hands channel: announcements, memos and notices at every level, each labelled in its own frontmatter — the classification demo store, open to everyone"
+
+source:
+  type: directory
+  path: bundles/aiso-demo-pack/all-hands
+  pattern: "*.md"
+
+loader:
+  type: okf
+
+splitter:
+  type: recursive
+  chunkSize: 700
+  chunkOverlap: 80
+
+embedding: default
+
+# The store itself is public; every document carries its own level and categories
+# (aistackops_classification in the frontmatter), so one store holds all four levels.
+classification:
+  level: public
+  auto: false
+
+egress:
+  allowFrontier: false
+
+search:
+  defaultK: 6
