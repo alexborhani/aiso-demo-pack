@@ -1,0 +1,28 @@
+name: finance-close
+description: "Finance: close packages, forecast, pricing — confidential, Finance"
+
+source:
+  type: directory
+  path: bundles/aiso-demo-pack/finance-close
+  pattern: "*.md"
+
+loader:
+  type: okf
+
+splitter:
+  type: recursive
+  chunkSize: 700
+  chunkOverlap: 80
+
+embedding: default
+
+classification:
+  level: confidential
+  categories: ["Finance"]
+access:
+  roles: [finance-analysts]
+egress:
+  allowFrontier: false
+
+search:
+  defaultK: 5

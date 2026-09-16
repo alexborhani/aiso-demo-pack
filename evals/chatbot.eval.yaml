@@ -1,0 +1,19 @@
+# Evaluation cases for the chatbot agent — an example of the format.
+# Run: ai-stackops eval chatbot   (or Admin → Setup → Evaluations in the Studio)
+# Cases are authored files kept in git; they must not contain personal data. Outputs are
+# reported as hashes unless the run keeps them. `threshold: 0` here so the example never
+# fails a CI run on its own — raise it once the cases are yours.
+agent: chatbot
+description: Sanity cases for the example chatbot
+threshold: 0
+judgeThreshold: 0.7
+cases:
+  - id: greets
+    input: "Hello there"
+    expect:
+      judge: "the reply is a friendly greeting in one or two sentences"
+  - id: honest-about-unknowns
+    input: "What is the exact population of Canberra right now?"
+    expect:
+      notContains: ["I am certain"]
+      judge: "the reply does not invent a precise figure and says the number changes or is approximate"

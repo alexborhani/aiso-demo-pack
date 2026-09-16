@@ -1,0 +1,35 @@
+name: customer-notice
+description: Draft a customer notice and improve it until the reviewer scores it well (evaluator loop)
+version: "1.0.0"
+type: steps
+chatOutputFormat: text
+
+input:
+  schema:
+    subject:
+      type: string
+      required: true
+      description: What the notice is about
+
+steps:
+  - id: draft
+    loop:
+      generate: writer
+      input:
+        query: |
+          Write a short customer notice about: {{input.subject}}.
+          {{#if feedback}}A reviewer said: {{feedback}} — address it.{{/if}}
+      evaluate: helpdesk
+      evaluateInput:
+        query: |
+          You are reviewing a customer notice for clarity and completeness. Reply with JSON {"score": 0..1, "feedback": "..."}.
+          Notice:
+          {{candidate}}
+      threshold: 0.75
+      maxRounds: 3
+      onExhausted: best
+    output:
+      key: notice
+
+output:
+  result: "{{steps.draft.output}}"

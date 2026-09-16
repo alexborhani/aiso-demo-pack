@@ -1,0 +1,33 @@
+# Meridian Works data classification (evaluation data — see policy.md)
+levels: [public, internal, confidential, restricted]
+categories: [HR, Finance, Legal, Security]
+default: internal
+tierClearance:
+  member: public
+  builder: internal
+  admin: restricted
+autoApplyConfidence: 0.8
+criteria:
+  levels:
+    public: Published or safe to publish — the handbook, product pages, press releases, anything a visitor could read.
+    internal: Day-to-day operating information for staff — runbooks, procedures, meeting notes, plans without figures.
+    confidential: Information whose disclosure would harm a person or the company — personnel files, compensation, financial results before release, customer contracts.
+    restricted: Information whose disclosure would cause serious harm or legal exposure — legal matters, security incidents, credentials, regulator correspondence.
+  categories:
+    HR: Anything about an identifiable employee — pay, reviews, health, grievances, immigration status.
+    Finance: Ledgers, forecasts, close packages, pricing, audit workpapers.
+    Legal: Matters, contracts under negotiation, counsel's advice, regulator correspondence.
+    Security: Incidents, vulnerabilities, credentials, access reviews, penetration test findings.
+handling:
+  confidential:
+    requireAccess: true
+    minTier: member
+    retentionDays: 2555
+  restricted:
+    requireAccess: true
+    minTier: admin
+    localOnly: true
+    retentionDays: 3650
+mappings:
+  purview: {}
+  purviewTrust: floor

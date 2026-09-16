@@ -1,0 +1,7 @@
+# Merged into tools.yaml: the revoke_access function needs a person's approval before it runs.
+builtins:
+  revoke_access:
+    required: true
+    approvers: { minRole: admin }
+    separate: false
+    timeoutMinutes: 60

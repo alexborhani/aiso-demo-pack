@@ -1,0 +1,9 @@
+# Merged into routing.yaml (objectives only). Takes effect once routing is enabled with a workspace objective.
+objectives:
+  roles:
+    contractors: { mode: cost, maxTier: light }
+    finance-analysts: { mode: quality, maxTier: heavy, tasks: { reasoning: standard } }
+    hr-partners: { mode: cost, maxTier: standard }
+  agents:
+    counsel: { mode: quality, maxTier: heavy }
+    writer: { mode: cost, maxTier: standard }

@@ -1,0 +1,26 @@
+name: handbook
+description: Meridian Works employee handbook — public, everyone may read it
+
+source:
+  type: directory
+  path: bundles/aiso-demo-pack/handbook
+  pattern: "*.md"
+
+loader:
+  type: okf
+
+splitter:
+  type: recursive
+  chunkSize: 700
+  chunkOverlap: 80
+
+embedding: default
+
+classification:
+  level: public
+
+egress:
+  allowFrontier: true
+
+search:
+  defaultK: 5

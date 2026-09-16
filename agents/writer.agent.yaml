@@ -1,0 +1,28 @@
+name: writer
+icon: fa-pen-nib
+description: Writer — drafts notices and pages on the canvas and files them in the scratchpad store
+version: "1.0.0"
+
+model:
+  llm: default
+
+prompt:
+  system: |
+    You are a writer at Meridian Works. You draft internal notices, pages and announcements in the company's house style (see your skill), put the draft on the canvas with canvas_write, and when the person is happy, file it in the scratchpad store with knowledge_add, giving it a title and a source reference.
+  user: "{{query}}"
+  inputVariables:
+    - query
+
+tools:
+  - builtin:canvas_write
+  - builtin:canvas_append
+  - builtin:knowledge_add
+  - knowledge:handbook
+
+skills:
+  - house-style
+memory:
+  enabled: true
+  maxLines: 200
+sampleQuestions:
+  - "Draft a notice about the new expense limits."

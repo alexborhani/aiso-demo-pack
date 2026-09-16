@@ -1,0 +1,232 @@
+{
+  "id": "aiso-demo-pack",
+  "name": "AI Stackops demo pack",
+  "version": "1.0.0",
+  "publisher": "AI Stack Ops",
+  "tier": "certified",
+  "description": "Meridian Works, a fictional company, for evaluating the whole platform as different people: six accounts with different tiers, roles and clearances, a classification policy, knowledge stores at every level, agents scoped to them, an organisation with tickets and an agent CEO, routing objectives, a tool that needs approval, evals — plus the former sample agents, stores, functions, skills and workflows. Nothing in it is real.",
+  "readOnly": false,
+  "resources": {
+    "agents": [
+      "agents/actor.agent.yaml",
+      "agents/architect.agent.yaml",
+      "agents/canvas.agent.yaml",
+      "agents/corporate.agent.yaml",
+      "agents/counsel.agent.yaml",
+      "agents/finance-analyst.agent.yaml",
+      "agents/helpdesk.agent.yaml",
+      "agents/image-creator.agent.yaml",
+      "agents/investment-analyst.agent.yaml",
+      "agents/marketer.agent.yaml",
+      "agents/meridian-ceo.agent.yaml",
+      "agents/music-librarian.agent.yaml",
+      "agents/network-security.agent.yaml",
+      "agents/org-ceo.agent.yaml",
+      "agents/p2pvoice.agent.yaml",
+      "agents/people-partner.agent.yaml",
+      "agents/security-lead.agent.yaml",
+      "agents/simple-toolbox.agent.yaml",
+      "agents/video-creator.agent.yaml",
+      "agents/voice-clone.agent.yaml",
+      "agents/web-engineer.agent.yaml",
+      "agents/web-pilot.agent.yaml",
+      "agents/writer.agent.yaml"
+    ],
+    "knowledge": [
+      "knowledge/finance-close.knowledge.yaml",
+      "knowledge/handbook.knowledge.yaml",
+      "knowledge/it-runbooks.knowledge.yaml",
+      "knowledge/legal-matters.knowledge.yaml",
+      "knowledge/music-store.knowledge.yaml",
+      "knowledge/org-chart.knowledge.yaml",
+      "knowledge/patient-records.knowledge.yaml",
+      "knowledge/people-files.knowledge.yaml",
+      "knowledge/pet-store.knowledge.yaml",
+      "knowledge/scratchpad.knowledge.yaml",
+      "knowledge/security-incidents.knowledge.yaml",
+      "knowledge/transcripts.knowledge.yaml",
+      "knowledge/web-docs.knowledge.yaml"
+    ],
+    "bundles": [
+      "data/finance-close",
+      "data/handbook",
+      "data/it-runbooks",
+      "data/legal-matters",
+      "data/music-store",
+      "data/org-chart",
+      "data/pdf-patients",
+      "data/people-files",
+      "data/pet-store",
+      "data/scratchpad",
+      "data/security-incidents",
+      "data/transcripts"
+    ],
+    "workflows": [
+      "workflows/customer-notice.workflow.yaml",
+      "workflows/example.workflow.yaml",
+      "workflows/incident-brief.workflow.yaml",
+      "workflows/react-example.workflow.yaml",
+      "workflows/team-chat.workflow.yaml"
+    ],
+    "skills": [
+      "skills/house-style",
+      "skills/pii-guard",
+      "skills/sandbox",
+      "skills/web-pilot"
+    ],
+    "functions": [
+      "functions/calculator.function.mjs",
+      "functions/revoke-access.function.mjs",
+      "functions/text-formatter.function.mjs"
+    ],
+    "evals": [
+      "evals/chatbot.eval.yaml",
+      "evals/helpdesk.eval.yaml"
+    ],
+    "routing": "routing.fragment.yaml",
+    "tools": "tools.fragment.yaml",
+    "organization": "organization.yaml"
+  },
+  "seed": {
+    "roles": [
+      {
+        "name": "staff",
+        "description": "Meridian Works staff: internal information (the member tier itself clears public only, so contractors stay at public)",
+        "permissions": [],
+        "clearance": {
+          "level": "internal",
+          "categories": []
+        }
+      },
+      {
+        "name": "hr-partners",
+        "description": "People Operations partners: confidential HR files",
+        "permissions": [
+          "knowledge:search",
+          "agents:run"
+        ],
+        "clearance": {
+          "level": "confidential",
+          "categories": [
+            "HR"
+          ]
+        }
+      },
+      {
+        "name": "finance-analysts",
+        "description": "Finance analysts: confidential Finance files",
+        "permissions": [
+          "knowledge:search",
+          "agents:run",
+          "functions:run"
+        ],
+        "clearance": {
+          "level": "confidential",
+          "categories": [
+            "Finance"
+          ]
+        },
+        "limits": {
+          "tokensPerDay": 400000
+        }
+      },
+      {
+        "name": "contractors",
+        "description": "External contractors: public information only",
+        "permissions": [],
+        "clearance": {
+          "level": "public",
+          "categories": []
+        },
+        "limits": {
+          "requestsPerMinute": 10,
+          "tokensPerDay": 50000
+        }
+      }
+    ],
+    "users": [
+      {
+        "username": "dana",
+        "displayName": "Dana Okafor",
+        "email": "dana.okafor@meridianworks.example",
+        "tier": "admin"
+      },
+      {
+        "username": "sam",
+        "displayName": "Sam Reyes",
+        "email": "sam.reyes@meridianworks.example",
+        "tier": "builder"
+      },
+      {
+        "username": "priya",
+        "displayName": "Priya Nair",
+        "email": "priya.nair@meridianworks.example",
+        "tier": "member",
+        "roles": [
+          "staff"
+        ]
+      },
+      {
+        "username": "marcus",
+        "displayName": "Marcus Bell",
+        "email": "marcus.bell@meridianworks.example",
+        "tier": "member",
+        "roles": [
+          "staff",
+          "hr-partners"
+        ],
+        "groups": [
+          "people-ops"
+        ]
+      },
+      {
+        "username": "lena",
+        "displayName": "Lena Fischer",
+        "email": "lena.fischer@meridianworks.example",
+        "tier": "member",
+        "roles": [
+          "staff",
+          "finance-analysts"
+        ],
+        "groups": [
+          "finance"
+        ]
+      },
+      {
+        "username": "jordan",
+        "displayName": "Jordan Lee (contractor)",
+        "email": "jordan.lee@contractor.example",
+        "tier": "member",
+        "roles": [
+          "contractors"
+        ],
+        "groups": [
+          "contractors"
+        ]
+      }
+    ],
+    "apiKeys": [
+      {
+        "name": "meridian-scripted-client",
+        "tier": "member"
+      }
+    ],
+    "taxonomy": "classification.yaml",
+    "policy": "policy.md"
+  },
+  "permissions": [
+    "agents:run",
+    "knowledge:search",
+    "functions:run"
+  ],
+  "egress": {
+    "class": "none",
+    "hosts": []
+  },
+  "signature": {
+    "alg": "ed25519",
+    "keyId": "a4470c96bdcc103c",
+    "publicKey": "q2F/I5FwWGRdIG/Jhwgl6eGo1WMy0DKS0U05m0ROSIA=",
+    "signature": "a2mQ2bCoUD4evmVddwhSbJWAvoz9YfsDV++K8x0jxgwsSiat2XPxP1SZq97PFQDrqWfKYinhyOmLTZBd6e8rDg=="
+  }
+}

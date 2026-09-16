@@ -1,0 +1,28 @@
+name: legal-matters
+description: Legal matters and regulator correspondence — restricted, Legal
+
+source:
+  type: directory
+  path: bundles/aiso-demo-pack/legal-matters
+  pattern: "*.md"
+
+loader:
+  type: okf
+
+splitter:
+  type: recursive
+  chunkSize: 700
+  chunkOverlap: 80
+
+embedding: default
+
+classification:
+  level: restricted
+  categories: ["Legal"]
+access:
+  minRole: admin
+egress:
+  allowFrontier: false
+
+search:
+  defaultK: 5

@@ -1,0 +1,26 @@
+name: it-runbooks
+description: IT runbooks for the helpdesk and the network team — internal
+
+source:
+  type: directory
+  path: bundles/aiso-demo-pack/it-runbooks
+  pattern: "*.md"
+
+loader:
+  type: okf
+
+splitter:
+  type: recursive
+  chunkSize: 700
+  chunkOverlap: 80
+
+embedding: default
+
+classification:
+  level: internal
+
+egress:
+  allowFrontier: true
+
+search:
+  defaultK: 5

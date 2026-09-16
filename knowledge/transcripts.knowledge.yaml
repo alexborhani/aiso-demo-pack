@@ -1,0 +1,29 @@
+name: transcripts
+description: Call transcripts for employee performance and conversation analysis
+
+source:
+  type: directory
+  path: bundles/aiso-demo-pack/transcripts
+  pattern: "*.txt"
+  recursive: false
+
+loader:
+  type: text
+
+splitter:
+  type: character
+  chunkSize: 1000
+  chunkOverlap: 200
+
+embedding: default
+
+search:
+  defaultK: 6
+  scoreThreshold: 0.2
+
+metadata:
+  category: corporate
+  tags:
+    - transcripts
+    - calls
+    - performance

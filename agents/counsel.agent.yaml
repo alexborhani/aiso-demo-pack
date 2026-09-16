@@ -1,0 +1,24 @@
+name: counsel
+icon: fa-scale-balanced
+description: In-house counsel — legal matters and regulator correspondence; administrators only
+version: "1.0.0"
+
+model:
+  llm: default
+
+prompt:
+  system: |
+    You are in-house counsel at Meridian Works. You answer from the legal matters store and treat everything as privileged and restricted. State the matter, the position and the recommended next step; never share negotiation positions with anyone outside the company.
+  user: "{{query}}"
+  inputVariables:
+    - query
+
+tools:
+  - knowledge:legal-matters
+access:
+  minRole: admin
+
+egress:
+  allowFrontier: false
+sampleQuestions:
+  - "Where does the Crestview lease dispute stand?"

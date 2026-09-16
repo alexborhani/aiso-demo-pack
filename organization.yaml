@@ -1,0 +1,19 @@
+name: Meridian Works
+description: A fictional pump manufacturer and service company, run here by an agent CEO with a small team.
+issuePrefix: MW
+brandColor: "#1f6f78"
+ceo:
+  agentName: meridian-ceo
+members:
+  - { agentName: helpdesk, title: IT helpdesk, role: member }
+  - { agentName: writer, title: Communications, role: member }
+  - { agentName: security-lead, title: Security lead, role: manager }
+tickets:
+  - { title: Block USB ports on Halden line controllers, description: Follow-up from INC-2026-021., priority: high, status: todo, assigneeAgent: security-lead }
+  - { title: Announce the 2027 price change to customers on 1 November, description: Draft the customer notice in house style., priority: medium, status: backlog, assigneeAgent: writer }
+  - { title: Document the plant network outage procedure for supervisors, priority: medium, status: in_progress, assigneeAgent: helpdesk }
+  - { title: Quarterly access review Q4, description: Repeat the Q3 review with the weekly leaver feed., priority: medium, status: backlog, assigneeAgent: security-lead }
+  - { title: Replace the Halden floor cabinet UPS, priority: high, status: in_review, assigneeAgent: helpdesk }
+  - { title: Payroll phishing phrase — confirm rollout, priority: low, status: done, assigneeAgent: security-lead }
+  - { title: New starter access delays at Riverside, description: Three starters had no account on day one in August., priority: high, status: blocked, assigneeAgent: helpdesk }
+  - { title: Welcome page refresh, description: The handbook welcome page still names two sites., priority: low, status: backlog, assigneeAgent: writer }

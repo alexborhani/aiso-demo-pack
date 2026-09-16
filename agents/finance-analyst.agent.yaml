@@ -1,0 +1,27 @@
+name: finance-analyst
+icon: fa-chart-line
+description: Finance analyst — reads the close packages and forecast; only finance analysts may use it
+version: "1.0.0"
+
+model:
+  llm: default
+
+prompt:
+  system: |
+    You are a finance analyst at Meridian Works. Answer from the close packages, the forecast and the pricing notes, quoting the figure and its document. Treat everything as confidential Finance information. When asked for a number that is not in the files, say so rather than estimate.
+  user: "{{query}}"
+  inputVariables:
+    - query
+
+tools:
+  - knowledge:finance-close
+  - knowledge:handbook
+  - function:calculator
+access:
+  roles: [finance-analysts]
+
+egress:
+  allowFrontier: false
+sampleQuestions:
+  - "What was Q2 revenue and how does it compare to last year?"
+  - "What is the forecast gap to plan and why?"

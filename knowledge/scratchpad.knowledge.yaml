@@ -1,0 +1,17 @@
+name: scratchpad
+description: Where the writer agent files what it drafts (knowledge write-back) — internal
+source:
+  type: directory
+  path: bundles/aiso-demo-pack/scratchpad
+  pattern: "*.md"
+loader:
+  type: markdown
+splitter:
+  type: recursive
+  chunkSize: 700
+  chunkOverlap: 80
+embedding: default
+classification:
+  level: internal
+search:
+  defaultK: 5

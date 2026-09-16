@@ -1,0 +1,28 @@
+name: security-incidents
+description: Security incidents, access reviews, test findings — restricted, Security
+
+source:
+  type: directory
+  path: bundles/aiso-demo-pack/security-incidents
+  pattern: "*.md"
+
+loader:
+  type: okf
+
+splitter:
+  type: recursive
+  chunkSize: 700
+  chunkOverlap: 80
+
+embedding: default
+
+classification:
+  level: restricted
+  categories: ["Security"]
+access:
+  minRole: admin
+egress:
+  allowFrontier: false
+
+search:
+  defaultK: 5

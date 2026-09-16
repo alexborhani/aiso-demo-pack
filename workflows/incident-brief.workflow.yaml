@@ -1,0 +1,39 @@
+name: incident-brief
+description: Two agents research an incident in parallel; the results are merged into one brief (parallel + merge guard)
+version: "1.0.0"
+type: steps
+chatOutputFormat: text
+
+input:
+  schema:
+    incident:
+      type: string
+      required: true
+      description: The incident id or subject
+
+steps:
+  - id: research
+    parallel:
+      - id: security
+        agent: security-lead
+        input:
+          query: "Summarise what the security incidents store says about {{input.incident}} in five lines."
+      - id: runbooks
+        agent: helpdesk
+        input:
+          query: "Which IT runbooks are relevant to {{input.incident}}? List them with one line each."
+    merge:
+      expect: all
+      onMissing: flag
+  - id: brief
+    agent: writer
+    input:
+      query: |
+        Write a one-page incident brief in house style from these notes.
+        Security summary:
+        {{steps.security.output}}
+        Relevant runbooks:
+        {{steps.runbooks.output}}
+
+output:
+  result: "{{steps.brief.output}}"
