@@ -16,6 +16,10 @@ prompt:
 tools:
   - knowledge:all-hands
 
+# A small local model may keep re-searching when the notices it may read do not cover the question;
+# five iterations is plenty for one search and an answer, and the loop then answers from what it has.
+maxIterations: 5
+
 egress:
   allowFrontier: false
 
