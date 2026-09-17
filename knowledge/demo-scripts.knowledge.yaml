@@ -1,0 +1,33 @@
+name: demo-scripts
+description: "The twenty demonstration scripts (DEMOS.md, one concept per scenario) plus the tour and the reset list — what the presenter reads from"
+
+source:
+  type: directory
+  path: bundles/aiso-demo-pack/demo-scripts
+  pattern: "*.md"
+
+loader:
+  type: okf
+
+graph:
+  fromLinks: false
+
+splitter:
+  type: recursive
+  chunkSize: 1200
+  chunkOverlap: 120
+
+embedding: default
+
+classification:
+  level: internal
+  auto: false
+
+access:
+  minRole: admin
+
+egress:
+  allowFrontier: false
+
+search:
+  defaultK: 3

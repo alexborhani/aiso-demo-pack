@@ -1,10 +1,10 @@
 {
   "id": "aiso-demo-pack",
   "name": "AI Stackops demo pack",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "publisher": "AI Stack Ops",
   "tier": "certified",
-  "description": "Meridian Works, a fictional company, for evaluating the whole platform as different people: six accounts with different tiers, roles and clearances, a classification policy, knowledge stores at every level, agents scoped to them, an all-hands store with notices at every level for the classification demo (enforcement starts off: switch to monitor, then enforce), an unlabelled site-notes store for the classifier, an organisation with tickets and an agent CEO, routing objectives, a tool that needs approval, evals — plus the former sample agents, stores, functions, skills and workflows. Nothing in it is real.",
+  "description": "Meridian Works, a fictional company, for evaluating the whole platform as different people: six accounts with different tiers, roles and clearances, a classification policy, knowledge stores at every level, agents scoped to them, an all-hands store with notices at every level for the classification demo (enforcement starts off: switch to monitor, then enforce), an unlabelled site-notes store for the classifier, a presenter agent that runs the scripts aloud in a chosen or lent voice, an organisation with tickets and an agent CEO, routing objectives, a tool that needs approval, evals — plus the former sample agents, stores, functions, skills and workflows. Nothing in it is real.",
   "readOnly": false,
   "resources": {
     "agents": [
@@ -33,7 +33,8 @@
       "agents/web-pilot.agent.yaml",
       "agents/writer.agent.yaml",
       "agents/assistant.agent.yaml",
-      "agents/support.agent.yaml"
+      "agents/support.agent.yaml",
+      "agents/presenter.agent.yaml"
     ],
     "knowledge": [
       "knowledge/all-hands.knowledge.yaml",
@@ -51,7 +52,8 @@
       "knowledge/transcripts.knowledge.yaml",
       "knowledge/web-docs.knowledge.yaml",
       "knowledge/site-notes.knowledge.yaml",
-      "knowledge/product-faq.knowledge.yaml"
+      "knowledge/product-faq.knowledge.yaml",
+      "knowledge/demo-scripts.knowledge.yaml"
     ],
     "bundles": [
       "data/all-hands",
@@ -68,7 +70,8 @@
       "data/security-incidents",
       "data/transcripts",
       "data/site-notes",
-      "data/product-faq"
+      "data/product-faq",
+      "data/demo-scripts"
     ],
     "workflows": [
       "workflows/customer-notice.workflow.yaml",
@@ -236,6 +239,6 @@
     "alg": "ed25519",
     "keyId": "a4470c96bdcc103c",
     "publicKey": "q2F/I5FwWGRdIG/Jhwgl6eGo1WMy0DKS0U05m0ROSIA=",
-    "signature": "RARCgO8Z5f6f8b64KcANc/zKpl2OEC/BFPbl8T9vavCEqwXunEbMueTSaeBYiuEERMarStadXUQ6uTh2tbR1CA=="
+    "signature": "r5HTWK0X0dBHI+EIKVFWaabKbns0q8ZPGSiaZcOl3omgtnCiEk7ba5/rLEeVbsCd279vD9KTcppxInxNv/1SBQ=="
   }
 }
