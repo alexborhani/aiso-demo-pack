@@ -2,6 +2,8 @@
 
 A pack that turns a vanilla AI Stackops install into a fictional company, **Meridian Works**, so the whole platform can be evaluated as different people. Nothing in it is real: the people, documents, figures and matters are invented.
 
+**Presenting to leaders?** [DEMOS.md](DEMOS.md) has twenty scripted scenarios, a 60-minute tour and the reset list.
+
 ## What it installs
 
 - **Six accounts** with generated passwords, shown once at install (Packs → *Reset passwords* mints new ones):

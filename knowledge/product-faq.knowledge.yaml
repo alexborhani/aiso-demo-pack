@@ -1,9 +1,9 @@
-name: legal-matters
-description: Legal matters and regulator correspondence — restricted, Legal
+name: product-faq
+description: "Meridian Works product FAQ for customers: pump models, service intervals, warranty, spares, contacts — public, the store behind the published support page"
 
 source:
   type: directory
-  path: bundles/aiso-demo-pack/legal-matters
+  path: bundles/aiso-demo-pack/product-faq
   pattern: "*.md"
 
 loader:
@@ -22,13 +22,11 @@ splitter:
 embedding: default
 
 classification:
-  level: restricted
-  categories: ["Legal"]
+  level: public
   auto: false
-access:
-  minRole: admin
+
 egress:
-  allowFrontier: false
+  allowFrontier: true
 
 search:
   defaultK: 5

@@ -29,7 +29,7 @@ steps:
     agent: writer
     input:
       query: |
-        Write a one-page incident brief in house style from these notes.
+        Write a one-page incident brief in house style from these notes. Reply with the brief text itself: do not use the canvas and do not file it.
         Security summary:
         {{steps.security.output}}
         Relevant runbooks:

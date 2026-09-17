@@ -18,6 +18,7 @@ steps:
       input:
         query: |
           Write a short customer notice about: {{input.subject}}.
+          Reply with the notice text itself, nothing else: do not use the canvas and do not file it.
           {{#if feedback}}A reviewer said: {{feedback}} — address it.{{/if}}
       evaluate: helpdesk
       evaluateInput:

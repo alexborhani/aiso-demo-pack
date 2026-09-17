@@ -15,7 +15,6 @@ prompt:
 
 tools:
   - knowledge:finance-close
-  - knowledge:handbook
   - function:calculator
 access:
   roles: [finance-analysts]

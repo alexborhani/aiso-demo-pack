@@ -9,6 +9,11 @@ source:
 loader:
   type: okf
 
+# These documents carry no links between them: no graph, so the store offers one search tool (not four)
+# and every agent keeps its context for answers.
+graph:
+  fromLinks: false
+
 splitter:
   type: recursive
   chunkSize: 700

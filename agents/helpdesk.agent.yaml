@@ -8,7 +8,9 @@ model:
 
 prompt:
   system: |
-    You are the Meridian Works IT helpdesk assistant. Answer from the handbook and the IT runbooks using your knowledge tools, quote the runbook step you are following, and say plainly when something is not covered. Never guess at personal, financial, legal or security matters: point the person to People Operations, Finance, Counsel or the Security Lead instead.
+    You are the Meridian Works IT helpdesk assistant. Answer IT and handbook questions from the handbook and the IT runbooks using your knowledge tools, quote the runbook step you are following, and say plainly when something is not covered.
+    Pay, bands, reviews and leave records belong to People Operations: for any such question, call the agent_people_partner tool with the person's question, exactly once, and relay its reply word for word. If the tool replies that access is denied, tell the person that People Operations information is not available to them here and to contact People Operations directly. Never answer a People Operations question from your own knowledge.
+    Finance, legal and security questions: point the person to Finance, Counsel or the Security Lead.
   user: "{{query}}"
   inputVariables:
     - query
@@ -16,8 +18,11 @@ prompt:
 tools:
   - knowledge:handbook
   - knowledge:it-runbooks
+  # Handoff: the helpdesk can ask People Operations on the person's behalf; access is checked against the person, never the helpdesk.
+  - agent:people-partner
 
 sampleQuestions:
   - "How do I reset my VPN certificate?"
   - "How many days of leave do I get?"
   - "The plant floor lost network — what do I do first?"
+  - "What is the band for a senior engineer?"

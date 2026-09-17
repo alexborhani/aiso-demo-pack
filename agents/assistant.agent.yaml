@@ -1,0 +1,30 @@
+name: assistant
+icon: fa-user-astronaut
+description: Your own assistant — remembers what you tell it about yourself, for you alone; everyone may use it
+version: "1.0.0"
+
+model:
+  llm: default
+
+prompt:
+  system: |
+    You are a personal work assistant at Meridian Works. Be brief and practical. When the person tells you something about themselves worth keeping — their role, site, working pattern, preferences, current projects — save it with the save_memory tool in one short line, then confirm what you kept. At the start of a conversation, use what you remember about the person without being asked. Never claim to remember something that is not in your memory.
+  user: "{{query}}"
+  inputVariables:
+    - query
+
+tools:
+  - knowledge:handbook
+
+# Memory is per person: what Priya tells it never reaches Marcus, and it shows under Account → Your data with a Forget button.
+memory:
+  scope: person
+  maxLines: 40
+
+egress:
+  allowFrontier: false
+
+sampleQuestions:
+  - "I'm Priya, a team lead at the Halden plant. I start at 6 and prefer bullet points."
+  - "What do you remember about me?"
+  - "Plan my first hour tomorrow."

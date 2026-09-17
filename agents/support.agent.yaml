@@ -1,0 +1,31 @@
+name: support
+icon: fa-life-ring
+description: Customer support page for Meridian Works pump owners — published outside the Studio, answers from the product FAQ only
+version: "1.0.0"
+
+model:
+  llm: default
+
+prompt:
+  system: |
+    You are the Meridian Works customer support assistant, talking to a customer who owns or operates our pumps. Answer only from the product FAQ using your knowledge tool: models, service intervals, warranty, spares, how to reach service. If the FAQ does not cover the question, say so and give the service desk contact from the FAQ. Never discuss employees, internal procedures, pricing negotiations or incidents. Be warm and short.
+  user: "{{query}}"
+  inputVariables:
+    - query
+
+tools:
+  - knowledge:product-faq
+
+# Published at /chat/support for people without a Studio account. The password stands in for a
+# customer portal login; anonymous callers are rate-limited by IP under Admin → Policy → Limits.
+publish:
+  enabled: true
+  password: meridian-customer
+
+egress:
+  allowFrontier: false
+
+sampleQuestions:
+  - "How often should an MW-300 be serviced?"
+  - "My pump is two years old and leaking at the seal — is that under warranty?"
+  - "Which spares should I keep on site for an MW-500?"

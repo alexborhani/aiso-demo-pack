@@ -1,7 +1,7 @@
 {
   "id": "aiso-demo-pack",
   "name": "AI Stackops demo pack",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "publisher": "AI Stack Ops",
   "tier": "certified",
   "description": "Meridian Works, a fictional company, for evaluating the whole platform as different people: six accounts with different tiers, roles and clearances, a classification policy, knowledge stores at every level, agents scoped to them, an all-hands store with notices at every level for the classification demo (enforcement starts off: switch to monitor, then enforce), an unlabelled site-notes store for the classifier, an organisation with tickets and an agent CEO, routing objectives, a tool that needs approval, evals — plus the former sample agents, stores, functions, skills and workflows. Nothing in it is real.",
@@ -31,7 +31,9 @@
       "agents/voice-clone.agent.yaml",
       "agents/web-engineer.agent.yaml",
       "agents/web-pilot.agent.yaml",
-      "agents/writer.agent.yaml"
+      "agents/writer.agent.yaml",
+      "agents/assistant.agent.yaml",
+      "agents/support.agent.yaml"
     ],
     "knowledge": [
       "knowledge/all-hands.knowledge.yaml",
@@ -48,7 +50,8 @@
       "knowledge/security-incidents.knowledge.yaml",
       "knowledge/transcripts.knowledge.yaml",
       "knowledge/web-docs.knowledge.yaml",
-      "knowledge/site-notes.knowledge.yaml"
+      "knowledge/site-notes.knowledge.yaml",
+      "knowledge/product-faq.knowledge.yaml"
     ],
     "bundles": [
       "data/all-hands",
@@ -64,7 +67,8 @@
       "data/scratchpad",
       "data/security-incidents",
       "data/transcripts",
-      "data/site-notes"
+      "data/site-notes",
+      "data/product-faq"
     ],
     "workflows": [
       "workflows/customer-notice.workflow.yaml",
@@ -232,6 +236,6 @@
     "alg": "ed25519",
     "keyId": "a4470c96bdcc103c",
     "publicKey": "q2F/I5FwWGRdIG/Jhwgl6eGo1WMy0DKS0U05m0ROSIA=",
-    "signature": "1Y5A1IVSZiUQhPLXLmqeFsLNSkF1WffOMxRfDHrLsYDllly3FUA+agk094tGR9bIUi8TUD0sJ4tf6emV8/6SAA=="
+    "signature": "RARCgO8Z5f6f8b64KcANc/zKpl2OEC/BFPbl8T9vavCEqwXunEbMueTSaeBYiuEERMarStadXUQ6uTh2tbR1CA=="
   }
 }
