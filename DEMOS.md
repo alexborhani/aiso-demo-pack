@@ -74,6 +74,11 @@ reinstalled in under five minutes, which returns every account, store and policy
    signed packs, installs in one line, uninstalls completely, and unsigned packs can be refused
    estate-wide.
 
+6. Still on the pack card: *Update* and the *auto* switch. Say: a pack is kept current from the same
+   publisher without reinstalling — accounts keep their passwords, unchanged stores keep their index,
+   an edited policy is kept — and a pack you trust can take its updates from the daily check on its
+   own, every one of them audited. *Check for updates* asks every source now.
+
 **Land:** the controls a security review asks for exist on day one, are visible on one page, and every
 one names its fix. Nothing here required a consultant.
 
