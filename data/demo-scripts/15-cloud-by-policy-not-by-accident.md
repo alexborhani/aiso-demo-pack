@@ -4,7 +4,8 @@ title: "15. Cloud by policy, not by accident"
 tags: ["scenario-15"]
 ---
 *Where a cloud model fits: as a governed entry with access, a ceiling and a budget, never as the
-default.* Stronger with an Anthropic API key on the host; complete without one.
+default.* Stronger with a cloud key on the host (Anthropic, or OpenRouter — `provider: openrouter`, model
+`<vendor>/<model>`, key `${OPENROUTER_API_KEY}`; the steps read the same); complete without one.
 
 **You are** Dana; Jordan in the second window.
 
@@ -25,6 +26,16 @@ default.* Stronger with an Anthropic API key on the host; complete without one.
    whether any restricted store could reach it (it cannot, ceiling internal).
 6. Mention the operator lock: `EGRESS_ALLOW_FRONTIER=false` in the host's environment refuses every
    cloud call for everyone, and no setting in the Studio can override it.
+7. The router, local first and cloud only when the local model cannot: IDE tab → `models.yaml`, add an
+   entry `frontline` with `provider: router` and `candidates: [mlx-serve, claude]`, and set `helpdesk`'s
+   model to `frontline`. As Dana, `helpdesk`: **"How do I reset my VPN certificate?"** — answered by
+   the local model; Admin → Audit, `models.route`: candidate `mlx-serve`, reason *first candidate*.
+   Then open `bundles/aiso-demo-pack/long-reads/riverside-commissioning-report.md` in the IDE tab
+   (320 test records, about 19,000 tokens — more than the local engine's window), copy all of it into
+   the chat and ask: **"How many of these tests failed, and which fault was most common?"** The router
+   skips the local model before dialling — the audit row's reason says *fit: mlx-serve (context …)* —
+   and the cloud entry answers; the answer key is beside the report. As Jordan, the same paste is
+   refused: the local model does not fit and the cloud entry is not his to use.
 
 **Land:** cloud models are welcome where the policy says so, with a person, a data class and a budget
 attached, and the answer to "did anything leave the building" is in the audit log.

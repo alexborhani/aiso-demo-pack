@@ -1,0 +1,2 @@
+320 tests, 52 failed.
+By fault: [('check valve chatter at low flow', 8), ('guard interlock tripped on door bounce', 8), ('seal weep at the gland after warm-up', 8), ('flow meter reading unstable below 20 %', 7), ('pressure transducer drift beyond 0.5 %', 6), ('bearing temperature rose past 75 °C', 6), ('coupling alignment out by 0.08 mm', 6), ('VFD over-current at ramp-up', 3)]
