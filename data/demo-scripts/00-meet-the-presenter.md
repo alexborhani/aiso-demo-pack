@@ -14,9 +14,12 @@ rest of the day on request.*
    reply from here is spoken, one paragraph at a time.
 2. Ask: **"What is the enforcement mode right now?"** The presenter checks the platform and answers in
    a sentence or two, spoken.
-3. Ask: **"Run scenario 4."** It reads the script from the `demo-scripts` store, says what the room is
-   about to see, switches enforcement itself where the script says so, and tells you what to click
-   for the steps that need another person signed in. Say "next" to move on.
+3. Ask: **"Run scenario 4."** It reads the script from the `demo-scripts` store and gives you the first
+   step only: who must be signed in and in which window, what to do there, and what the room should
+   see. Do it in that window, then say **"next"**; it never moves on by itself. Where a step is a
+   switch it holds (enforcement, the classifier, evaluations, the member cap) it flips it in that
+   same turn and says so. A question in the middle gets a spoken paragraph and "say next when you
+   are ready"; the last step ends with the scenario's closing point.
 4. *Lend your voice*: an audience member types their first name, agrees on screen, reads the passage,
    ten seconds record with a meter, and the presenter carries on in their voice under their name —
    "I'm Alex, or at least I sound like him today." *Forget this voice* deletes the clip, audited; the
