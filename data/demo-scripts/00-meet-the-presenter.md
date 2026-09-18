@@ -33,7 +33,7 @@ Both models are pulled once. MLX Serve's pull skips a repository's subdirectorie
 be fetched by hand after the pull, and the engine lists a pulled model by its bare name:
 
 ```
-# as the engine's user, in its models directory (the kit's is /usr/local/var/mlx-serve/.mlx-serve/models)
+# in the engine's models directory (MLX Core: ~/.mlx-serve/models of the account running it)
 curl -X POST localhost:11234/api/pull -d '{"model":"ddalcu/Kokoro-82M-MLX-Serve"}'
 mkdir -p ddalcu/Kokoro-82M-MLX-Serve/g2p && for f in gb_gold us_gold us_silver; do
   curl -sL https://huggingface.co/ddalcu/Kokoro-82M-MLX-Serve/resolve/main/g2p/$f.json -o ddalcu/Kokoro-82M-MLX-Serve/g2p/$f.json; done
@@ -42,7 +42,7 @@ curl -X POST localhost:11234/api/pull -d '{"model":"mlx-community/Qwen3-TTS-12Hz
 mkdir -p mlx-community/Qwen3-TTS-12Hz-0.6B-Base-8bit/speech_tokenizer && curl -sL \
   https://huggingface.co/mlx-community/Qwen3-TTS-12Hz-0.6B-Base-8bit/resolve/main/speech_tokenizer/config.json \
   -o mlx-community/Qwen3-TTS-12Hz-0.6B-Base-8bit/speech_tokenizer/config.json
-sudo launchctl kickstart -k system/com.aistackops.mlx-serve   # the engine discovers the files at start-up
+# then restart the engine (quit and reopen MLX Core): it discovers the files at start-up
 ```
 
 Then Models tab → activate the Qwen3-TTS entry for the *tts* role, and load Kokoro once from the Local
