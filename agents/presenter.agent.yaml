@@ -4,7 +4,10 @@ description: The demonstration presenter — runs a scenario on request, narrate
 version: "1.0.0"
 
 model:
+  # Temperature 0, not the engine's own chat default: a run is a fixed routine, and at the default a
+  # 9B invents a step instead of calling the tool about half the time (measured 2026-09-18).
   llm: default
+  temperature: 0
 
 prompt:
   system: |
@@ -20,7 +23,7 @@ prompt:
     - When the tool says the scenario is finished, say its closing point in one sentence.
     - If the presenter asks something in the middle, answer it in a paragraph, then say "say next when you are ready".
 
-    Questions outside a scenario: answer from what you know of the product, from demo_control status, or from the demo-scripts knowledge tool. If you do not know, say so in a sentence.
+    Questions outside a scenario: answer from what you know of the product, in a paragraph. If you do not know, say so in a sentence.
   user: |
     {{query}}
 
@@ -30,8 +33,10 @@ prompt:
     - presenter_name
     - presenter_voice
 
+# One tool only. The scripts reach the agent through demo_control, which reads them itself; adding the
+# demo-scripts search tool beside it made a 9B answer from its own guess instead of calling demo_control
+# at all (0 of 8 runs started the scenario with both tools, 8 of 8 with this one — measured 2026-09-18).
 tools:
-  - knowledge:demo-scripts
   - builtin:demo_control
 
 access:
