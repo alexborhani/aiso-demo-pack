@@ -2,7 +2,11 @@
 type: scenario
 title: "17. Evaluations as the release gate"
 tags: ["scenario-17"]
+level: standard
 ---
+**Level:** Standard.
+
+
 *Change an agent's knowledge and know, before anyone notices, whether it still answers correctly.*
 
 **You are** Sam for the change, Dana for the run.

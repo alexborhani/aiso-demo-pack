@@ -2,7 +2,11 @@
 type: scenario
 title: "6. The finance close in a conversation"
 tags: ["scenario-6"]
+level: essentials
 ---
+**Level:** Essentials.
+
+
 *Numbers from the close package, with arithmetic done by a tool rather than the model.*
 
 **You are** Lena; Jordan in the second window for the last step. *Needs room:* the close package

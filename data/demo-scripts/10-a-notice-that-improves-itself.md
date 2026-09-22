@@ -2,7 +2,11 @@
 type: scenario
 title: "10. A notice that improves itself"
 tags: ["scenario-10"]
+level: standard
 ---
+**Level:** Standard.
+
+
 *A workflow where one agent drafts and another judges, until the reviewer is satisfied.*
 
 **You are** Sam. Workflow: `customer-notice` (an evaluator loop). *Needs room:* three rounds of draft

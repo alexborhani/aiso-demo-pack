@@ -12,7 +12,8 @@ tags: []
    retrieved documents. Every scenario below was exercised against the real engine; the ones marked
    *needs room* fail with "prompt exceeds maximum context length" or take minutes at 4096 and are
    written for 16K.
-2. Sign in as the first admin, then Packs → *Install* → `https://github.com/alexborhani/aiso-demo-pack`.
+2. Sign in as the first admin, then Packs → *Install* → `https://github.com/alexborhani/aiso-demo-pack`,
+   and pick the level your model carries (above).
    Copy the six passwords from the dialog into a password manager: Dana (admin), Sam (builder),
    Priya, Marcus, Lena (members with roles), Jordan (contractor, public only). *Reset passwords* on
    the pack card mints new ones at any time.

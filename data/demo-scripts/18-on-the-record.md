@@ -2,7 +2,11 @@
 type: scenario
 title: "18. On the record"
 tags: ["scenario-18"]
+level: essentials
 ---
+**Level:** Essentials.
+
+
 *The audit trail, the usage ledger, chargeback and a signed evidence bundle: the paperwork a
 security review or an auditor asks for, produced by the platform.*
 

@@ -2,7 +2,11 @@
 type: scenario
 title: "8. Counsel on a restricted matter"
 tags: ["scenario-8"]
+level: essentials
 ---
+**Level:** Essentials.
+
+
 *The most sensitive store on the estate, in use, and invisible to everyone else.*
 
 **You are** Dana; Jordan in the second window.

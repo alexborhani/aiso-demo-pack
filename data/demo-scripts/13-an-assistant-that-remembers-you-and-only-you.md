@@ -2,7 +2,11 @@
 type: scenario
 title: "13. An assistant that remembers you, and only you"
 tags: ["scenario-13"]
+level: essentials
 ---
+**Level:** Essentials.
+
+
 *Personal memory with a boundary the audience can see, and a person's right to see and delete it.*
 
 **You are** Priya in one window, Marcus in the other.

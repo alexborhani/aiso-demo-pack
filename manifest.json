@@ -1,7 +1,7 @@
 {
   "id": "aiso-demo-pack",
   "name": "AI Stackops demo pack",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "publisher": "AI Stack Ops",
   "tier": "certified",
   "description": "Meridian Works, a fictional company, for evaluating the whole platform as different people: six accounts with different tiers, roles and clearances, a classification policy, knowledge stores at every level, agents scoped to them, an all-hands store with notices at every level for the classification demo (enforcement starts off: switch to monitor, then enforce), an unlabelled site-notes store for the classifier, a presenter agent that runs the scripts aloud in a chosen or lent voice, an organisation with tickets and an agent CEO, routing objectives, a tool that needs approval, evals — plus the former sample agents, stores, functions, skills and workflows. Nothing in it is real.",
@@ -236,10 +236,115 @@
     "class": "none",
     "hosts": []
   },
+  "levels": [
+    {
+      "id": "essentials",
+      "label": "Essentials",
+      "description": "The eight Meridian Works agents with one to three tools each, the nine stores the scripts use, the people, roles and policy. Scenarios 1–8, 13, 14, 16, 18, 19.",
+      "requires": {
+        "modelClass": "small",
+        "contextTokens": 16384
+      }
+    },
+    {
+      "id": "standard",
+      "label": "Standard",
+      "description": "Adds the presenter, the writer and canvas, the agent CEO with its organisation, the two workflows, the evals and the demo scripts. Scenarios 0, 9–12, 15, 17.",
+      "requires": {
+        "modelClass": "standard",
+        "contextTokens": 32768
+      },
+      "adds": {
+        "agents": [
+          "agents/presenter.agent.yaml",
+          "agents/writer.agent.yaml",
+          "agents/canvas.agent.yaml",
+          "agents/meridian-ceo.agent.yaml"
+        ],
+        "knowledge": [
+          "knowledge/demo-scripts.knowledge.yaml",
+          "knowledge/scratchpad.knowledge.yaml"
+        ],
+        "bundles": [
+          "data/demo-scripts",
+          "data/long-reads",
+          "data/scratchpad"
+        ],
+        "workflows": [
+          "workflows/customer-notice.workflow.yaml",
+          "workflows/incident-brief.workflow.yaml"
+        ],
+        "skills": [
+          "skills/house-style"
+        ],
+        "evals": [
+          "evals/chatbot.eval.yaml",
+          "evals/helpdesk.eval.yaml"
+        ],
+        "organization": "organization.yaml"
+      }
+    },
+    {
+      "id": "full",
+      "label": "Full",
+      "description": "Adds the sample workshop agents (architect, marketer, web engineer, sandbox and media agents) and the sample stores. Scenario 20 and the builder workshop.",
+      "requires": {
+        "modelClass": "large",
+        "contextTokens": 32768
+      },
+      "adds": {
+        "agents": [
+          "agents/actor.agent.yaml",
+          "agents/architect.agent.yaml",
+          "agents/corporate.agent.yaml",
+          "agents/image-creator.agent.yaml",
+          "agents/investment-analyst.agent.yaml",
+          "agents/marketer.agent.yaml",
+          "agents/music-librarian.agent.yaml",
+          "agents/network-security.agent.yaml",
+          "agents/org-ceo.agent.yaml",
+          "agents/p2pvoice.agent.yaml",
+          "agents/simple-toolbox.agent.yaml",
+          "agents/video-creator.agent.yaml",
+          "agents/voice-clone.agent.yaml",
+          "agents/web-engineer.agent.yaml",
+          "agents/web-pilot.agent.yaml"
+        ],
+        "knowledge": [
+          "knowledge/music-store.knowledge.yaml",
+          "knowledge/org-chart.knowledge.yaml",
+          "knowledge/patient-records.knowledge.yaml",
+          "knowledge/pet-store.knowledge.yaml",
+          "knowledge/transcripts.knowledge.yaml",
+          "knowledge/web-docs.knowledge.yaml"
+        ],
+        "bundles": [
+          "data/music-store",
+          "data/org-chart",
+          "data/pdf-patients",
+          "data/pet-store",
+          "data/transcripts"
+        ],
+        "workflows": [
+          "workflows/example.workflow.yaml",
+          "workflows/react-example.workflow.yaml",
+          "workflows/team-chat.workflow.yaml"
+        ],
+        "skills": [
+          "skills/pii-guard",
+          "skills/sandbox",
+          "skills/web-pilot"
+        ],
+        "functions": [
+          "functions/text-formatter.function.mjs"
+        ]
+      }
+    }
+  ],
   "signature": {
     "alg": "ed25519",
     "keyId": "a4470c96bdcc103c",
     "publicKey": "q2F/I5FwWGRdIG/Jhwgl6eGo1WMy0DKS0U05m0ROSIA=",
-    "signature": "0ob3hV5qSfTxKvzDL7BNJ+Xn81c9OKug6RthR8dLvFwm+8hHmhrruZEcxHxUMkPPSyUZPjo7fUywgI6g2KoxAg=="
+    "signature": "6E2JknKVQKACM4FGuwy1a29udlbjTjLkDLmkg3zOUN+GAVry5EWUMX4DGE7bduhUr/3pgRqgclVZRqyEeJu6AQ=="
   }
 }

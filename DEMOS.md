@@ -9,6 +9,23 @@ that chains eight of them is at the end, with a reset checklist.
 Meridian Works is fictional: an industrial pump and controls company with a plant at Halden, a
 service centre at Riverside and an office at Crestview, about 400 people. Nothing in the pack is real.
 
+## Levels: pick the demo your model can carry
+
+The pack installs at one of three levels, chosen on the install dialog and changeable later from
+the pack card (agents above the level are removed, the people and the policy stay). Every scenario
+below says which level it needs; the people, the stores of the essentials and the scripts are the
+same at every level, so a story told at Essentials reads the same at Full.
+
+| Level | Reference model | What it adds | Scenarios |
+| --- | --- | --- | --- |
+| **Essentials** | a 9B-class local model, 16K–32K context (Qwen 3.5 9B on a 24 GB Mac) | the eight Meridian agents with one to three tools each, the nine stores the scripts use | 1–8, 13, 14, 16, 18, 19 |
+| **Standard** | a 27B-class local model at 32K (a 48 GB Mac or larger), or a cloud entry | the presenter, the writer and canvas, the agent CEO and its organisation, the two workflows, the evals, the demo scripts | 0, 9–12, 15, 17 |
+| **Full** | a 70B-class model or a frontier provider | the sample workshop agents (architect, marketer, web engineer, sandbox, media) and the sample stores | 20, and the builder workshop |
+
+The boundaries come from measurement, not taste: on a 9B a single tool with ten actions was
+already unreliable, so nothing at Essentials has more than three one-action tools, and the
+presenter and the CEO — long prompts, many actions — wait for Standard.
+
 ## Before the day
 
 **Install and prepare (once, about 20 minutes)**
@@ -20,7 +37,8 @@ service centre at Riverside and an office at Crestview, about 400 people. Nothin
    retrieved documents. Every scenario below was exercised against the real engine; the ones marked
    *needs room* fail with "prompt exceeds maximum context length" or take minutes at 4096 and are
    written for 16K.
-2. Sign in as the first admin, then Packs → *Install* → `https://github.com/alexborhani/aiso-demo-pack`.
+2. Sign in as the first admin, then Packs → *Install* → `https://github.com/alexborhani/aiso-demo-pack`,
+   and pick the level your model carries (above).
    Copy the six passwords from the dialog into a password manager: Dana (admin), Sam (builder),
    Priya, Marcus, Lena (members with roles), Jordan (contractor, public only). *Reset passwords* on
    the pack card mints new ones at any time.
@@ -50,6 +68,8 @@ reinstalled in under five minutes, which returns every account, store and policy
 ---
 
 ## 0. Meet the presenter
+**Level:** Standard.
+
 
 *Optional opener: the platform introduces itself, in a voice the room chooses, and can present the
 rest of the day on request.*
@@ -100,6 +120,8 @@ engine lists it, `Kokoro-82M-MLX-Serve`.
 ---
 
 ## 1. Day one: a governed estate before lunch
+**Level:** Essentials.
+
 
 *For the audience: what "governed" looks like on the first morning, without a services engagement.*
 
@@ -135,6 +157,8 @@ one names its fix. Nothing here required a consultant.
 ---
 
 ## 2. The new starter's first day
+**Level:** Essentials.
+
 
 *Self-service that deflects the tickets IT and HR answer every week, and a hard line the assistant
 will not cross.*
@@ -159,6 +183,8 @@ a contractor and useful for an HR partner without anyone building two assistants
 ---
 
 ## 3. Who can see what
+**Level:** Essentials.
+
 
 *RBAC, custom roles and clearances applied to real questions by four people.*
 
@@ -181,6 +207,8 @@ retrieval on every chunk, not by which assistant they were given.
 ---
 
 ## 4. Classification, switched on in front of them
+**Level:** Essentials.
+
 
 *The difference a policy makes, shown as before and after with the same questions.*
 
@@ -208,6 +236,8 @@ with evidence at each step.
 ---
 
 ## 5. Classify what nobody labelled
+**Level:** Essentials.
+
 
 *The unglamorous truth of every estate: most content carries no label. Here it gets one.*
 
@@ -232,6 +262,8 @@ criteria, with a person in the loop only where the policy says so.
 ---
 
 ## 6. The finance close in a conversation
+**Level:** Essentials.
+
 
 *Numbers from the close package, with arithmetic done by a tool rather than the model.*
 
@@ -252,6 +284,8 @@ is deterministic, and the answer never reaches anyone outside the finance role.
 ---
 
 ## 7. The incident copilot, with a human on the trigger
+**Level:** Essentials.
+
 
 *An agent that can act, and the approval that stands between it and the action.*
 
@@ -275,6 +309,8 @@ change between approval and execution, and both halves are on the record.
 ---
 
 ## 8. Counsel on a restricted matter
+**Level:** Essentials.
+
 
 *The most sensitive store on the estate, in use, and invisible to everyone else.*
 
@@ -296,6 +332,8 @@ policy's handling rules are checked against the configuration, not promised.
 ---
 
 ## 9. Drafting on the canvas, in house style, filed on the record
+**Level:** Standard.
+
 
 *Knowledge work with an output you can see, and an agent writing back into the estate under audit.*
 
@@ -318,6 +356,8 @@ An agent that writes into the estate does so with a name attached.
 ---
 
 ## 10. A notice that improves itself
+**Level:** Standard.
+
 
 *A workflow where one agent drafts and another judges, until the reviewer is satisfied.*
 
@@ -339,6 +379,8 @@ to it, with every round recorded.
 ---
 
 ## 11. An incident brief from two agents in parallel
+**Level:** Standard.
+
 
 *Fan-out and merge: two specialists work at once, and the workflow refuses to pretend a missing half
 arrived.*
@@ -359,6 +401,8 @@ The agents are the same ones people chat with; the workflow is the management la
 ---
 
 ## 12. An organisation run by an agent CEO
+**Level:** Standard.
+
 
 *Tickets, a team of agents, and a CEO that triages and delegates on a heartbeat.*
 
@@ -384,6 +428,8 @@ backlog, an owner and a cadence, with every decision written down.
 ---
 
 ## 13. An assistant that remembers you, and only you
+**Level:** Essentials.
+
 
 *Personal memory with a boundary the audience can see, and a person's right to see and delete it.*
 
@@ -404,6 +450,8 @@ them, deletable by them, and never shared between people or nodes.
 ---
 
 ## 14. A support page for people outside the building
+**Level:** Essentials.
+
 
 *The same governed platform, published to customers, with limits and without any of the internal data.*
 
@@ -427,6 +475,8 @@ reach the store it was given, and it is rate-limited like any other caller.
 ---
 
 ## 15. Cloud by policy, not by accident
+**Level:** Standard.
+
 
 *Where a cloud model fits: as a governed entry with access, a ceiling and a budget, never as the
 default.* Stronger with a cloud key on the host (Anthropic, or OpenRouter — `provider: openrouter`, model
@@ -468,6 +518,8 @@ attached, and the answer to "did anything leave the building" is in the audit lo
 ---
 
 ## 16. The runaway agent
+**Level:** Essentials.
+
 
 *Budgets and rate limits as circuit breakers, per person, per agent, per model.*
 
@@ -490,6 +542,8 @@ recorded with who, what and how much.
 ---
 
 ## 17. Evaluations as the release gate
+**Level:** Standard.
+
 
 *Change an agent's knowledge and know, before anyone notices, whether it still answers correctly.*
 
@@ -511,6 +565,8 @@ number on a page, and the run is audited.
 ---
 
 ## 18. On the record
+**Level:** Essentials.
+
 
 *The audit trail, the usage ledger, chargeback and a signed evidence bundle: the paperwork a
 security review or an auditor asks for, produced by the platform.*
@@ -534,6 +590,8 @@ for is a download, and it is tamper-evident.
 ---
 
 ## 19. A person leaves
+**Level:** Essentials.
+
 
 *Subject access, erasure and legal hold, with the audit log kept intact.*
 
@@ -556,6 +614,8 @@ thing that is never edited.
 ---
 
 ## 20. Two nodes, one policy
+**Level:** Full.
+
 
 *Hub and spoke on one Mac: a second AI Stackops process enrolls, receives the hub's floors, and sends
 its usage and audit home.*

@@ -14,6 +14,8 @@ for part in re.split(r'^## ', md, flags=re.M)[1:]:
     else:
         slug = re.sub(r'[^a-z0-9]+', '-', title.lower()).strip('-'); fname = f'{slug}.md'; ctype = 'guide'; tags = []
     body = body.strip().replace('\n---\n', '\n')
-    front = f'---\ntype: {ctype}\ntitle: "{title.replace(chr(34), chr(39))}"\ntags: {json.dumps(tags)}\n---\n'
+    lv = re.search(r'^\*\*Level:\*\*\s*(\w+)', body, re.M)
+    level = f'level: {lv.group(1).lower()}\n' if lv else ''
+    front = f'---\ntype: {ctype}\ntitle: "{title.replace(chr(34), chr(39))}"\ntags: {json.dumps(tags)}\n{level}---\n'
     open(os.path.join(out, fname), 'w').write(front + body + '\n')
 print('demo-scripts written:', len(os.listdir(out)))

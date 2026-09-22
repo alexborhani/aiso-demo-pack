@@ -1,6 +1,6 @@
 name: people-partner
 icon: fa-people-group
-description: People Operations partner — reads the people files; only HR partners may use it
+description: People Operations partner — pay, bands, reviews, leave and holiday questions, from the people files; only HR partners may use it
 version: "1.0.0"
 
 model:

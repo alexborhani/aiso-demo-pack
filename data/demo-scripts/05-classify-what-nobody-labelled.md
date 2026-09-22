@@ -2,7 +2,11 @@
 type: scenario
 title: "5. Classify what nobody labelled"
 tags: ["scenario-5"]
+level: essentials
 ---
+**Level:** Essentials.
+
+
 *The unglamorous truth of every estate: most content carries no label. Here it gets one.*
 
 **You are** Dana. Store: `site-notes`, six Riverside notes as staff wrote them, none labelled.

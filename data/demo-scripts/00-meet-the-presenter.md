@@ -2,7 +2,11 @@
 type: scenario
 title: "0. Meet the presenter"
 tags: ["scenario-0"]
+level: standard
 ---
+**Level:** Standard.
+
+
 *Optional opener: the platform introduces itself, in a voice the room chooses, and can present the
 rest of the day on request.*
 

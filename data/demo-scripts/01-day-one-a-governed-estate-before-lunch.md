@@ -2,7 +2,11 @@
 type: scenario
 title: "1. Day one: a governed estate before lunch"
 tags: ["scenario-1"]
+level: essentials
 ---
+**Level:** Essentials.
+
+
 *For the audience: what "governed" looks like on the first morning, without a services engagement.*
 
 **You are** Dana. **Windows:** one.

@@ -2,7 +2,11 @@
 type: scenario
 title: "16. The runaway agent"
 tags: ["scenario-16"]
+level: essentials
 ---
+**Level:** Essentials.
+
+
 *Budgets and rate limits as circuit breakers, per person, per agent, per model.*
 
 **You are** Dana; Priya in the second window.

@@ -2,7 +2,11 @@
 type: scenario
 title: "3. Who can see what"
 tags: ["scenario-3"]
+level: essentials
 ---
+**Level:** Essentials.
+
+
 *RBAC, custom roles and clearances applied to real questions by four people.*
 
 **You are** each of Jordan, Marcus, Lena, Dana in turn (two windows, swap the second).

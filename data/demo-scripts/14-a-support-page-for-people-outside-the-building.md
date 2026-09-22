@@ -2,7 +2,11 @@
 type: scenario
 title: "14. A support page for people outside the building"
 tags: ["scenario-14"]
+level: essentials
 ---
+**Level:** Essentials.
+
+
 *The same governed platform, published to customers, with limits and without any of the internal data.*
 
 **You are** nobody: a third window with no Studio session. Agent: `support` over `product-faq`.

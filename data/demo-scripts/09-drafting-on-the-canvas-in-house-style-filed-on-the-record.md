@@ -2,7 +2,11 @@
 type: scenario
 title: "9. Drafting on the canvas, in house style, filed on the record"
 tags: ["scenario-9"]
+level: standard
 ---
+**Level:** Standard.
+
+
 *Knowledge work with an output you can see, and an agent writing back into the estate under audit.*
 
 **You are** Sam (builder).

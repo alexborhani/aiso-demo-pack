@@ -2,7 +2,11 @@
 type: scenario
 title: "19. A person leaves"
 tags: ["scenario-19"]
+level: essentials
 ---
+**Level:** Essentials.
+
+
 *Subject access, erasure and legal hold, with the audit log kept intact.*
 
 **You are** Dana.

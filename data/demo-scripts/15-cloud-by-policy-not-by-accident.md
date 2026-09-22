@@ -2,7 +2,11 @@
 type: scenario
 title: "15. Cloud by policy, not by accident"
 tags: ["scenario-15"]
+level: standard
 ---
+**Level:** Standard.
+
+
 *Where a cloud model fits: as a governed entry with access, a ceiling and a budget, never as the
 default.* Stronger with a cloud key on the host (Anthropic, or OpenRouter — `provider: openrouter`, model
 `<vendor>/<model>`, key `${OPENROUTER_API_KEY}`; the steps read the same); complete without one.

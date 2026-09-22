@@ -2,7 +2,11 @@
 type: scenario
 title: "7. The incident copilot, with a human on the trigger"
 tags: ["scenario-7"]
+level: essentials
 ---
+**Level:** Essentials.
+
+
 *An agent that can act, and the approval that stands between it and the action.*
 
 **You are** Dana. Two windows help: one for the chat, one for Approvals. *Needs room:* the incident

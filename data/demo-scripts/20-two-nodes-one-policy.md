@@ -2,7 +2,11 @@
 type: scenario
 title: "20. Two nodes, one policy"
 tags: ["scenario-20"]
+level: full
 ---
+**Level:** Full.
+
+
 *Hub and spoke on one Mac: a second AI Stackops process enrolls, receives the hub's floors, and sends
 its usage and audit home.*
 

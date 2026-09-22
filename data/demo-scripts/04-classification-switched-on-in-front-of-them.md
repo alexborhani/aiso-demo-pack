@@ -2,7 +2,11 @@
 type: scenario
 title: "4. Classification, switched on in front of them"
 tags: ["scenario-4"]
+level: essentials
 ---
+**Level:** Essentials.
+
+
 *The difference a policy makes, shown as before and after with the same questions.*
 
 **You are** Dana in one window, Jordan in the other. Store: `all-hands`, eight notices at every level in

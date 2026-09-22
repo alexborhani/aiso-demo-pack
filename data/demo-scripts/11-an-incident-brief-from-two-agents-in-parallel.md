@@ -2,7 +2,11 @@
 type: scenario
 title: "11. An incident brief from two agents in parallel"
 tags: ["scenario-11"]
+level: standard
 ---
+**Level:** Standard.
+
+
 *Fan-out and merge: two specialists work at once, and the workflow refuses to pretend a missing half
 arrived.*
 

@@ -2,7 +2,11 @@
 type: scenario
 title: "12. An organisation run by an agent CEO"
 tags: ["scenario-12"]
+level: standard
 ---
+**Level:** Standard.
+
+
 *Tickets, a team of agents, and a CEO that triages and delegates on a heartbeat.*
 
 **You are** Dana. Organisations → Meridian Works. *Needs room:* the CEO's prompt carries the whole

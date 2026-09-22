@@ -24,9 +24,21 @@ A pack that turns a vanilla AI Stackops install into a fictional company, **Meri
 - **An organisation**, Meridian Works, with an agent CEO, members and eight tickets.
 - **Routing objectives** per role and agent, **budgets** on two roles, a **tool-approval** entry, an **eval** file for the helpdesk, a **skill** (house style) and functions.
 
+## Levels
+
+The pack installs at one of three levels — pick the one your default chat model carries on the install dialog, and change it later from the pack card (raising installs more; lowering removes the agents and stores above the level and keeps the people and the policy):
+
+| Level | For | Adds |
+| --- | --- | --- |
+| Essentials | a 9B-class local model, 16K+ context | the eight Meridian agents (one to three tools each), the nine stores the scripts use, the people, roles and policy |
+| Standard | a 27B-class local model at 32K, or a cloud entry | the presenter, the writer and canvas, the agent CEO and its organisation, the workflows, the evals, the demo scripts |
+| Full | a 70B-class model or a frontier provider | the sample workshop agents and the sample stores |
+
+[DEMOS.md](DEMOS.md) says which level each scenario needs. `scripts/bench.py` checks a level against the model on a host (see *Benchmarking a level*).
+
 ## Install
 
-Packs tab → Install → source `https://github.com/alexborhani/aiso-demo-pack`. The pack is signed by AI Stack Ops (certified tier); seeding accounts requires that signature. Install is refused while SCIM provisioning is on or when a classification policy is already adopted.
+Packs tab → Install → source `https://github.com/alexborhani/aiso-demo-pack`, and choose a level. The pack is signed by AI Stack Ops (certified tier); seeding accounts requires that signature. Install is refused while SCIM provisioning is on or when a classification policy is already adopted.
 
 Then sign out and back in as each person to see what changes. The Setup checklist notes the demo accounts until the pack is uninstalled.
 

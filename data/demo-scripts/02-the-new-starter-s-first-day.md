@@ -2,7 +2,11 @@
 type: scenario
 title: "2. The new starter's first day"
 tags: ["scenario-2"]
+level: essentials
 ---
+**Level:** Essentials.
+
+
 *Self-service that deflects the tickets IT and HR answer every week, and a hard line the assistant
 will not cross.*
 
