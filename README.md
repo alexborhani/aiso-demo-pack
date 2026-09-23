@@ -30,7 +30,7 @@ The pack installs at one of three levels — pick the one your default chat mode
 
 | Level | For | Adds |
 | --- | --- | --- |
-| Essentials | a 9B-class local model, 16K+ context | the eight Meridian agents (one to three tools each), the nine stores the scripts use, the people, roles and policy |
+| Essentials | a 9B-class local model, 16K+ context | the eight Meridian agents (one to three tools each), the nine stores the scripts use, the people, roles and policy; the front door scenario (21) |
 | Standard | a 27B-class local model at 32K, or a cloud entry | the presenter, the writer and canvas, the agent CEO and its organisation, the workflows, the evals, the demo scripts |
 | Full | a 70B-class model or a frontier provider | the sample workshop agents and the sample stores |
 
