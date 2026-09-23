@@ -21,9 +21,8 @@ by name, and asks the admins on their behalf.*
 3. As Marcus, Chat: the same holiday question. The door reaches the people partner and answers.
    Say: same door, same question, different person, different destinations.
 4. As Dana, Approvals: Jordan's request is waiting, with `hr-partners` pre-selected because that is
-   the role `people-partner` names, and a *Hygiene* score beside the reason — put there by this
-   pack's own hook, not by the product (Packs → the pack's card → *Reacts to*). *Grant*. Admin →
-   Audit → *Door routing* lists Jordan's refused route and Marcus's successful one.
+   the role `people-partner` names. *Grant*. Admin → Audit → *Door routing* lists Jordan's refused
+   route and Marcus's successful one.
 5. As Jordan again (sign out and in — the role is read at sign-in): the holiday question now
    reaches the people partner.
 
