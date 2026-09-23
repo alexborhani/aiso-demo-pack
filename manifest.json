@@ -1,7 +1,7 @@
 {
   "id": "aiso-demo-pack",
   "name": "AI Stackops demo pack",
-  "version": "1.8.0",
+  "version": "1.8.1",
   "publisher": "AI Stack Ops",
   "tier": "certified",
   "description": "Meridian Works, a fictional company, for evaluating the whole platform as different people: six accounts with different tiers, roles and clearances, a classification policy, knowledge stores at every level, agents scoped to them, an all-hands store with notices at every level for the classification demo (enforcement starts off: switch to monitor, then enforce), an unlabelled site-notes store for the classifier, a presenter agent that runs the scripts aloud in a chosen or lent voice, an organisation with tickets and an agent CEO, routing objectives, a tool that needs approval, evals — plus the former sample agents, stores, functions, skills and workflows. Nothing in it is real.",
@@ -345,6 +345,6 @@
     "alg": "ed25519",
     "keyId": "a4470c96bdcc103c",
     "publicKey": "q2F/I5FwWGRdIG/Jhwgl6eGo1WMy0DKS0U05m0ROSIA=",
-    "signature": "g9vjMH+uclwFuXM0GyL31Sieyw9Ed/V6bvUOhHZQ/v9B7LANzJvTwXTV7aZ7vw59o6d9qoD3dnqfXTB9sX5pAw=="
+    "signature": "gbJm1fPdn5RxMnsBI4109UCWiWPuVpEnUq9ZhKviAgGXDIGVFDaSSzh1gVP2zMzRLRd8TDi0pvWxVH893+F7CA=="
   }
 }
