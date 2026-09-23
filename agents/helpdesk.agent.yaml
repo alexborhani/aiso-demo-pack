@@ -1,6 +1,6 @@
 name: helpdesk
 icon: fa-headset
-description: Meridian Works helpdesk — answers from the handbook and the IT runbooks; everyone may use it
+description: Meridian Works helpdesk — answers from the handbook and the IT runbooks
 version: "1.0.0"
 
 model:

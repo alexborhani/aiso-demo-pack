@@ -56,9 +56,12 @@ else:
     creds = json.load(open(A.creds))
 people = {n: login(n, p) for n, p in creds.items()}
 
+# Session ids carry a per-invocation stamp: a reused id (the server keeps conversation history in
+# memory between passes) makes the model answer from history without a tool call.
+STAMP = time.strftime('%H%M%S')
 def ask(agent, who, q, session, extra=None):
     inp = {'query': q}; inp.update(extra or {})
-    st, r = call('POST', f'/api/agents/{agent}/invoke', {'input': inp, 'sessionId': session}, people[who])
+    st, r = call('POST', f'/api/agents/{agent}/invoke', {'input': inp, 'sessionId': f'{session}-{STAMP}'}, people[who])
     return st, (r.get('output', '') if isinstance(r, dict) else str(r))
 
 def audit_since(action, actor, t0):

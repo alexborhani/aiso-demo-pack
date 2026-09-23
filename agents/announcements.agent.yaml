@@ -1,6 +1,6 @@
 name: announcements
 icon: fa-bullhorn
-description: Meridian Works announcements desk — answers from the all-hands channel; everyone may use it (the classification demo agent)
+description: Meridian Works announcements desk — answers from the all-hands channel (the classification demo agent)
 version: "1.0.0"
 
 model:

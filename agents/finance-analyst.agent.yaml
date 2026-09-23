@@ -1,6 +1,6 @@
 name: finance-analyst
 icon: fa-chart-line
-description: Finance analyst — reads the close packages and forecast; only finance analysts may use it
+description: Finance analyst — reads the close packages and forecast
 version: "1.0.0"
 
 model:
