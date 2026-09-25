@@ -21,7 +21,17 @@ tags: []
    `security-incidents`, `legal-matters`, `all-hands`, `site-notes`, `product-faq`, `scratchpad`.
    Ten stores, a few minutes in total on the local embedding model.
 4. Models tab: confirm the default chat entry is the engine's Gemma and the embedding entry is
-   `bge-small`. Nothing else is required. Scenario 15 adds a cloud entry live.
+   `bge-small`. Nothing else is required. Scenario 15 adds a cloud entry live. Scenario 16 is
+   stronger with the cloud entry below, added once; skip it and the scenario runs on the local model.
+
+   *Scenario 16's Claude entry.* Models tab → Anthropic, name `claude-haiku`, model
+   `claude-haiku-4-5-20251001`, key `${ANTHROPIC_API_KEY}`, Max Tokens 2048, Thinking budget 0,
+   access minimum role **member** (Priya asks the questions; a new cloud entry starts admin-only),
+   classification ceiling internal (the runbooks are internal), pricing 1 / 5 per million, and
+   USD / day **1**. Save. That dollar a day is the demo's own fence: a rehearsal and a run share it,
+   because the window is a rolling 24 hours. Do not make it the default and leave `helpdesk` on
+   `default`; the scenario switches it live. Keep to Haiku 4.5 or a 4.6 model here: the helpdesk
+   sends a temperature, and Sonnet 5, Opus 4.7 and later refuse one.
 5. Open the Studio in two browser profiles (or one normal and one private window) so you can be Dana
    in one and another person in the other without signing out. Scenario 14 needs a third window with
    no session at all.

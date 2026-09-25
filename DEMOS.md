@@ -46,7 +46,17 @@ presenter and the CEO — long prompts, many actions — wait for Standard.
    `security-incidents`, `legal-matters`, `all-hands`, `site-notes`, `product-faq`, `scratchpad`.
    Ten stores, a few minutes in total on the local embedding model.
 4. Models tab: confirm the default chat entry is the engine's Gemma and the embedding entry is
-   `bge-small`. Nothing else is required. Scenario 15 adds a cloud entry live.
+   `bge-small`. Nothing else is required. Scenario 15 adds a cloud entry live. Scenario 16 is
+   stronger with the cloud entry below, added once; skip it and the scenario runs on the local model.
+
+   *Scenario 16's Claude entry.* Models tab → Anthropic, name `claude-haiku`, model
+   `claude-haiku-4-5-20251001`, key `${ANTHROPIC_API_KEY}`, Max Tokens 2048, Thinking budget 0,
+   access minimum role **member** (Priya asks the questions; a new cloud entry starts admin-only),
+   classification ceiling internal (the runbooks are internal), pricing 1 / 5 per million, and
+   USD / day **1**. Save. That dollar a day is the demo's own fence: a rehearsal and a run share it,
+   because the window is a rolling 24 hours. Do not make it the default and leave `helpdesk` on
+   `default`; the scenario switches it live. Keep to Haiku 4.5 or a 4.6 model here: the helpdesk
+   sends a temperature, and Sonnet 5, Opus 4.7 and later refuse one.
 5. Open the Studio in two browser profiles (or one normal and one private window) so you can be Dana
    in one and another person in the other without signing out. Scenario 14 needs a third window with
    no session at all.
@@ -521,20 +531,47 @@ attached, and the answer to "did anything leave the building" is in the audit lo
 **Level:** Essentials.
 
 
-*Budgets and rate limits as circuit breakers, per person, per agent, per model.*
+*Budgets and rate limits as circuit breakers, per person, per agent, per model, on real answers
+and real dollars.* Stronger with the `claude-haiku` entry from *Before the day*; complete without
+one (see the end).
 
-**You are** Dana; Priya in the second window.
+**You are** Dana; Priya in the second window. A run is about ten helpdesk answers, roughly 10–15
+cents on Haiku; the entry's 1 USD a day stops anything beyond that.
 
-1. Admin → Policy → Limits: set the member tier to 1,500 tokens a day. Save.
-2. As Priya, `helpdesk`: **"How do I reset my VPN certificate?"** Answered. Ask again with another
-   runbook question. On the second or third call the reply is refused: budget exceeded, with what was
-   used and the limit. The Usage tab as Dana shows Priya's rows adding up to it.
-3. Admin → Audit: `limits.exceeded`, scope principal, throttled to one row per five minutes so a
-   loop cannot flood the log.
-4. Show the other two scopes without running them: an agent's own `limits` (runs per minute, spend
-   per month) in its definition, and a model entry's `budget` on the Models tab. Say: a runaway loop,
-   a leaked API key, or an over-enthusiastic pilot all hit the same three fences.
-5. Set the member cap back.
+1. As Dana, Agents → `helpdesk` → edit its model to `claude-haiku`. Save. Say: the most-used
+   assistant in the building now runs on a paid cloud model, and three fences sit around it.
+2. As Priya, `helpdesk`: **"How do I reset my VPN certificate?"** Claude answers from the VPN reset
+   runbook and quotes the step. As Dana, Usage tab → *By model entry* → `claude-haiku`: one row, its
+   tokens and its cost at the pricing on the entry, about a cent. Note that per-answer cost; step 4
+   uses it.
+3. **The person fence, by rate.** Admin → Policy → Limits: member tier, Requests / min **2**. Save.
+   As Priya, ask three in a row without waiting: **"The plant floor lost network, what do I do
+   first?"**, **"A print job is stuck in the queue, how do I clear it?"**, **"What does IT set up
+   for a new starter on day one?"** Two answers; the third is refused with *Limit reached: 2
+   requests per minute for priya — retry in …s*. Wait it out, ask the third again: answered.
+   The count is questions, not model calls. Set Requests / min back to empty.
+4. **The model fence, by spend.** As Dana, Usage shows what `claude-haiku` has spent in the last 24
+   hours. Models tab → `claude-haiku` → USD / day: type that figure plus about three answers' worth
+   (spent $0.06 and a cent an answer: **0.09**). Type it; the arrows step by 0.50. Save. As Priya,
+   keep asking runbook questions (**"How do I rebuild my laptop?"**, the VPN question again). A few
+   are answered, then: *Limit reached: $0.09 per day for model entry "claude-haiku" (used $0.09).
+   It frees up as the rolling 24 hours pass; an admin can raise it in the model entry's budget on
+   the Models tab.* The check runs before each call, so the answer that crosses the line still
+   arrives and the next one is refused. Usage: Priya's rows add up to it, at the price you set,
+   and the same calls are on the Anthropic bill.
+5. Admin → Audit, action `limits.exceeded`: the rate refusal (scope principal) and the spend
+   refusal (scope model), each throttled to one row per five minutes so a loop cannot flood the
+   log.
+6. Show the third scope without running it: an agent's own `limits` (runs per minute, spend per
+   month) in its definition. Say: a runaway loop, a leaked API key, or an over-enthusiastic pilot
+   all hit the same three fences.
+7. Reset now (the list at the end): `helpdesk` back to `default`, `claude-haiku` back to 1 USD a day.
+
+*Without a cloud key:* skip step 1 and give the `mlx-serve` entry pricing 1 / 5 per million on the
+Models tab. The local model answers, Usage prices each call as if it were Haiku, nothing is billed,
+and steps 3–5 run the same with `mlx-serve` in place of `claude-haiku`. A 9B answer costs more
+tokens than Claude's, so read the per-answer cost from Usage before setting the cap. Remove the
+pricing afterwards.
 
 **Land:** spend and load are bounded by policy before they become an invoice, and every refusal is
 recorded with who, what and how much.
@@ -711,7 +748,9 @@ audience; 19 for anyone with a privacy remit.
 - Scenario 12: the CEO's ticket changes stay; add a fresh ticket next time.
 - Scenario 13: Priya → Account → *Forget*.
 - Scenario 15: leave the entry; delete `board-analyst` if you prefer a clean agent list.
-- Scenario 16: member cap back to unlimited.
+- Scenario 16: member Requests / min back to empty; `helpdesk`'s model back to `default`;
+  `claude-haiku` USD / day back to 1 (or, without a key, the pricing removed from `mlx-serve`).
+  Leave the entry: the next run needs it.
 - Scenario 17: restore the runbook and reindex.
 - Scenario 19: reinstall the pack to bring Jordan back (Packs → uninstall → install).
 - Scenario 20: revoke the enrollment on the hub and stop the spoke process.

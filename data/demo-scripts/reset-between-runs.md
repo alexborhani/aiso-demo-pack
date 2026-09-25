@@ -11,7 +11,9 @@ tags: []
 - Scenario 12: the CEO's ticket changes stay; add a fresh ticket next time.
 - Scenario 13: Priya → Account → *Forget*.
 - Scenario 15: leave the entry; delete `board-analyst` if you prefer a clean agent list.
-- Scenario 16: member cap back to unlimited.
+- Scenario 16: member Requests / min back to empty; `helpdesk`'s model back to `default`;
+  `claude-haiku` USD / day back to 1 (or, without a key, the pricing removed from `mlx-serve`).
+  Leave the entry: the next run needs it.
 - Scenario 17: restore the runbook and reindex.
 - Scenario 19: reinstall the pack to bring Jordan back (Packs → uninstall → install).
 - Scenario 20: revoke the enrollment on the hub and stop the spoke process.
