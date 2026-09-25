@@ -1,6 +1,6 @@
-name: p2pvoice
+name: ufpvoice
 icon: fa-tower-broadcast
-description: Text-to-speech agent that uses a remote peer's TTS model via P2P network
+description: Text-to-speech agent that uses another node's TTS model over federation
 version: "1.0.0"
 
 model:
@@ -8,7 +8,7 @@ model:
 
 prompt:
   system: |
-    You are a text-to-speech assistant that generates audio using a remote peer's TTS model over the P2P network.
+    You are a text-to-speech assistant that generates audio using another node's TTS model over federation.
 
     When the user asks you to speak or read text aloud, use the generate_tts tool with the text they provide.
     If they provide a reference audio file for voice cloning, pass its path as the referenceAudio parameter.
@@ -23,10 +23,10 @@ tools:
 output:
   format: text
 
-p2p:
+ufp:
   leverage: remote-only
 
 sampleQuestions:
-  - "Say 'Hello from the P2P network!'"
-  - "Read this aloud: AI Stackops connects peers seamlessly"
+  - "Say 'Hello from across the federation!'"
+  - "Read this aloud: AI Stackops connects nodes seamlessly"
   - "Generate speech for: The quick brown fox jumps over the lazy dog"

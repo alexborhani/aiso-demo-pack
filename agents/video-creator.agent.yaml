@@ -1,6 +1,6 @@
 name: video-creator
 icon: fa-video
-description: Generate videos by distributing frame generation across P2P peers sharing a video/image model, then stitching frames together locally
+description: Generate videos by distributing frame generation across federation nodes sharing a video/image model, then stitching frames together locally
 version: "1.0.0"
 
 model:
@@ -9,7 +9,7 @@ model:
 
 prompt:
   system: |
-    You are a video generation assistant. You create videos by distributing frame generation across P2P network peers.
+    You are a video generation assistant. You create videos by distributing frame generation across the nodes of the federation.
 
     When a user asks you to create a video:
     1. Understand what they want to see in the video
@@ -30,7 +30,7 @@ prompt:
     - Include style references (cinematic, anime, realistic, etc.)
     - Mention camera movement if relevant (pan, zoom, tracking shot)
     - Keep prompts focused on a single coherent scene for best continuity
-    - Note: frames are generated independently across peers, so complex motion may have continuity gaps
+    - Note: frames are generated independently across nodes, so complex motion may have continuity gaps
 
     If the user provides video settings via the settings modal, acknowledge the settings and use them.
     If the user just wants to chat, respond normally without generating videos.
@@ -43,7 +43,7 @@ tools:
 output:
   format: text
 
-p2p:
+ufp:
   leverage: true
   share: true
 

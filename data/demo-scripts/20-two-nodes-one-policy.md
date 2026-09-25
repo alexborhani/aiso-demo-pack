@@ -36,12 +36,12 @@ lost or leaving laptop is cut off with one click.
 
 ```
 mkdir -p ~/aiso-spoke && cp templates/models.yaml ~/aiso-spoke/
-WORKSPACE=~/aiso-spoke PORT=3460 P2P_ENABLED=true P2P_PEER_NAME=riverside-laptop \
-  P2P_ENDPOINT=http://127.0.0.1:3460 HEADLESS=true ./dist/sea/ai-stackops start
+WORKSPACE=~/aiso-spoke PORT=3460 UFP_ENABLED=true UFP_PEER_NAME=riverside-laptop \
+  UFP_ENDPOINT=http://127.0.0.1:3460 HEADLESS=true ./dist/sea/ai-stackops start
 ```
 
 Open `http://localhost:3460`, create its admin, and continue from step 2. The spoke uses the same
 engine as the hub, which is fine for a demo; in production each node has its own. The hub must not
-have been started with `P2P_ENABLED=false` in its environment: that locks federation off.
+have been started with `UFP_ENABLED=false` in its environment: that locks federation off.
 
 ---

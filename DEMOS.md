@@ -646,41 +646,41 @@ lost or leaving laptop is cut off with one click.
 
 ```
 mkdir -p ~/aiso-spoke && cp templates/models.yaml ~/aiso-spoke/
-WORKSPACE=~/aiso-spoke PORT=3460 P2P_ENABLED=true P2P_PEER_NAME=riverside-laptop \
-  P2P_ENDPOINT=http://127.0.0.1:3460 HEADLESS=true ./dist/sea/ai-stackops start
+WORKSPACE=~/aiso-spoke PORT=3460 UFP_ENABLED=true UFP_PEER_NAME=riverside-laptop \
+  UFP_ENDPOINT=http://127.0.0.1:3460 HEADLESS=true ./dist/sea/ai-stackops start
 ```
 
 Open `http://localhost:3460`, create its admin, and continue from step 2. The spoke uses the same
 engine as the hub, which is fine for a demo; in production each node has its own. The hub must not
-have been started with `P2P_ENABLED=false` in its environment: that locks federation off.
+have been started with `UFP_ENABLED=false` in its environment: that locks federation off.
 
 ---
 
-## 21. One door for everyone
+## 21. One chat for everyone
 **Level:** Essentials.
 
 
-*A member never picks an agent. The front door answers from what they may use, refuses the rest
+*A member never picks an agent. Chat answers from what they may use, refuses the rest
 by name, and asks the admins on their behalf.*
 
 **You are** Jordan, then Marcus, then Dana (two windows).
 
 1. As Jordan, the Chat tab (it is the only chat a member has; the workshop tabs are gone). Ask
-   **"How do I reset my VPN certificate?"** The door hands the question to the helpdesk and answers
+   **"How do I reset my VPN certificate?"** Chat hands the question to the helpdesk and answers
    from the runbook, naming it.
-2. Still as Jordan: **"How much holiday do I carry over at year end?"** The door says the people
+2. Still as Jordan: **"How much holiday do I carry over at year end?"** Chat says the people
    partner owns that and it is outside Jordan's access, and offers to ask the administrators. Say
-   **"Yes, please ask."** The door confirms the request was sent.
-3. As Marcus, Chat: the same holiday question. The door reaches the people partner and answers.
-   Say: same door, same question, different person, different destinations.
+   **"Yes, please ask."** Chat confirms the request was sent.
+3. As Marcus, Chat: the same holiday question. This time it reaches the people partner and answers.
+   Say: same chat, same question, different person, different destinations.
 4. As Dana, Approvals: Jordan's request is waiting, with `hr-partners` pre-selected because that is
-   the role `people-partner` names. *Grant*. Admin → Audit → *Door routing* lists Jordan's refused
+   the role `people-partner` names. *Grant*. Admin → Audit → *Chat routing* lists Jordan's refused
    route and Marcus's successful one.
 5. As Jordan again (sign out and in — the role is read at sign-in): the holiday question now
    reaches the people partner.
 
-**Land:** one chat for members, resolved per person on every request; nothing is granted by the
-door, and every route and every request is on the record.
+**Land:** one chat for members, resolved per person on every request; nothing is granted by
+Chat, and every route and every request is on the record.
 
 ---
 

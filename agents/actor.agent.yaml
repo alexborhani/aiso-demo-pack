@@ -26,7 +26,7 @@ prompt:
 output:
   format: text
 memory: true
-p2p:
+ufp:
   share: true
 publish:
   enabled: true

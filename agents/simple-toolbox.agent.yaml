@@ -24,7 +24,7 @@ tools:
 output:
   format: text
 
-p2p:
+ufp:
   share: true
 
 sampleQuestions:

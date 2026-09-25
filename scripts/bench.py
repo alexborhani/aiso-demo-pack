@@ -109,23 +109,26 @@ def c_counsel(i):
 def c_finance(i):
     st, out = ask('finance-analyst', 'lena', 'What is the Q3 close status? One sentence.', f'b-fin-{i}')
     return st == 200 and len(out.strip()) > 20 and hasnt(out, r'cannot|not able|no access'), out[:80]
-def door_name():
+def chat_name():
+    # The Chat agent: rows carry `chat` (older hosts `door` only); it is named `chat`, or `front-door` on older workspaces.
     st, r = call('GET', '/api/agents', cookie=ADMIN)
-    return next((a['name'] for a in (r if isinstance(r, list) else []) if a.get('door')), 'front-door')
-def c_door_refused(i):
+    rows = r if isinstance(r, list) else []
+    return (next((a['name'] for a in rows if a.get('chat')), None) or next((a['name'] for a in rows if a.get('door')), None)
+            or ('chat' if any(a.get('name') == 'chat' for a in rows) else 'front-door'))
+def c_chat_refused(i):
     t0 = time.strftime('%Y-%m-%dT%H:%M:%S', time.gmtime())
-    st, out = ask(door_name(), 'jordan', 'How much holiday do I carry over at year end?', f'b-dr-j-{i}')
+    st, out = ask(chat_name(), 'jordan', 'How much holiday do I carry over at year end?', f'b-dr-j-{i}')
     ok = st == 200 and hasnt(out, r'\b\d+ days\b') and has(out, r'people|access|administrator|request')
     return ok, out[:90]
-def c_door_works(i):
+def c_chat_works(i):
     t0 = time.strftime('%Y-%m-%dT%H:%M:%S', time.gmtime())
-    st, out = ask(door_name(), 'marcus', 'How much holiday do I carry over at year end?', f'b-dr-m-{i}')
+    st, out = ask(chat_name(), 'marcus', 'How much holiday do I carry over at year end?', f'b-dr-m-{i}')
     rows = audit_since('agents.handoff', 'marcus', t0)
     return st == 200 and bool(rows) and rows[0]['outcome'] == 'success' and has(out, r'holiday|leave|carry|days'), (f'handoff={rows[0]["outcome"] if rows else "none"} ' + out[:70])
-def c_door_request(i):
+def c_chat_request(i):
     t0 = time.strftime('%Y-%m-%dT%H:%M:%S', time.gmtime())
-    ask(door_name(), 'jordan', 'How much holiday do I carry over at year end?', f'b-dq-{i}')
-    st, out = ask(door_name(), 'jordan', 'Yes, please ask the administrators for me.', f'b-dq-{i}')
+    ask(chat_name(), 'jordan', 'How much holiday do I carry over at year end?', f'b-dq-{i}')
+    st, out = ask(chat_name(), 'jordan', 'Yes, please ask the administrators for me.', f'b-dq-{i}')
     rows = audit_since('access.request', 'jordan', t0)
     st2, q = call('GET', '/api/admin/access-requests?status=all', cookie=ADMIN)
     mine = [x for x in (q.get('requests', []) if isinstance(q, dict) else []) if x.get('principalName') == 'jordan' and x.get('requestedAt', '') >= t0]
@@ -148,9 +151,9 @@ CHECKS = [
     ('severance-hr', 'essentials', 4, 'an HR partner does get them', c_severance_hr),
     ('store-refused', 'essentials', 3, 'the legal store refuses a contractor at the API', c_store_refused),
     ('memory', 'essentials', 13, 'the assistant remembers within a session', c_memory),
-    ('door-refused', 'essentials', 21, 'the front door refuses a contractor\'s holiday question by name and offers to ask', c_door_refused),
-    ('door-works', 'essentials', 21, 'the front door hands an HR partner\'s holiday question to the people partner', c_door_works),
-    ('door-request', 'essentials', 21, 'a yes at the door files an access request the admins see', c_door_request),
+    ('chat-refused', 'essentials', 21, 'Chat refuses a contractor\'s holiday question by name and offers to ask', c_chat_refused),
+    ('chat-works', 'essentials', 21, 'Chat hands an HR partner\'s holiday question to the people partner', c_chat_works),
+    ('chat-request', 'essentials', 21, 'a yes in Chat files an access request the admins see', c_chat_request),
     ('counsel', 'essentials', 8, 'counsel answers the admin on a restricted matter', c_counsel),
     ('finance', 'essentials', 6, 'the finance analyst answers a finance analyst', c_finance),
     ('presenter-start', 'standard', 4, 'the presenter starts a scenario through its tool', c_presenter),

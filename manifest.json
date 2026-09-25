@@ -1,7 +1,7 @@
 {
   "id": "aiso-demo-pack",
   "name": "AI Stackops demo pack",
-  "version": "1.9.1",
+  "version": "1.10.0",
   "publisher": "AI Stack Ops",
   "tier": "certified",
   "description": "Meridian Works, a fictional company, for evaluating the whole platform as different people: six accounts with different tiers, roles and clearances, a classification policy, knowledge stores at every level, agents scoped to them, an all-hands store with notices at every level for the classification demo (enforcement starts off: switch to monitor, then enforce), an unlabelled site-notes store for the classifier, a presenter agent that runs the scripts aloud in a chosen or lent voice, an organisation with tickets and an agent CEO, routing objectives, a tool that needs approval, evals — plus the former sample agents, stores, functions, skills and workflows. Nothing in it is real.",
@@ -23,10 +23,10 @@
       "agents/music-librarian.agent.yaml",
       "agents/network-security.agent.yaml",
       "agents/org-ceo.agent.yaml",
-      "agents/p2pvoice.agent.yaml",
       "agents/people-partner.agent.yaml",
       "agents/security-lead.agent.yaml",
       "agents/simple-toolbox.agent.yaml",
+      "agents/ufpvoice.agent.yaml",
       "agents/video-creator.agent.yaml",
       "agents/voice-clone.agent.yaml",
       "agents/web-engineer.agent.yaml",
@@ -303,8 +303,8 @@
           "agents/music-librarian.agent.yaml",
           "agents/network-security.agent.yaml",
           "agents/org-ceo.agent.yaml",
-          "agents/p2pvoice.agent.yaml",
           "agents/simple-toolbox.agent.yaml",
+          "agents/ufpvoice.agent.yaml",
           "agents/video-creator.agent.yaml",
           "agents/voice-clone.agent.yaml",
           "agents/web-engineer.agent.yaml",
@@ -345,6 +345,6 @@
     "alg": "ed25519",
     "keyId": "a4470c96bdcc103c",
     "publicKey": "q2F/I5FwWGRdIG/Jhwgl6eGo1WMy0DKS0U05m0ROSIA=",
-    "signature": "lGKsRhEJW+HMyhUzyyeBiPkSJV+plGJynIG7CsNkksVXx39f6ksNr3UEqV0nqcACCuthZhBb+lAa7ktJtqkYCQ=="
+    "signature": "nRjTir23eitASeDi9BkK9dwY54f5/h+eGWGG6kIPJR6sQHhugjsJB/gO4RcqCdu7q5zNTRO5+njzXP/0vjYXBg=="
   }
 }
