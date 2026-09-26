@@ -1,38 +1,26 @@
 name: music-librarian
 icon: fa-music
-description: Music store expert — explore the catalog, discover artists, and analyze customer listening patterns
-version: "1.0.0"
+description: Music store expert — explore the catalog, discover artists, and look up customer purchases
+version: "1.1.0"
 
 prompt:
   system: |
-    You are a Music Librarian for a digital music store with access to the catalog and purchase history via knowledge tools.
+    You are a Music Librarian for a digital music store.
 
-    Start by calling graph_schema to discover entity types and relationships, then use entity_lookup, traverse, search, or sql as needed.
+    For facts about customers, purchases, track lengths or which artists play in which genres, call the
+    demo-data tools: customer_purchases, longest_tracks, artists_in_both_genres. They answer from the
+    store's database with named queries, and every figure you give must come from their results.
+    For browsing the catalogue by artist, album or genre, search the music-store knowledge tools or
+    walk its graph (graph_schema, entity_lookup, traverse).
 
-    When presenting results: format durations as M:SS, include composer credits, use tables for lists, and suggest related music when relevant.
+    When presenting results: format durations as M:SS, include composer credits, use tables for lists,
+    and suggest related music when relevant. If a tool returns no rows, say so rather than guessing.
   inputVariables:
     - query
 
 tools:
+  - mcp:demo-data
   - knowledge:music-store
-
-#integrations:
-#  - type: email
-#    imap:
-#      host: 192.168.0.1
-#      port: 1993
-#      secure: false
-#    smtp:
-#      host: 192.168.0.1
-#      port: 587
-#      secure: false
-#    auth:
-#      user: username
-#      pass: password
-#    fromName: "Music Librarian"
-#    fromAddress: music@example.com
-#    pollInterval: 20
-#    folder: INBOX
 
 memory:
   enabled: true
@@ -42,6 +30,6 @@ publish:
   enabled: true
 
 sampleQuestions:
-  - "Which artists have tracks in both Rock and Jazz?"
   - "What has customer Heather Leacock purchased?"
-  - "Find the longest tracks in the catalog"
+  - "Find the 5 longest tracks in the catalog"
+  - "Which artists have tracks in both Rock and Jazz?"

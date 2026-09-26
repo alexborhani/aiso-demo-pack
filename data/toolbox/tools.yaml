@@ -1,0 +1,110 @@
+# MCP Toolbox for Databases (https://github.com/googleapis/mcp-toolbox), pinned in
+# mcp/demo-data.mcp.json. Every tool is a named, parameterised query: the demo's governed
+# answers. There is deliberately no execute_sql tool, so no model writes SQL here.
+# Paths are relative to this folder, which is the server's working directory.
+sources:
+  music-store:
+    kind: sqlite
+    database: ../music-store/musicstore.sqlite
+  pet-store:
+    kind: sqlite
+    database: ../pet-store/pet-store.db
+
+tools:
+  customer_purchases:
+    kind: sqlite-sql
+    source: music-store
+    description: Tracks a music store customer bought, newest invoice first, with the price paid. Give the customer's first and last name.
+    parameters:
+      - name: first_name
+        type: string
+        description: The customer's first name, for example Heather.
+      - name: last_name
+        type: string
+        description: The customer's last name, for example Leacock.
+    statement: |
+      SELECT i.InvoiceId AS invoice_id, date(i.InvoiceDate) AS invoice_date,
+             t.Name AS track, ar.Name AS artist, a.Title AS album, g.Name AS genre,
+             il.UnitPrice AS price, il.Quantity AS quantity
+      FROM Customer c
+      JOIN Invoice i ON i.CustomerId = c.CustomerId
+      JOIN InvoiceLine il ON il.InvoiceId = i.InvoiceId
+      JOIN Track t ON t.TrackId = il.TrackId
+      JOIN Album a ON a.AlbumId = t.AlbumId
+      JOIN Artist ar ON ar.ArtistId = a.ArtistId
+      LEFT JOIN Genre g ON g.GenreId = t.GenreId
+      WHERE c.FirstName = ? COLLATE NOCASE AND c.LastName = ? COLLATE NOCASE
+      ORDER BY i.InvoiceDate DESC, t.Name
+
+  longest_tracks:
+    kind: sqlite-sql
+    source: music-store
+    description: The longest tracks in the catalogue, longest first, with artist, album and length in seconds.
+    parameters:
+      - name: limit
+        type: integer
+        description: How many tracks to return (1 to 50).
+    statement: |
+      SELECT t.Name AS track, ar.Name AS artist, a.Title AS album,
+             t.Milliseconds / 1000 AS seconds, g.Name AS genre
+      FROM Track t
+      JOIN Album a ON a.AlbumId = t.AlbumId
+      JOIN Artist ar ON ar.ArtistId = a.ArtistId
+      LEFT JOIN Genre g ON g.GenreId = t.GenreId
+      ORDER BY t.Milliseconds DESC
+      LIMIT min(max(?, 1), 50)
+
+  artists_in_both_genres:
+    kind: sqlite-sql
+    source: music-store
+    description: Artists with at least one track in each of two genres, for example Rock and Jazz, with their track count in each.
+    parameters:
+      - name: genre_a
+        type: string
+        description: The first genre name, for example Rock.
+      - name: genre_b
+        type: string
+        description: The second genre name, for example Jazz.
+    statement: |
+      SELECT ar.Name AS artist,
+             sum(g.Name = ?1 COLLATE NOCASE) AS tracks_in_first,
+             sum(g.Name = ?2 COLLATE NOCASE) AS tracks_in_second
+      FROM Track t
+      JOIN Album a ON a.AlbumId = t.AlbumId
+      JOIN Artist ar ON ar.ArtistId = a.ArtistId
+      JOIN Genre g ON g.GenreId = t.GenreId
+      GROUP BY ar.ArtistId
+      HAVING tracks_in_first > 0 AND tracks_in_second > 0
+      ORDER BY ar.Name
+
+  pets_available:
+    kind: sqlite-sql
+    source: pet-store
+    description: Pets available for adoption, with species, breed, age and price. Give a species such as Dog or Cat, or "any".
+    parameters:
+      - name: species
+        type: string
+        description: A species name, or "any" for every species.
+    statement: |
+      SELECT p.name AS pet, s.name AS species, b.name AS breed, p.age, p.price
+      FROM pets p
+      JOIN breeds b ON b.id = p.breed_id
+      JOIN species s ON s.id = b.species_id
+      WHERE p.status = 'available' AND (?1 = 'any' OR s.name = ?1 COLLATE NOCASE)
+      ORDER BY s.name, p.price
+
+  pet_details:
+    kind: sqlite-sql
+    source: pet-store
+    description: Everything the store records about one pet by name, including its breed's size, temperament and lifespan.
+    parameters:
+      - name: name
+        type: string
+        description: The pet's name.
+    statement: |
+      SELECT p.name AS pet, p.age, p.price, p.status, p.description,
+             b.name AS breed, b.size, b.temperament, b.avg_lifespan, s.name AS species
+      FROM pets p
+      JOIN breeds b ON b.id = p.breed_id
+      JOIN species s ON s.id = b.species_id
+      WHERE p.name = ? COLLATE NOCASE

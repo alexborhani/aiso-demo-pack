@@ -1,7 +1,7 @@
 {
   "id": "aiso-demo-pack",
   "name": "AI Stackops demo pack",
-  "version": "1.10.1",
+  "version": "1.11.0",
   "publisher": "AI Stack Ops",
   "tier": "certified",
   "description": "Meridian Works, a fictional company, for evaluating the whole platform as different people: six accounts with different tiers, roles and clearances, a classification policy, knowledge stores at every level, agents scoped to them, an all-hands store with notices at every level for the classification demo (enforcement starts off: switch to monitor, then enforce), an unlabelled site-notes store for the classifier, a presenter agent that runs the scripts aloud in a chosen or lent voice, an organisation with tickets and an agent CEO, routing objectives, a tool that needs approval, evals — plus the former sample agents, stores, functions, skills and workflows. Nothing in it is real.",
@@ -72,7 +72,8 @@
       "data/transcripts",
       "data/site-notes",
       "data/product-faq",
-      "data/demo-scripts"
+      "data/demo-scripts",
+      "data/toolbox"
     ],
     "workflows": [
       "workflows/customer-notice.workflow.yaml",
@@ -94,11 +95,13 @@
     ],
     "evals": [
       "evals/chatbot.eval.yaml",
-      "evals/helpdesk.eval.yaml"
+      "evals/helpdesk.eval.yaml",
+      "evals/music-librarian.eval.yaml"
     ],
     "routing": "routing.fragment.yaml",
     "tools": "tools.fragment.yaml",
-    "organization": "organization.yaml"
+    "organization": "organization.yaml",
+    "mcp": "mcp/demo-data.mcp.json"
   },
   "seed": {
     "roles": [
@@ -287,7 +290,7 @@
     {
       "id": "full",
       "label": "Full",
-      "description": "Adds the sample workshop agents (architect, marketer, web engineer, sandbox and media agents) and the sample stores. Scenario 20 and the builder workshop.",
+      "description": "Adds the sample workshop agents (architect, marketer, web engineer, sandbox and media agents) and the sample stores, and the demo-data MCP server (MCP Toolbox over the music-store and pet-store databases). Scenario 20 and the builder workshop.",
       "requires": {
         "modelClass": "large",
         "contextTokens": 32768
@@ -323,7 +326,8 @@
           "data/org-chart",
           "data/pdf-patients",
           "data/pet-store",
-          "data/transcripts"
+          "data/transcripts",
+          "data/toolbox"
         ],
         "workflows": [
           "workflows/example.workflow.yaml",
@@ -337,14 +341,19 @@
         ],
         "functions": [
           "functions/text-formatter.function.mjs"
+        ],
+        "mcp": "mcp/demo-data.mcp.json",
+        "evals": [
+          "evals/music-librarian.eval.yaml"
         ]
       }
     }
   ],
+  "integrity": "sha256-0930a6cba827b8db4d70104522d06af7fbd08c98f0853cab953d87d8c26b90bd",
   "signature": {
     "alg": "ed25519",
     "keyId": "a4470c96bdcc103c",
     "publicKey": "q2F/I5FwWGRdIG/Jhwgl6eGo1WMy0DKS0U05m0ROSIA=",
-    "signature": "vQBgGIoaQNMoJcS4OYZIKtqWOIhWFLM20H4zk2jN3YUunfzHmqIpV129EaQn/npTf9/BVXTdFHyZOllAUCZpAg=="
+    "signature": "mQQYS68GexH9pc2lhzVOvJGy08XD3ZGEffxIJoE4K3ztQvNIaGWc0gm0LEWe1pS43mtod7qmzNKDlDO3qX2dCw=="
   }
 }

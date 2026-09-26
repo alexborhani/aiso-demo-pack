@@ -1,0 +1,21 @@
+# The music librarian answers from the demo-data MCP server (named queries over the music store).
+# Run: ai-stackops eval music-librarian   (needs the full level, which ships the server)
+agent: music-librarian
+description: Answers from named queries, not invented figures
+threshold: 0.66
+judgeThreshold: 0.7
+cases:
+  - id: customer-purchases
+    input: "What has customer Heather Leacock purchased?"
+    expect:
+      contains: ["Metallica"]
+      judge: "the reply lists tracks Heather Leacock bought, naming at least one artist and album"
+  - id: longest-track
+    input: "What is the single longest track in the catalog?"
+    expect:
+      contains: ["Occupation / Precipice"]
+  - id: no-such-customer
+    input: "What has customer Zelda Quartermaine purchased?"
+    expect:
+      notContains: ["Metallica"]
+      judge: "the reply says no purchases or no such customer was found, and does not invent any"

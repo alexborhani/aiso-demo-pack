@@ -1,47 +1,14 @@
 name: music-store
 description: Music store catalog — artists, albums, tracks, and genres with graph relationships
 
+# The rows come from scripts/export-demo-rows.py. Live questions (who bought what, what is
+# available now) go to the demo-data MCP server, which answers with named queries.
 source:
-  type: database
-  connectionString: sqlite://bundles/aiso-demo-pack/music-store/musicstore.sqlite
-  query: |
-    SELECT
-      t.TrackId       AS track_id,
-      t.Name          AS track_name,
-      COALESCE(t.Composer, '') AS composer,
-      t.Milliseconds  AS duration_ms,
-      t.UnitPrice     AS price,
-      a.AlbumId       AS album_id,
-      a.Title         AS album_title,
-      ar.ArtistId     AS artist_id,
-      ar.Name         AS artist_name,
-      g.GenreId       AS genre_id,
-      g.Name          AS genre_name,
-      t.Name || ' by ' || COALESCE(ar.Name, 'Unknown')
-        || ' on album ' || a.Title
-        || ' [' || COALESCE(g.Name, 'Unknown') || ']'
-        || ' (' || (t.Milliseconds / 60000) || ':' || printf('%02d', (t.Milliseconds % 60000) / 1000) || ')'
-        || CASE WHEN t.Composer IS NOT NULL AND t.Composer <> '' THEN '. Composed by ' || t.Composer ELSE '' END
-      AS content
-    FROM Track t
-    JOIN Album a ON t.AlbumId = a.AlbumId
-    JOIN Artist ar ON a.ArtistId = ar.ArtistId
-    LEFT JOIN Genre g ON t.GenreId = g.GenreId
-    LIMIT 500
-  contentColumn: content
-  metadataColumns:
-    - track_id
-    - track_name
-    - composer
-    - album_id
-    - album_title
-    - artist_id
-    - artist_name
-    - genre_id
-    - genre_name
+  type: file
+  path: bundles/aiso-demo-pack/music-store/tracks.json
 
 loader:
-  type: text
+  type: json
 
 splitter:
   type: character

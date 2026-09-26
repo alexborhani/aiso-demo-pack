@@ -1,0 +1,14 @@
+{
+  "servers": {
+    "demo-data": {
+      "description": "Meridian's demo databases (the music store and the pet store) through MCP Toolbox for Databases: named queries only, no free SQL.",
+      "command": "npx",
+      "args": ["-y", "@toolbox-sdk/server@1.13.1", "--stdio", "--config", "tools.yaml"],
+      "cwd": "bundles/aiso-demo-pack/toolbox",
+      "profile": "toolbox",
+      "serviceAccount": { "name": "demo SQLite files", "description": "The two SQLite files shipped in the pack, opened by the Toolbox server; nobody signs in to them." },
+      "timeout": 120000,
+      "callTimeout": 30000
+    }
+  }
+}

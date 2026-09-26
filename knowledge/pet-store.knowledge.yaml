@@ -1,38 +1,14 @@
 name: pet-store
 description: Pet store inventory with species, breeds, pets, and supplies
 
+# The rows come from scripts/export-demo-rows.py. Live questions (who bought what, what is
+# available now) go to the demo-data MCP server, which answers with named queries.
 source:
-  type: database
-  connectionString: sqlite://bundles/aiso-demo-pack/pet-store/pet-store.db
-  query: |
-    SELECT
-      p.id       AS pet_id,
-      p.name     AS pet_name,
-      p.age,
-      p.price,
-      p.status,
-      p.description AS content,
-      b.id       AS breed_id,
-      b.name     AS breed_name,
-      b.size,
-      b.temperament,
-      b.avg_lifespan,
-      s.id       AS species_id,
-      s.name     AS species_name
-    FROM pets p
-    JOIN breeds b ON p.breed_id = b.id
-    JOIN species s ON b.species_id = s.id
-  contentColumn: content
-  metadataColumns:
-    - pet_id
-    - pet_name
-    - breed_name
-    - species_name
-    - status
-    - price
+  type: file
+  path: bundles/aiso-demo-pack/pet-store/pets.json
 
 loader:
-  type: text
+  type: json
 
 splitter:
   type: character
@@ -44,8 +20,6 @@ embedding: default
 search:
   defaultK: 5
 
-reindex:
-  schedule: "0 * * * *"          # Re-index every hour
 
 graph:
   directMapping:

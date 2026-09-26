@@ -22,6 +22,7 @@ A pack that turns a vanilla AI Stackops install into a fictional company, **Meri
 - **Agents** scoped to them: `helpdesk` (everyone), `people-partner`, `finance-analyst`, `counsel`, `security-lead` (with the approval-gated `revoke_access` action), `writer` (canvas + knowledge write-back), `meridian-ceo`, plus the former sample agents.
 - **Workflows**: an evaluator loop (`customer-notice`), a parallel research-and-merge (`incident-brief`), and the former examples.
 - **An organisation**, Meridian Works, with an agent CEO, members and eight tickets.
+- **A data source** (full level): `demo-data`, MCP Toolbox for Databases over the music-store and pet-store SQLite files, with five named queries in `data/toolbox/tools.yaml` and no free SQL. The music librarian answers purchases and track lengths from it, so its replies carry a Sources line with the statement that ran. It needs Node's `npx` on the server's path; the first call downloads the pinned `@toolbox-sdk/server@1.13.1`.
 - **Routing objectives** per role and agent, **budgets** on two roles, a **tool-approval** entry, an **eval** file for the helpdesk, a **skill** (house style) and functions.
 
 ## Levels
@@ -32,7 +33,7 @@ The pack installs at one of three levels — pick the one your default chat mode
 | --- | --- | --- |
 | Essentials | a 9B-class local model, 16K+ context | the eight Meridian agents (one to three tools each), the nine stores the scripts use, the people, roles and policy; the Chat scenario (21) |
 | Standard | a 27B-class local model at 32K, or a cloud entry | the presenter, the writer and canvas, the agent CEO and its organisation, the workflows, the evals, the demo scripts |
-| Full | a 70B-class model or a frontier provider | the sample workshop agents and the sample stores |
+| Full | a 70B-class model or a frontier provider | the sample workshop agents and the sample stores, and the `demo-data` MCP server |
 
 [DEMOS.md](DEMOS.md) says which level each scenario needs. `scripts/bench.py` checks a level against the model on a host (see *Benchmarking a level*).
 
