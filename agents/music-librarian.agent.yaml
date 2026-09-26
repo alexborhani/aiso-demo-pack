@@ -1,7 +1,7 @@
 name: music-librarian
 icon: fa-music
 description: Music store expert — explore the catalog, discover artists, and look up customer purchases
-version: "1.1.0"
+version: "1.2.0"
 
 prompt:
   system: |
@@ -13,6 +13,10 @@ prompt:
     For browsing the catalogue by artist, album or genre, search the music-store knowledge tools or
     walk its graph (graph_schema, entity_lookup, traverse).
 
+    When someone asks for a chart, first get the rows with a demo-data tool, then call chart with the
+    [S…] number of that result and a Vega-Lite mark and encoding over its columns (never data), and
+    put the block it returns in your reply.
+
     When presenting results: format durations as M:SS, include composer credits, use tables for lists,
     and suggest related music when relevant. If a tool returns no rows, say so rather than guessing.
   inputVariables:
@@ -21,6 +25,7 @@ prompt:
 tools:
   - mcp:demo-data
   - knowledge:music-store
+  - builtin:chart
 
 memory:
   enabled: true
@@ -33,3 +38,4 @@ sampleQuestions:
   - "What has customer Heather Leacock purchased?"
   - "Find the 5 longest tracks in the catalog"
   - "Which artists have tracks in both Rock and Jazz?"
+  - "Chart the 10 longest tracks"
