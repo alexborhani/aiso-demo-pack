@@ -2,7 +2,7 @@
 
 A pack that turns a vanilla AI Stackops install into a fictional company, **Meridian Works**, so the whole platform can be evaluated as different people. Nothing in it is real: the people, documents, figures and matters are invented.
 
-**Presenting to leaders?** [DEMOS.md](DEMOS.md) has twenty-five scripted scenarios (0–24), a 60-minute tour and the reset list.
+**Presenting to leaders?** [DEMOS.md](DEMOS.md) has thirty-seven scripted scenarios (0–36), a 60-minute tour and the reset list. Scenarios 25–36 are new and not yet measured; 34–36 need a system the demo Mac does not have (a warehouse, an unsigned pack's repository, a Microsoft 365 tenant).
 
 ## What it installs
 
@@ -33,9 +33,9 @@ The pack installs at one of three levels — pick the one your default chat mode
 
 | Level | For | Adds |
 | --- | --- | --- |
-| Essentials | a 9B-class local model, 16K+ context (measured on Qwen 3.5 9B) | the eight Meridian agents (one to three tools each), the nine stores the scripts use, the people, roles and policy; Chat (21) and checked answers (22) |
+| Essentials | a 9B-class local model, 16K+ context (measured on Qwen 3.5 9B) | the eight Meridian agents (one to three tools each), the nine stores the scripts use, the people, roles and policy; Chat (21), checked answers (22) and files that carry Purview labels (25) |
 | Standard | a 27B-class local model at 32K, or a cloud entry for the agents this level adds (measured on Claude Haiku 4.5) | the presenter, the writer with its playbook, canvas, the agent CEO and its organisation, the workflows, the evals, the demo scripts |
-| Full | a 70B-class model or a frontier provider (measured on Claude Haiku 4.5) | the sample workshop agents and stores, the `demo-data` MCP server, the firmware docs and the safety review skill |
+| Full | a 70B-class model or a frontier provider (measured on Claude Haiku 4.5) | the sample workshop agents and stores, the `demo-data` MCP server and its column-tag catalog (26), the firmware docs and the safety review skill |
 
 [DEMOS.md](DEMOS.md) says which level each scenario needs. `scripts/bench.py` checks a level against the model on a host (see *Benchmarking a level*).
 
@@ -74,7 +74,7 @@ Measured for 1.12.0 on 2026-09-29, 3 runs per check, a check passing at 2 of 3, 
 | Standard | Claude Haiku 4.5 (OpenRouter) for the writer | the playbook asks for its missing date 3/3, the filing waits for an admin and files 3/3, the playbook's own evals pass 3/3 |
 | Full | Claude Haiku 4.5 for the music librarian | a governed data answer with its figures found and a grade 3/3 |
 
-The presenter (scenario 0) refuses cloud models and started a scenario in 0 of 3 runs on the 9B: it needs a Standard-class local model. Scenarios 23 (the skill builder) and 24 (Claude Code through the gateway) were run end to end once on Claude Haiku 4.5; they are not in the bench. On a 24 GB Mac some calls to the 9B took minutes when the machine was swapping; see *Before the day* in DEMOS.md.
+The presenter (scenario 0) refuses cloud models and started a scenario in 0 of 3 runs on the 9B: it needs a Standard-class local model. Scenarios 23 (the skill builder) and 24 (Claude Code through the gateway) were run end to end once on Claude Haiku 4.5; they are not in the bench. Scenarios 25–36 are new and not in the bench yet (measured: pending). On a 24 GB Mac some calls to the 9B took minutes when the machine was swapping; see *Before the day* in DEMOS.md.
 
 ## Uninstall
 

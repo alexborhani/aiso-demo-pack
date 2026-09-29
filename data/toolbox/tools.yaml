@@ -108,3 +108,33 @@ tools:
       JOIN breeds b ON b.id = p.breed_id
       JOIN species s ON s.id = b.species_id
       WHERE p.name = ? COLLATE NOCASE
+
+  customer_contact:
+    kind: sqlite-sql
+    source: music-store
+    description: A music store customer's contact details and support rep id, by last name.
+    parameters:
+      - name: last_name
+        type: string
+        description: The customer's last name, for example Leacock.
+    statement: |
+      SELECT c.FirstName, c.LastName, c.Company, c.City, c.Country, c.Email, c.Phone, c.SupportRepId
+      FROM Customer c
+      WHERE c.LastName = ? COLLATE NOCASE
+      ORDER BY c.FirstName
+
+  customer_spend_by_country:
+    kind: sqlite-sql
+    source: music-store
+    description: Countries with the most customer spending, with the number of customers and total spend.
+    parameters:
+      - name: limit
+        type: integer
+        description: How many countries to return (1 to 25).
+    statement: |
+      SELECT c.Country, COUNT(DISTINCT c.CustomerId) AS customers, ROUND(SUM(i.Total), 2) AS spend
+      FROM Customer c
+      JOIN Invoice i ON i.CustomerId = c.CustomerId
+      GROUP BY c.Country
+      ORDER BY spend DESC
+      LIMIT min(max(?, 1), 25)

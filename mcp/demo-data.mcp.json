@@ -3,12 +3,89 @@
     "demo-data": {
       "description": "Meridian's demo databases (the music store and the pet store) through MCP Toolbox for Databases: named queries only, no free SQL.",
       "command": "npx",
-      "args": ["-y", "@toolbox-sdk/server@1.13.1", "--stdio", "--config", "tools.yaml"],
+      "args": [
+        "-y",
+        "@toolbox-sdk/server@1.13.1",
+        "--stdio",
+        "--config",
+        "tools.yaml"
+      ],
       "cwd": "bundles/aiso-demo-pack/toolbox",
       "profile": "toolbox",
-      "serviceAccount": { "name": "demo SQLite files", "description": "The two SQLite files shipped in the pack, opened by the Toolbox server; nobody signs in to them." },
+      "serviceAccount": {
+        "name": "demo SQLite files",
+        "description": "The two SQLite files shipped in the pack, opened by the Toolbox server; nobody signs in to them."
+      },
+      "classification": {
+        "level": "internal"
+      },
+      "columns": {
+        "sync": true,
+        "via": "demo-catalog",
+        "vocabulary": "bigquery",
+        "intervalHours": 24,
+        "classify": true
+      },
       "timeout": 120000,
       "callTimeout": 30000
+    },
+    "demo-catalog": {
+      "description": "The data team's column catalog for the music store (a stand-in for BigQuery policy tags): one named query, aiso_column_tags, read by AI Stackops to classify the demo-data columns. No agent uses it.",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@toolbox-sdk/server@1.13.1",
+        "--stdio",
+        "--config",
+        "tools.yaml"
+      ],
+      "cwd": "bundles/aiso-demo-pack/column-catalog",
+      "profile": "toolbox",
+      "serviceAccount": {
+        "name": "demo catalog file",
+        "description": "The catalog SQLite file shipped in the pack, opened by the Toolbox server."
+      },
+      "timeout": 120000,
+      "callTimeout": 30000
+    },
+    "demo-sql": {
+      "description": "The music store through MCP Toolbox with one free-SQL tool, run_sql, over a copy of the database: for builders, each statement read by the SQL check before it runs (scenario 30).",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@toolbox-sdk/server@1.13.1",
+        "--stdio",
+        "--config",
+        "sql.yaml"
+      ],
+      "cwd": "bundles/aiso-demo-pack/toolbox",
+      "profile": "toolbox",
+      "serviceAccount": {
+        "name": "demo SQLite copy",
+        "description": "A copy of the music store's SQLite file, opened by the Toolbox server; nobody signs in to it."
+      },
+      "classification": {
+        "level": "internal"
+      },
+      "tools": {
+        "tiers": {
+          "run_sql": "sql"
+        },
+        "sql": {
+          "access": {
+            "minRole": "builder"
+          }
+        }
+      },
+      "timeout": 120000,
+      "callTimeout": 30000,
+      "columns": {
+        "sync": true,
+        "via": "demo-catalog",
+        "vocabulary": "bigquery",
+        "intervalHours": 24,
+        "classify": false
+      }
     }
   }
 }

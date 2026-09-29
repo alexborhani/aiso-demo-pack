@@ -17,8 +17,12 @@ level: essentials
 2. Admin → Policy → Classification. Show the four levels and the categories the pack adopted from the
    written policy, the tier clearances, and the *Enforcement* panel showing **Off** in red. Say: the
    policy is loaded and idle; scenario 4 turns it on in front of them.
-3. Scroll to *Written policy*. This is the organisation's own document, stored beside the taxonomy,
-   hashed and versioned. Press *Extract criteria*: the local model reads the policy and proposes
+3. First give the classifier its model: a pack does not set the host's classifier, and *Extract
+   criteria* needs one. Under *Background classifier*, *Model (a local chat entry under Models)*:
+   type the local chat entry's name, `mlx-serve`, and press *Save taxonomy*. The status line under
+   it reads *classifier ready on mlx-serve*. Then scroll to *Written policy*. This is the
+   organisation's own document, stored beside the taxonomy, hashed and versioned. Press *Extract
+   criteria*: the local model reads the policy and proposes
    levels with criteria, categories, clearances and handling rules. Compare the proposal with the
    editor above it. Nothing applies until an admin copies it in. *Needs room:* the policy is about
    1,500 tokens; at 4K the proposal may come back short.

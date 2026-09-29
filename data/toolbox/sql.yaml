@@ -1,0 +1,15 @@
+# Free SQL over a copy of the music store, for scenario 30 (the demo-sql server in
+# mcp/demo-data.mcp.json). A copy, so nothing a statement does can touch the file the governed
+# demo-data queries read. The Toolbox profile tiers run_sql as `sql` (its input is `sql`), so the
+# SQL check reads each statement before it runs and only builders are offered the tool.
+# Paths are relative to this folder, which is the server's working directory.
+sources:
+  music-store-copy:
+    kind: sqlite
+    database: ../music-store/musicstore-analyst.sqlite
+
+tools:
+  run_sql:
+    kind: sqlite-execute-sql
+    source: music-store-copy
+    description: Run one read-only SQLite SELECT against the music store and return the rows.

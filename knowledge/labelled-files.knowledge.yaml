@@ -1,0 +1,36 @@
+name: labelled-files
+description: "A shared folder of Word, Excel, PowerPoint and PDF files that carry Microsoft Purview sensitivity labels, two of them protected: the external-labels demo store"
+
+source:
+  type: directory
+  path: bundles/aiso-demo-pack/labelled-files
+  pattern: "*.{docx,xlsx,pptx,pdf}"
+
+# Word, Excel and PowerPoint go to the Office loader, PDFs to the PDF loader (same store). Both read
+# the sensitivity label the file carries; a protected file is recorded as unreadable, not indexed.
+loader:
+  type: office
+
+graph:
+  fromLinks: false
+
+splitter:
+  type: recursive
+  chunkSize: 700
+  chunkOverlap: 80
+
+embedding: default
+
+# Files whose label maps (Policy → Classification → External labels → Purview) take that level.
+# The price list's label ("Partner Shared") maps to nothing, so it reads at this default until a
+# person or the classifier decides. auto: false keeps the background classifier off this store,
+# so what the audience sees is the labels alone.
+classification:
+  level: internal
+  auto: false
+
+egress:
+  allowFrontier: false
+
+search:
+  defaultK: 5

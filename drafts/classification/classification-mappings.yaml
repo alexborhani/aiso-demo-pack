@@ -1,0 +1,39 @@
+# Draft replacement for the last block of classification.yaml (the `mappings:` block, which today is
+# `mappings: { external: {} }`), plus the column classifier settings. Everything else in
+# classification.yaml stays as it is. Label ids and the tenant are fictional and fixed; they match the
+# files built by generate_labelled_files.py and the tags in generate_column_catalog.py.
+#
+# Checked with the product's TaxonomySchema by probe-labels.ts / probe-columns.ts (see NOTES.md).
+
+# Labels other systems put on data, mapped to these levels. Purview: labels read from inside Office
+# and PDF files (store `labelled-files`). BigQuery: the column tags the demo-data server's catalog lists.
+mappings:
+  external:
+    purview:
+      trust: floor
+      labels:
+        - { match: name, key: Public, level: public }
+        # Office since 2022 writes only the label id (docMetadata/LabelInfo.xml), so General is matched by id.
+        - { match: id, key: 5d8e2b1a-7c4f-4e9a-8b3d-6f1a2c4e8b02, level: internal }
+        - { match: name, key: Confidential, level: confidential }
+        - { match: id, key: 9a4d7e2f-3c6b-4d8a-8e1f-5c2b9d4a7e04, level: confidential, categories: [Finance] }
+        - { match: name, key: Confidential - HR, level: confidential, categories: [HR] }
+        - { match: name, key: Highly Confidential, level: restricted }
+        - { match: name, key: Highly Confidential - Legal, level: restricted, categories: [Legal] }
+        # "Partner Shared" (e6c1b7d3-…) is deliberately not mapped.
+    bigquery:
+      trust: floor
+      labels:
+        - { match: name, key: pii, level: confidential }
+        - { match: name, key: finance, level: confidential, categories: [Finance] }
+        - { match: name, key: hr, level: confidential, categories: [HR] }
+        - { match: name, key: hr, value: date_of_birth, level: restricted, categories: [HR] }
+        - { match: name, key: contact, level: internal }
+        # "retention" is deliberately not mapped.
+
+# Optional, for the columns-nobody-tagged scenario. Off in the shipped pack; the scenario switches it
+# on from the Studio (Policy → Classification → Columns nobody tagged). If shipped on, the classifier
+# model must be a local entry or nothing runs.
+# classifier:
+#   columns: monitor
+#   columnSamples: true

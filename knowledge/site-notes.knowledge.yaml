@@ -22,11 +22,11 @@ splitter:
 embedding: default
 
 # No document carries a label. Until the classifier (or a person on the Sources panel) decides,
-# every note reads at the store default below. `auto: true` puts new documents in front of the
-# background classifier once a classifier model is set in the taxonomy.
+# every note reads at the store default below. `auto: false`: nothing goes to the background
+# classifier on its own; scenario 5 sends the notes with *Send undecided to the classifier*.
 classification:
   level: internal
-  auto: true
+  auto: false
 
 egress:
   allowFrontier: false

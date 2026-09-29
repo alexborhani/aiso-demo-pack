@@ -1,7 +1,7 @@
 {
   "id": "aiso-demo-pack",
   "name": "AI Stackops demo pack",
-  "version": "1.12.0",
+  "version": "1.13.0",
   "publisher": "AI Stack Ops",
   "tier": "certified",
   "description": "Meridian Works, a fictional company, for evaluating the whole platform as different people: six accounts with different tiers, roles and clearances, a classification policy, knowledge stores at every level, agents scoped to them, an all-hands store with notices at every level for the classification demo (enforcement starts off: switch to monitor, then enforce), an unlabelled site-notes store for the classifier, a presenter agent that runs the scripts aloud in a chosen or lent voice, an organisation with tickets and an agent CEO, routing objectives, a tool that needs approval, evals — plus the former sample agents, stores, functions, skills and workflows. Nothing in it is real.",
@@ -34,7 +34,8 @@
       "agents/writer.agent.yaml",
       "agents/assistant.agent.yaml",
       "agents/support.agent.yaml",
-      "agents/presenter.agent.yaml"
+      "agents/presenter.agent.yaml",
+      "agents/data-analyst.agent.yaml"
     ],
     "knowledge": [
       "knowledge/all-hands.knowledge.yaml",
@@ -52,6 +53,7 @@
       "knowledge/transcripts.knowledge.yaml",
       "knowledge/web-docs.knowledge.yaml",
       "knowledge/site-notes.knowledge.yaml",
+      "knowledge/labelled-files.knowledge.yaml",
       "knowledge/product-faq.knowledge.yaml",
       "knowledge/demo-scripts.knowledge.yaml",
       "knowledge/firmware-docs.knowledge.yaml"
@@ -72,9 +74,11 @@
       "data/security-incidents",
       "data/transcripts",
       "data/site-notes",
+      "data/labelled-files",
       "data/product-faq",
       "data/demo-scripts",
       "data/toolbox",
+      "data/column-catalog",
       "data/firmware-docs"
     ],
     "workflows": [
@@ -261,7 +265,7 @@
     {
       "id": "essentials",
       "label": "Essentials",
-      "description": "The eight Meridian Works agents with one to three tools each, the nine stores the scripts use, the people, roles and policy. Measured on Qwen 3.5 9B. Scenarios 1–8, 13, 14, 16, 18, 19, 21, 22.",
+      "description": "The eight Meridian Works agents with one to three tools each, the ten stores the scripts use (one of Word, Excel, PowerPoint and PDF files carrying Purview labels), the people, roles and policy. Measured on Qwen 3.5 9B. Scenarios 1–8, 13, 14, 16, 18, 19, 21, 22, 25.",
       "requires": {
         "modelClass": "small",
         "contextTokens": 16384
@@ -309,7 +313,7 @@
     {
       "id": "full",
       "label": "Full",
-      "description": "Adds the sample workshop agents and stores, the demo-data MCP server (MCP Toolbox over the music-store and pet-store databases), the firmware docs and the safety change review skill for coding agents. Measured on Claude Haiku 4.5. Scenarios 20, 22 (part two), 24 and the builder workshop.",
+      "description": "Adds the sample workshop agents and stores, the demo-data MCP server (MCP Toolbox over the music-store and pet-store databases) with its column-tag catalog server, the demo-sql server (one free-SQL tool over a copy of the music store) and the data-analyst agent that uses it, the firmware docs and the safety change review skill for coding agents. Measured on Claude Haiku 4.5. Scenarios 20, 22 (part two), 24, 26, 29, 30 and the builder workshop.",
       "requires": {
         "modelClass": "large",
         "contextTokens": 32768
@@ -330,7 +334,8 @@
           "agents/video-creator.agent.yaml",
           "agents/voice-clone.agent.yaml",
           "agents/web-engineer.agent.yaml",
-          "agents/web-pilot.agent.yaml"
+          "agents/web-pilot.agent.yaml",
+          "agents/data-analyst.agent.yaml"
         ],
         "knowledge": [
           "knowledge/music-store.knowledge.yaml",
@@ -348,6 +353,7 @@
           "data/pet-store",
           "data/transcripts",
           "data/toolbox",
+          "data/column-catalog",
           "data/firmware-docs"
         ],
         "workflows": [
@@ -371,11 +377,11 @@
       }
     }
   ],
-  "integrity": "sha256-0930a6cba827b8db4d70104522d06af7fbd08c98f0853cab953d87d8c26b90bd",
+  "integrity": "sha256-63de789d398c179c04dc3221710430da83a2b9d40b159d95b9d5b842bd886c06",
   "signature": {
     "alg": "ed25519",
     "keyId": "a4470c96bdcc103c",
     "publicKey": "q2F/I5FwWGRdIG/Jhwgl6eGo1WMy0DKS0U05m0ROSIA=",
-    "signature": "CeatDE+CzQLVWkMeMIEedqY01lPc6Ulcb95uw5++joQ//DvcgmSUfdHCA7I7vEStAZw/KbIq4Lg+h9BwcFM3Dw=="
+    "signature": "t/M79ClOw4fCbGmtzhsap58aZ4xYTM840OK+tlDIzM2+SA83KNHA7g2ofX9SOsTuA4tNDTQ8SjKP8Bs1/DkVAQ=="
   }
 }

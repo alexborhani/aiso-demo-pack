@@ -1,0 +1,55 @@
+# Draft ADDITION to data/toolbox/tools.yaml (append under `tools:`). Two named queries for the column
+# scenario. Both return the columns under their own names, so AI Stackops resolves each result column
+# to the catalog column it came from; `customers` and `spend` are computed, so they take the highest
+# classification of the tables read (fail closed).
+#
+# The tag query `aiso_column_tags` is NOT added here: it lives on its own Toolbox server
+# (data/column-catalog/tools.yaml, server `demo-catalog`) and the demo-data server reads it through
+# `columns.via`, so no agent is ever handed it. Option B at the end puts it here instead.
+
+  customer_contact:
+    kind: sqlite-sql
+    source: music-store
+    description: A music store customer's contact details and support rep id, by last name.
+    parameters:
+      - name: last_name
+        type: string
+        description: The customer's last name, for example Leacock.
+    statement: |
+      SELECT c.FirstName, c.LastName, c.Company, c.City, c.Country, c.Email, c.Phone, c.SupportRepId
+      FROM Customer c
+      WHERE c.LastName = ? COLLATE NOCASE
+      ORDER BY c.FirstName
+
+  customer_spend_by_country:
+    kind: sqlite-sql
+    source: music-store
+    description: Countries with the most customer spending, with the number of customers and total spend.
+    parameters:
+      - name: limit
+        type: integer
+        description: How many countries to return (1 to 25).
+    statement: |
+      SELECT c.Country, COUNT(DISTINCT c.CustomerId) AS customers, ROUND(SUM(i.Total), 2) AS spend
+      FROM Customer c
+      JOIN Invoice i ON i.CustomerId = c.CustomerId
+      GROUP BY c.Country
+      ORDER BY spend DESC
+      LIMIT min(max(?, 1), 25)
+
+# Option B (not recommended): the tag query on the demo-data server itself. It needs a second source
+# for the catalog file, and every agent given `mcp:demo-data` then also sees `aiso_column_tags`
+# (hiding it with `tools.hide` adds a "not available to you here" notice to every reply).
+#
+# sources:
+#   column-catalog:
+#     kind: sqlite
+#     database: ../column-catalog/catalog.sqlite
+# tools:
+#   aiso_column_tags:
+#     kind: sqlite-sql
+#     source: column-catalog
+#     description: Column tags on the music store database. Read by AI Stackops; not for answering questions.
+#     statement: |
+#       SELECT "database", "schema", "table", "column", data_type, domain, tag, value, masked
+#       FROM column_tags ORDER BY "table", "column", tag

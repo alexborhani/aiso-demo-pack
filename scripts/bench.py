@@ -200,6 +200,40 @@ def c_playbook_signoff(i):
     done.set(); th.join(timeout=10)
     added = [e for e in audit_since('knowledge.add', 'sam', t0) if e.get('outcome') == 'success']
     return st == 200 and seen.get('decided') == 200 and bool(added), f"approval={'decided' if seen.get('decided') == 200 else 'none'} filed={bool(added)} " + out[:50]
+def c_revoke(i):
+    # The security lead calls revoke_access at once; the run waits on Dana's approval, then runs it.
+    import threading
+    t0 = time.strftime('%Y-%m-%dT%H:%M:%S', time.gmtime()); seen = {}; done = threading.Event()
+    def approve():
+        while not done.is_set():
+            st, a = call('GET', '/api/approvals', cookie=people['dana'])
+            for x in (a.get('pending', []) if isinstance(a, dict) else []):
+                if x.get('tool') == 'revoke_access' and x.get('createdAt', '') >= t0:
+                    st2, _ = call('POST', f"/api/approvals/{x['id']}/decide", {'decision': 'approve', 'argsHash': x['argsHash'], 'note': 'bench'}, people['dana']); seen['decided'] = st2; return
+            done.wait(2)
+    th = threading.Thread(target=approve, daemon=True); th.start()
+    st, out = ask('security-lead', 'dana', 'Revoke the access of the contractor holding badge 4471, reason INC-2026-021.', f'b-rv-{i}')
+    done.set(); th.join(timeout=10)
+    granted = audit_since('tools.approval.granted', 'dana', t0)
+    return st == 200 and seen.get('decided') == 200 and bool(granted), f"approval={'decided' if seen.get('decided') == 200 else 'none'} " + out[-60:]
+def c_classify_note(i):
+    # The local classifier decides one unlabelled note: the customer visit's price proposal is confidential Finance.
+    view = call('GET', '/api/knowledge/site-notes/sources', cookie=ADMIN)[1]
+    if not (view.get('classifier') or {}).get('model'):
+        # Scenario 1 step 3: an admin names the classifier's model (a pack never sets the host's).
+        st, c = call('GET', '/api/admin/classification', cookie=ADMIN)
+        t = {k: v for k, v in (c.get('taxonomy', c) if isinstance(c, dict) else {}).items() if k not in ('enforcement', 'pending', 'classifier_status')}
+        t['classifier'] = {**(t.get('classifier') or {}), 'model': 'mlx-serve'}
+        call('PUT', '/api/admin/classification', t, ADMIN)
+    src = next((x['source'] for x in (view.get('sources') or []) if 'nordvik' in x['source'].lower()), None)
+    if not src: return False, 'note not found'
+    st, r = call('POST', '/api/knowledge/site-notes/sources/queue', {'sources': [src]}, ADMIN)
+    if st != 200: return False, f'queue HTTP {st} {r}'
+    for _ in range(90):
+        time.sleep(4)
+        row = next((x for x in call('GET', '/api/knowledge/site-notes/sources', cookie=ADMIN)[1].get('sources') or [] if x['source'] == src), {})
+        if row.get('status') != 'pending': break
+    return row.get('level') == 'confidential' and 'Finance' in (row.get('categories') or []), f"{row.get('status')} {row.get('level')} {row.get('categories')}"
 _SKILL_EVALS = {}
 def c_skill_evals(i):
     if 'r' not in _SKILL_EVALS:
@@ -230,6 +264,8 @@ CHECKS = [
     ('finance', 'essentials', 6, 'the finance analyst answers a finance analyst', c_finance),
     ('answer-grade', 'essentials', 22, 'a finance answer is labelled documents, its figures found in sources, graded high or medium', c_answer_grade),
     ('answer-mark', 'essentials', 22, 'a person marks an answer wrong and clears the mark', c_answer_mark),
+    ('revoke', 'essentials', 7, 'the security lead calls revoke_access and it runs once Dana approves', c_revoke),
+    ('classify-note', 'essentials', 5, 'the local classifier files the Nordvik price proposal as confidential Finance', c_classify_note),
     ('owner-grant', 'essentials', 21, 'a contractor\'s request reaches the agent\'s owner, whose grant opens the agent', c_owner_grant),
     ('presenter-start', 'standard', 4, 'the presenter starts a scenario through its tool', c_presenter),
     ('playbook-asks', 'standard', 9, 'the writer asks for the playbook\'s missing date and files nothing', c_playbook_asks),

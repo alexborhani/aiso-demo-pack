@@ -21,8 +21,10 @@ security review or an auditor asks for, produced by the platform.*
    opens: who asked, each step with its statement and row count, the figures checked, the grade.
    Which skills shaped it, and which version, is in the audit rows `skills.loaded` for the same
    run. Scenario 22 keeps and verifies one.
-3. Usage tab: calls, tokens and cost by person, by agent, by model entry, by kind, by day. Click a
-   person to drill. *Export CSV*: one row per month, person, agent and model, ready for chargeback.
+3. Usage tab: calls, tokens and cost by person, by agent, by model entry, by kind, by day, and by
+   development project. Click a person to drill. **Export 30 days (CSV)**: one row per month, person,
+   agent, model entry and project, ready for chargeback: a Claude Code project's spend is its own
+   line. Scenario 33 walks it.
 4. Admin → Data → *Evidence bundle*: choose the last 30 days, download. One JSON file, signed with the
    workspace key, containing the setup checklist, the compliance report, the taxonomy version, the
    packs, the limits, the usage totals, the development projects and the audit rows. Open it and

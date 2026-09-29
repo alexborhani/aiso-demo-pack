@@ -17,8 +17,8 @@ cents on Haiku; the entry's 1 USD a day stops anything beyond that.
 1. As Dana, Agents → `helpdesk` → edit its model to `claude-haiku`. Save. Say: the most-used
    assistant in the building now runs on a paid cloud model, and three fences sit around it.
 2. As Priya, `helpdesk`: **"How do I reset my VPN certificate?"** Claude answers from the VPN reset
-   runbook and quotes the step. As Dana, Usage tab → *By model entry* → `claude-haiku`: one row, its
-   tokens and its cost at the pricing on the entry, about a cent. Note that per-answer cost; step 4
+   runbook and quotes the step. As Dana, Usage tab → the *Model entries* table → `claude-haiku`: one
+   row, its tokens and its cost at the pricing on the entry, about a cent. Note that per-answer cost; step 4
    uses it.
 3. **The person fence, by rate.** Admin → Policy → Limits: member tier, Requests / min **2**. Save.
    As Priya, ask three in a row without waiting: **"The plant floor lost network, what do I do
@@ -27,8 +27,9 @@ cents on Haiku; the entry's 1 USD a day stops anything beyond that.
    requests per minute for priya — retry in …s*. Wait it out, ask the third again: answered.
    The count is questions, not model calls. Set Requests / min back to empty.
 4. **The model fence, by spend.** As Dana, Usage shows what `claude-haiku` has spent in the last 24
-   hours. Models tab → `claude-haiku` → USD / day: type that figure plus about three answers' worth
-   (spent $0.06 and a cent an answer: **0.09**). Type it; the arrows step by 0.50. Save. As Priya,
+   hours. Models tab → the OpenRouter tab (or Anthropic, wherever you created it) → pick
+   `claude-haiku` in the list of entries above the form → USD / day: type that figure plus about
+   three answers' worth (spent $0.06 and a cent an answer: **0.09**). Type it; the arrows step by 0.50. Save. As Priya,
    keep asking runbook questions (**"How do I rebuild my laptop?"**, the VPN question again). A few
    are answered, then: *Limit reached: $0.09 per day for model entry "claude-haiku" (used $0.09).
    It frees up as the rolling 24 hours pass; an admin can raise it in the model entry's budget on

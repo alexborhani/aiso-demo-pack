@@ -15,7 +15,7 @@ tags: []
 2. Sign in as the first admin. Admin → Estate → **Licence**: paste the demo Enterprise key (issued
    by AI Stack Ops for the demo). The Licence panel shows the edition, the people and nodes used and
    the date it ends. On the Free edition the pack still installs, but the chargeback export and the
-   evidence bundle's projects section (scenarios 18 and 24) say *edition required*.
+   evidence bundle's projects section (scenarios 18, 24 and 33) say *edition required*.
 3. Packs → *Install* → `https://github.com/alexborhani/aiso-demo-pack`, and pick the level your
    model carries (above). Copy the six passwords from the dialog into a password manager: Dana
    (admin), Sam (builder), Priya, Marcus, Lena (members with roles), Jordan (contractor, public
@@ -28,7 +28,9 @@ tags: []
    Scenarios 16, 22 and 24, and Standard and Full on a small Mac, are stronger with the cloud entry
    below, added once; without it they run on the local model.
 
-   *The cloud entry.* Models tab → OpenRouter (or Anthropic), name `claude-haiku`, model
+   *The cloud entry.* Models tab → the OpenRouter tab (or Anthropic) → **New entry**. **Name**
+   `claude-haiku` (the scenarios and agents refer to the entry by this name; a new entry is named
+   after its model until you type one), model
    `anthropic/claude-haiku-4.5` on OpenRouter or `claude-haiku-4-5-20251001` on Anthropic, key
    `${OPENROUTER_API_KEY}` or `${ANTHROPIC_API_KEY}` (the key in the host's environment or the
    secret store, never in the file), Max Tokens 2048, Thinking budget 0, access minimum role
@@ -36,7 +38,13 @@ tags: []
    ceiling **internal** (the runbooks are internal; the firmware safety code, confidential, stays
    off it), pricing 1 / 5 per million, and USD / day **1**. Save. That dollar a day is the demo's own
    fence: a rehearsal and a run share it, because the window is a rolling 24 hours. Do not make it
-   the default; the scenarios switch agents to it live.
+   the default; the scenarios switch agents to it live. From then on the provider's tab lists each
+   entry by name above the form: pick `claude-haiku` there to edit it (scenario 16 changes its
+   budget), or **New entry** for another.
+   *A second cloud entry, for scenario 28 only.* OpenRouter tab → **New entry**: name
+   `deepseek-flash`, model `deepseek/deepseek-v4.1-flash`, the same key, access, ceiling and USD / day,
+   pricing from the model's OpenRouter page on the day. It is the cheaper model scenario 28 tests
+   before any switch; no agent uses it.
    *Standard and Full on a 9B-class Mac.* Keep the local model as the default and give the cloud
    entry only to the agents those levels add: Agents → `writer`, `canvas`, `meridian-ceo`,
    `music-librarian`, the workshop agents and `skill-builder` (added the first time Skills → *New
@@ -54,9 +62,10 @@ tags: []
 8. Open the Studio in two browser profiles (or one normal and one private window) so you can be Dana
    in one and another person in the other without signing out. Scenario 14 needs a third window with
    no session at all.
-9. For scenario 24 only (Full): Claude Code on the Mac, the `ai-stackops` command on the PATH (the
-   same binary the host runs), and a clone of `https://github.com/alexborhani/meridian-pump-controller`
-   in a folder of its own.
+9. For scenario 24 and the ones that continue from it (31, 32, 33; all Full): Claude Code on the
+   Mac, the `ai-stackops` command on the PATH (the same binary the host runs), and a clone of
+   `https://github.com/alexborhani/meridian-pump-controller` in a folder of its own. Scenario 28 needs
+   the `ai-stackops` command too.
 
 **The people you will be**
 

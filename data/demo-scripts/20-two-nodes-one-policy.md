@@ -23,10 +23,22 @@ binary with its own workspace, standing in for a laptop at Riverside.
 4. On the spoke: Admin → Policy → Limits shows the hub floor badge; the Models tab shows the chat
    entry pinned and cloud locked; Classification shows the hub's taxonomy. Say: a laptop cannot
    loosen what the hub set, only tighten it.
-5. On the hub: Admin → Estate → enrollments: the spoke with its policy version and last rollup.
+5. A pinned model does not fail over. The spoke has none of the pack's agents, so use its own
+   `chatbot`: on the spoke, Agents → `chatbot` → *Use models on other nodes* **Remote-first**, and
+   tick *Share this agent with other nodes* (step 7 uses it). Save. Ask it **"What is 1234 * 5678?"**:
+   answered on the spoke's own model, because the hub pinned the chat entry (step 2's floor). Admin
+   → Audit on the spoke: `models.pin.bypass`, reason *ufp-remote-first: …*. Say: a pinned model is
+   never swapped for another node's, even when an agent asks. Set it back to *Node default*.
+   (Not yet run; measured: pending.)
+6. On the hub: Admin → Estate → enrollments: the spoke with its policy version and last rollup.
    Network → Capacity: two nodes. On the spoke, *Send usage and audit now*; on the hub, Usage → *By
    node* and Audit → node selector: the spoke's rows, under its own name.
-6. Optional: revoke the enrollment on the hub; the spoke's next sync is refused and it purges the
+7. Optional, an answer from another node. On the hub, **Network** → the spoke → `chatbot` (shared in
+   step 5) → ask **"What is 1234 * 5678?"**. Under the reply, the Sources line names the step *on
+   riverside-laptop*; open it: *Answered on riverside-laptop, which keeps the record of what it ran*,
+   the spoke's run id, and *signature verified*. Not yet run on the demo (measured: pending): check
+   before the day that the Network tab's reply shows the Sources line as the Agents tab does.
+8. Optional: revoke the enrollment on the hub; the spoke's next sync is refused and it purges the
    hub's snapshots.
 
 **Land:** an estate of Macs is governed from one place: floors go down, evidence comes up, and a

@@ -17,9 +17,9 @@ level: essentials
 3. Press *Classify* on the parking note and set it public: it goes to the review queue instead,
    because that would lower it. Admin → Policy → Classification → *Reviews*: approve it there. Say:
    raising is a person's call, lowering is a second person's.
-4. Admin → Policy → Classification → classifier settings: set the model to the local chat entry, save.
-   Back on *Sources*, *Send undecided to the classifier*: four notes go *pending*. Refresh every ten
-   seconds. Within a minute each carries a level, categories and the classifier's confidence:
+4. Admin → Policy → Classification → *Background classifier*: the model is the local chat entry,
+   `mlx-serve`, if scenario 1 set it; if not, type it and press *Save taxonomy*. Back on *Sources*,
+   *Send undecided to the classifier*: four notes go *pending*. Refresh every ten seconds. Within a minute each carries a level, categories and the classifier's confidence:
    the customer visit confidential Finance, the badge follow-up restricted Security, the checklist
    internal, the volunteers note public or internal. The note a person decided is untouched.
 5. Admin → Policy → Classification: the classifier status and the backlog count, now zero.

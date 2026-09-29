@@ -31,12 +31,23 @@ trust the model.*
 
 *Part two: data (Full).*
 
+First, as Dana, Admin → Policy → Classification → Enforcement → **Monitor** (or Off) if an earlier
+scenario left it on Enforce. Under Enforce the column filter withholds the purchases query's
+renamed columns from the cloud librarian: that is scenario 26, not this one.
+
 4. As Dana, `music-librarian` (answers from the demo-data MCP server: named, parameterised queries
    over the store's database; there is no free SQL tool). **"What has customer Heather Leacock
    purchased, and how much did she spend in total?"** While it is held the reply says *Checking the answer against the results…*, then the table
    appears. Sources: *Governed*, the named query `customer_purchases`, 38 rows, *Figures found in
    sources*, Grade High. Open the step: the statement
-   that ran and its row count. Press *Show result*: the rows themselves.
+   that ran and its row count. Press *Show result*: the rows themselves. Open the grade. When the
+   model used references to the result (it is told to while *Fill in figures from the results* is
+   on), one reason reads *N figures were filled in from the results*: the model wrote a reference to
+   a column and row, and the platform put the number in. Not every answer uses them; a total the
+   model worked out with `calculate` is checked instead (*worked out from them*). Check on the day
+   which reason appears before saying it. With *Model for decisions* on the local entry (*Before the
+   day*, step 6) the second-model judge is on: a High grade's reasons include *A second model found
+   it answers the question*; where it doubts, the grade is Low and the reason names what it doubted.
 5. Answer checks → *Clarifying questions* → On. Ask **"Which artists play in two genres?"** The
    librarian asks which genres before running anything. **"Rock and Metal."** The named query
    `artists_in_both_genres` runs with those two, four artists come back, graded High. Set it back.
@@ -44,7 +55,15 @@ trust the model.*
    the audit row, the checks and the grade are each checked again and pass. **Export** → HTML: one
    file a reviewer can open without the Studio. Account → *Kept answers* lists it; Admin → Audit →
    *Look up an answer* finds it by its run id.
-7. Optional, to show a check catching something: ask the librarian how long the longest track is in
+7. Under the kept answer, **Re-run** against **data as it was**. The report: *Re-run against the data
+   as it was: 1 same, 0 changed, … not re-run, 0 failed*, and on the `artists_in_both_genres` line *time
+   travel not applied: the question is asked again, and the source may answer from newer data* (a
+   calculation is never re-run; it counts as not re-run). Say: the demo store is SQLite, which cannot
+   read the past; against Snowflake or Databricks the statement is rewritten to read the table as of
+   the answer's time (scenario 34). Against **current data**: the same, and the line under it says
+   how many of the answer's figures are still found. Admin → Audit: `answer.rerun`. (Not yet run;
+   measured: pending.)
+8. Optional, to show a check catching something: ask the librarian how long the longest track is in
    hours and minutes. If the model does the arithmetic in its head, the Sources line says *1 figure
    not found in sources* and the grade drops to Low.
 

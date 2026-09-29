@@ -10,9 +10,12 @@ same at every level, so a story told at Essentials reads the same at Full.
 
 | Level | Model it was measured on | What it adds | Scenarios |
 | --- | --- | --- | --- |
-| **Essentials** | Qwen 3.5 9B (4-bit) on MLX Serve, 32K context, on a 24 GB Mac | the eight Meridian agents with one to three tools each, the nine stores the scripts use | 1–8, 13, 14, 16, 18, 19, 21, 22 |
-| **Standard** | Claude Haiku 4.5 through OpenRouter, standing in for a 27B-class local model | the presenter, the writer with its customer-notice playbook, canvas, the agent CEO and its organisation, the two workflows, the evals, the demo scripts | 0, 9–12, 15, 17, 23 |
-| **Full** | Claude Haiku 4.5 through OpenRouter, standing in for a 70B-class model or a frontier provider | the sample workshop agents, the sample stores, the demo-data MCP server, the firmware docs and the safety review skill | 20, 22 (part two), 24, and the builder workshop |
+| **Essentials** | Qwen 3.5 9B (4-bit) on MLX Serve, 32K context, on a 24 GB Mac | the eight Meridian agents with one to three tools each, the nine stores the scripts use, the labelled files | 1–8, 13, 14, 16, 18, 19, 21, 22, 25; 35 (needs an unsigned pack repository, not built; not tested) |
+| **Standard** | Claude Haiku 4.5 through OpenRouter, standing in for a 27B-class local model | the presenter, the writer with its customer-notice playbook, canvas, the agent CEO and its organisation, the two workflows, the evals, the demo scripts | 0, 9–12, 15, 17, 23, 27; 34 (needs Snowflake or Databricks, not tested); 36 (needs a Microsoft 365 tenant, not tested) |
+| **Full** | Claude Haiku 4.5 through OpenRouter, standing in for a 70B-class model or a frontier provider | the sample workshop agents, the sample stores, the demo-data MCP server and its column catalog, the firmware docs and the safety review skill | 20, 22 (part two), 24, 26, 28–30, 31–33 (with Claude Code, continuing from 24; 32 also needs a pack with a pre-send hook, not tested), and the builder workshop |
+
+Scenarios 25–36 are new in this release and have not been run on either model yet (measured:
+pending). Each says which parts need a model and which need a system the Mac does not have.
 
 The boundaries come from measurement, not taste: on a 9B a single tool with ten actions was
 already unreliable, so nothing at Essentials has more than three one-action tools, and the

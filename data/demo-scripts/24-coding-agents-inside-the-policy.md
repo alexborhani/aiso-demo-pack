@@ -16,6 +16,10 @@ read, which code may never go to a cloud model, and every line an AI wrote is on
 1. As Dana, **Projects** → *New project* `pump-controller`: repository
    `alexborhani/meridian-pump-controller`, level internal. Models: `claude-haiku-4-5` routed to the
    `claude-haiku` entry, and `claude-local-qwen` routed to the local chat entry. Members: Sam.
+   A cloud id must contain `claude` for Claude Code's model picker to keep it; to route it to a model
+   that is not Claude, set its *Claude Code picker behaves as* to `claude-haiku-4-5`. With the
+   `claude-haiku` entry on OpenRouter the gateway translates Claude Code's Anthropic calls for
+   OpenRouter's Chat Completions API; that path was verified live with a local model only.
    *Docs for agents*: `firmware-docs`. **Code** → *Path rules*: `firmware/safety/**` confidential,
    Security. *Classified code*: **Enforce**. Mint a CI key and copy it.
 2. Skills → `safety-change-review` → *Where it is offered* → *Development projects*:
@@ -59,5 +63,7 @@ left out of the live run.
 
 **Land:** coding agents are governed like every other agent: the project picks the models, the policy
 keeps classified code on the models allowed to carry it, and what the AI wrote is attested.
+
+Scenarios 31 and 32 continue from this project; scenario 33 charges back its spend.
 
 ---

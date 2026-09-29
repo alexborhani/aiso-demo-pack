@@ -16,5 +16,6 @@ tags: []
 | 55 | 20. Two nodes | the estate |
 
 On Standard or Full, swap scenario 21 for 9 (the playbook with its sign-off). Keep 5, 10, 12 and 23
-ready as follow-ups for the technical people in the room, 24 for engineering leaders, 14 for a
-commercial audience, and 19 for anyone with a privacy remit.
+ready as follow-ups for the technical people in the room, 24 and 31–33 for engineering leaders, 25–27
+for whoever owns data classification, 26, 29 and 30 for the data team, 28 for whoever signs off a
+model change, 14 for a commercial audience, and 19 for anyone with a privacy remit.

@@ -14,12 +14,12 @@ criteria:
   levels:
     public: Published or safe to publish — the handbook, product pages, press releases, anything a visitor could read.
     internal: Day-to-day operating information for staff — runbooks, procedures, meeting notes, plans without figures.
-    confidential: Information whose disclosure would harm a person or the company — personnel files, compensation, financial results before release, customer contracts.
-    restricted: Information whose disclosure would cause serious harm or legal exposure — legal matters, security incidents, credentials, regulator correspondence.
+    confidential: Information whose disclosure would harm a person or the company — personnel files, compensation, financial results before release, customer contracts, and commercial figures such as quotes, proposals, prices and discounts discussed with a customer.
+    restricted: Information whose disclosure would cause serious harm or legal exposure — legal matters handled by counsel (disputes, claims, counsel's advice), security incidents, credentials, regulator correspondence. A sales conversation or a customer's price proposal is not a legal matter.
   categories:
     HR: Anything about an identifiable employee — pay, reviews, health, grievances, immigration status.
     Finance: Ledgers, forecasts, close packages, pricing, audit workpapers.
-    Legal: Matters, contracts under negotiation, counsel's advice, regulator correspondence.
+    Legal: Matters handled by counsel — disputes, claims, contract terms under legal review, counsel's advice, regulator correspondence. Not ordinary sales proposals or quotes (those are Finance).
     Security: Incidents, vulnerabilities, credentials, access reviews, penetration test findings.
 handling:
   confidential:
@@ -31,6 +31,28 @@ handling:
     minTier: admin
     localOnly: true
     retentionDays: 3650
-# Labels other systems put on data (Purview, Snowflake, …), mapped to these levels: none in the demo.
+# Labels other systems put on data, mapped to these levels. Purview: labels read from inside Office
+# and PDF files (store `labelled-files`). BigQuery: the column tags the demo-data server's catalog lists.
 mappings:
-  external: {}
+  external:
+    purview:
+      trust: floor
+      labels:
+        - { match: name, key: Public, level: public }
+        # Office since 2022 writes only the label id (docMetadata/LabelInfo.xml), so General is matched by id.
+        - { match: id, key: 5d8e2b1a-7c4f-4e9a-8b3d-6f1a2c4e8b02, level: internal }
+        - { match: name, key: Confidential, level: confidential }
+        - { match: id, key: 9a4d7e2f-3c6b-4d8a-8e1f-5c2b9d4a7e04, level: confidential, categories: [Finance] }
+        - { match: name, key: Confidential - HR, level: confidential, categories: [HR] }
+        - { match: name, key: Highly Confidential, level: restricted }
+        - { match: name, key: Highly Confidential - Legal, level: restricted, categories: [Legal] }
+        # "Partner Shared" (e6c1b7d3-…) is deliberately not mapped.
+    bigquery:
+      trust: floor
+      labels:
+        - { match: name, key: pii, level: confidential }
+        - { match: name, key: finance, level: confidential, categories: [Finance] }
+        - { match: name, key: hr, level: confidential, categories: [HR] }
+        - { match: name, key: hr, value: date_of_birth, level: restricted, categories: [HR] }
+        - { match: name, key: contact, level: internal }
+        # "retention" is deliberately not mapped.

@@ -14,7 +14,8 @@ will not cross.*
 
 1. As Jordan, Agents → `helpdesk`. Ask: **"My VPN certificate expired, what do I do?"** The helpdesk
    answers from the VPN reset runbook and quotes the step.
-2. Ask: **"How many days of annual leave do I get?"** Answered from the handbook.
+2. Ask: **"What are the core working hours?"** Answered from the handbook: 10:00 to 15:00. (Leave and
+   pay questions are different: the helpdesk hands those to People Operations, as step 4 shows.)
 3. Ask: **"The plant floor lost network, what do I do first?"** The outage runbook, first step first.
 4. Now ask: **"Please ask People Operations for me: what is the 2026 band for a senior engineer?"**
    The helpdesk hands the question to the people-partner agent (the `agent_people_partner` tool) and
