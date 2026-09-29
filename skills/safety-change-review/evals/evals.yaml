@@ -1,0 +1,9 @@
+runs: 3
+triggers:
+  - { input: "Review my change to the guard debounce in firmware/safety before I merge it.", shouldTrigger: true }
+  - { input: "Check pull request 42 before it merges: it raises the over-pressure trip threshold in firmware/safety.", shouldTrigger: true }
+  - { input: "Add a unit conversion from bar to psi in src/controller/units.c.", shouldTrigger: false }
+cases:
+  - id: threshold-change
+    input: "Review change feature/raise-trip: it moves TRIP_PRESSURE_KPA from 1150 to 1200."
+    expect: { regex: "SE-REV|Safety Engineering" }

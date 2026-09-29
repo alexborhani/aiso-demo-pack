@@ -4,7 +4,9 @@ title: "0. Meet the presenter"
 tags: ["scenario-0"]
 level: standard
 ---
-**Level:** Standard.
+**Level:** Standard, on a Standard-class local model: the presenter refuses cloud models (its
+`egress` says so), and a 9B does not drive it reliably (measured: Qwen 3.5 9B started a scenario in
+0 of 3 runs).
 
 
 *Optional opener: the platform introduces itself, in a voice the room chooses, and can present the
@@ -50,7 +52,7 @@ mkdir -p mlx-community/Qwen3-TTS-12Hz-0.6B-Base-8bit/speech_tokenizer && curl -s
 ```
 
 Then Models tab → activate the Qwen3-TTS entry for the *tts* role, and load Kokoro once from the Local
-LLM tab (it stays resident; both fit beside Gemma). The presenter's presets name the model as the
+LLM tab (it stays resident; both fit beside Qwen 3.5 9B). The presenter's presets name the model as the
 engine lists it, `Kokoro-82M-MLX-Serve`.
 
 ---

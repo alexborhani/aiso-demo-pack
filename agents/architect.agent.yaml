@@ -46,7 +46,7 @@ tools:
   - sandbox:shell
   - builtin:ask_user
 skills:
-  - orcha-builder
+  - aiso-builder
 output:
   format: text
 memory:

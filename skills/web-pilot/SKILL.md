@@ -1,7 +1,6 @@
 ---
 name: web-pilot
-description: Browser automation — observe-act loop with refs
-sandbox: true
+description: "Browser automation — an observe-act loop with element refs. Use when a task needs a website operated step by step: open, read, click, type."
 ---
 
 # Web Pilot

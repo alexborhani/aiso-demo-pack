@@ -1,0 +1,13 @@
+agent: writer
+runs: 3
+triggers:
+  - { input: "Draft a customer notice about the 2027 price list, effective 1 November 2026.", shouldTrigger: true }
+  - { input: "Write to MW-300 owners that the seal kit part number changes from 1 March.", shouldTrigger: true }
+  - { input: "Summarise the 2027 pricing changes for the finance team.", shouldTrigger: false }
+  - { input: "Draft an all-hands notice about the Riverside office move.", shouldTrigger: false }
+cases:
+  - id: price-change
+    input: "Draft a customer notice about the 2027 price list, effective 1 November 2026, for all customers. Do not file it."
+  - id: service-desk
+    input: "Draft a notice to MW-300 owners that the service interval changes from 12 to 9 months from 1 December 2026. Do not file it."
+    expect: { contains: ["service@meridianworks.example"] }

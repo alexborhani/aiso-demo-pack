@@ -1,7 +1,6 @@
 ---
 name: sandbox
-description: Execute JavaScript, shell commands, fetch web content, and control a browser
-sandbox: true
+description: Execute JavaScript, shell commands, fetch web content, and control a browser. Use when a task needs code run, a web page fetched or a browser driven in the sandbox.
 ---
 
 # Sandbox Tools

@@ -17,6 +17,13 @@ tags: []
 - Scenario 17: restore the runbook and reindex.
 - Scenario 19: reinstall the pack to bring Jordan back (Packs → uninstall → install).
 - Scenario 20: revoke the enrollment on the hub and stop the spoke process.
+- Scenario 21: Marcus → Account → *Access you granted* → *Revoke*, if the scenario did not end there.
+- Scenario 22: Answer checks → *Clarifying questions* back to Off; kept answers stay (Account →
+  *Kept answers*).
+- Scenario 23: the skill Sam built stays (delete its folder in the IDE tab if you want it gone);
+  Skills → `customer-notice` → *Where it is offered* → untick *Every agent*.
+- Scenario 24: Projects → pump-controller → *Archive*; Account → *Signed-in machines* → sign the
+  terminal out; delete the demo branch in the clone.
 
 A full reset is Packs → uninstall → install: accounts, stores, policy and the organisation return to
 the starting state, with new passwords.

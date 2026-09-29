@@ -64,6 +64,11 @@ def ask(agent, who, q, session, extra=None):
     st, r = call('POST', f'/api/agents/{agent}/invoke', {'input': inp, 'sessionId': f'{session}-{STAMP}'}, people[who])
     return st, (r.get('output', '') if isinstance(r, dict) else str(r))
 
+def ask_full(agent, who, q, session, extra=None, timeout=900):
+    inp = {'query': q}; inp.update(extra or {})
+    st, r = call('POST', f'/api/agents/{agent}/invoke', {'input': inp, 'sessionId': f'{session}-{STAMP}'}, people[who], timeout=timeout)
+    return st, (r if isinstance(r, dict) else {'output': str(r)})
+
 def audit_since(action, actor, t0):
     st, r = call('GET', f'/api/admin/audit?action={action}&limit=50', cookie=ADMIN)
     return [e for e in (r.get('entries', []) if isinstance(r, dict) else []) if e.get('actorName') == actor and e['ts'] >= t0]
@@ -81,7 +86,8 @@ def c_handoff_refused(i):
     t0 = time.strftime('%Y-%m-%dT%H:%M:%S', time.gmtime())
     st, out = ask('helpdesk', 'jordan', 'How much holiday do I carry over at year end?', f'b-ho-j-{i}')
     denied = audit_since('agents.handoff', 'jordan', t0)
-    return st == 200 and (bool(denied) and denied[0]['outcome'] == 'denied') and hasnt(out, r'\b\d+ days\b'), (f'handoff denied={bool(denied)} ' + out[:70])
+    # The handbook's public leave allowance may still be quoted; what must not happen is the handoff.
+    return st == 200 and (bool(denied) and denied[0]['outcome'] == 'denied') and hasnt(out, r'people (operations|partner) (says|said|told)'), (f'handoff denied={bool(denied)} ' + out[:70])
 def c_handoff_works(i):
     t0 = time.strftime('%Y-%m-%dT%H:%M:%S', time.gmtime())
     st, out = ask('helpdesk', 'marcus', 'How much holiday do I carry over at year end?', f'b-ho-m-{i}')
@@ -142,6 +148,72 @@ def c_presenter(i):
     started = [e for e in r.get('entries', []) if e['ts'] >= t0]
     return bool(started), f'start rows={len(started)}'
 
+def c_answer_grade(i):
+    st, r = ask_full('finance-analyst', 'lena', 'What was Q2 2026 revenue, and how does the full-year forecast compare with the plan?', f'b-gr-{i}')
+    prov = (r.get('metadata') or {}).get('provenance') or {}
+    grade = (prov.get('grade') or {}).get('level'); figs = ((prov.get('checks') or {}).get('figures') or {})
+    ok = st == 200 and prov.get('label') == 'documents' and grade in ('high', 'medium') and not figs.get('unsupported')
+    return ok, f"label={prov.get('label')} grade={grade} figures={figs.get('matched')}+{figs.get('derived')}/{figs.get('total')} unsupported={len(figs.get('unsupported') or [])}"
+def c_answer_mark(i):
+    st, r = ask_full('helpdesk', 'priya', 'How do I reset my VPN certificate?', f'b-mk-{i}')
+    run = ((r.get('metadata') or {}).get('provenance') or {}).get('runId')
+    if not run: return False, 'no answer record'
+    st1, _ = call('POST', f'/api/answers/{run}/outcome', {'verdict': 'wrong', 'reason': 'other', 'note': 'bench'}, people['priya'])
+    st2, _ = call('POST', f'/api/answers/{run}/outcome', {'verdict': None}, people['priya'])
+    return st1 == 200 and st2 == 200, f'mark {st1}, clear {st2}'
+def c_owner_grant(i):
+    t0 = time.strftime('%Y-%m-%dT%H:%M:%S', time.gmtime())
+    ask(chat_name(), 'jordan', 'How much holiday do I carry over at year end?', f'b-og-{i}')
+    ask(chat_name(), 'jordan', 'Yes, please ask the people who decide access for me.', f'b-og-{i}')
+    st, q = call('GET', '/api/access-requests', cookie=people['marcus'])
+    mine = [x for x in (q.get('requests', []) if isinstance(q, dict) else []) if x.get('principalName') == 'jordan' and x.get('status') == 'pending' and x.get('requestedAt', '') >= t0]
+    if not mine: return False, 'no request reached the owner'
+    cap = mine[0].get('capacity')
+    st, g = call('POST', f"/api/access-requests/{mine[0]['id']}/grant", {'note': 'bench'}, people['marcus'])
+    t1 = time.strftime('%Y-%m-%dT%H:%M:%S', time.gmtime())
+    st2, out = ask(chat_name(), 'jordan', 'How many days of annual leave do I get?', f'b-og2-{i}')
+    rows = audit_since('agents.handoff', 'jordan', t1)
+    reached = any(r_['outcome'] == 'success' for r_ in rows)
+    st3, gr = call('GET', '/api/access-requests/grants?kind=agent&name=people-partner', cookie=people['marcus'])
+    for x in (gr.get('grants', []) if isinstance(gr, dict) else []):
+        if x.get('userName') == 'jordan' and not x.get('revokedAt'): call('POST', f"/api/access-requests/grants/{x['id']}/revoke", {}, people['marcus'])
+    return cap == 'owner' and st == 200 and reached, f'capacity={cap} grant={st} handoff after grant={reached} ' + out[:50]
+def c_playbook_asks(i):
+    # The playbook's required input is asked for, never guessed; nothing is filed on a draft request.
+    t0 = time.strftime('%Y-%m-%dT%H:%M:%S', time.gmtime())
+    st, out = ask('writer', 'sam', 'Draft a customer notice about the 2027 price list.', f'b-pa-{i}')
+    filed = [e for e in audit_since('knowledge.add', 'sam', t0)]
+    return st == 200 and has(out, r'effective|date|when') and not filed, f'filed={bool(filed)} ' + out[:70]
+def c_playbook_signoff(i):
+    import threading
+    t0 = time.strftime('%Y-%m-%dT%H:%M:%S', time.gmtime()); seen = {}; done = threading.Event()
+    def approve():
+        while not done.is_set():
+            st, a = call('GET', '/api/approvals', cookie=people['dana'])
+            for x in (a.get('pending', []) if isinstance(a, dict) else []):
+                if x.get('tool') == 'knowledge_add' and x.get('requestedByName') == 'sam' and x.get('createdAt', '') >= t0:
+                    seen['id'] = x['id']; st2, _ = call('POST', f"/api/approvals/{x['id']}/decide", {'decision': 'approve', 'argsHash': x['argsHash'], 'note': 'bench'}, people['dana']); seen['decided'] = st2; return
+            done.wait(3)
+    th = threading.Thread(target=approve, daemon=True); th.start()
+    st, out = ask('writer', 'sam', 'Draft a customer notice about the 2027 price list, effective 1 November 2026, for all customers.', f'b-ps-{i}')
+    if not seen.get('decided'): st, out = ask('writer', 'sam', 'File it.', f'b-ps-{i}')
+    done.set(); th.join(timeout=10)
+    added = [e for e in audit_since('knowledge.add', 'sam', t0) if e.get('outcome') == 'success']
+    return st == 200 and seen.get('decided') == 200 and bool(added), f"approval={'decided' if seen.get('decided') == 200 else 'none'} filed={bool(added)} " + out[:50]
+_SKILL_EVALS = {}
+def c_skill_evals(i):
+    if 'r' not in _SKILL_EVALS:
+        _SKILL_EVALS['r'] = call('POST', '/api/skills/customer-notice/evals/run', {}, people['dana'], timeout=3600)
+    st, r = _SKILL_EVALS['r']
+    t = (r.get('triggers') or {}) if isinstance(r, dict) else {}
+    return st == 200 and bool(t.get('ok')), f"triggers {t.get('passed')}/{t.get('total')} ok={r.get('ok') if isinstance(r, dict) else r}"
+def c_data_answer(i):
+    st, r = ask_full('music-librarian', 'dana', 'What has customer Heather Leacock purchased, and how much did she spend in total?', f'b-da-{i}')
+    prov = (r.get('metadata') or {}).get('provenance') or {}
+    grade = (prov.get('grade') or {}).get('level')
+    figs = ((prov.get('checks') or {}).get('figures') or {})
+    return st == 200 and prov.get('label') == 'governed' and grade in ('high', 'medium') and not figs.get('unsupported'), f"label={prov.get('label')} grade={grade} figures={figs.get('matched')}/{figs.get('total')} " + (r.get('output') or '')[-60:]
+
 CHECKS = [
     ('runbook', 'essentials', 2, 'helpdesk answers Priya from the IT runbooks', c_runbook),
     ('handoff-refused', 'essentials', 2, 'a contractor\'s pay question is not handed to the people partner', c_handoff_refused),
@@ -156,7 +228,14 @@ CHECKS = [
     ('chat-request', 'essentials', 21, 'a yes in Chat files an access request the admins see', c_chat_request),
     ('counsel', 'essentials', 8, 'counsel answers the admin on a restricted matter', c_counsel),
     ('finance', 'essentials', 6, 'the finance analyst answers a finance analyst', c_finance),
+    ('answer-grade', 'essentials', 22, 'a finance answer is labelled documents, its figures found in sources, graded high or medium', c_answer_grade),
+    ('answer-mark', 'essentials', 22, 'a person marks an answer wrong and clears the mark', c_answer_mark),
+    ('owner-grant', 'essentials', 21, 'a contractor\'s request reaches the agent\'s owner, whose grant opens the agent', c_owner_grant),
     ('presenter-start', 'standard', 4, 'the presenter starts a scenario through its tool', c_presenter),
+    ('playbook-asks', 'standard', 9, 'the writer asks for the playbook\'s missing date and files nothing', c_playbook_asks),
+    ('playbook-signoff', 'standard', 9, 'filing the notice waits for an admin\'s approval, then files', c_playbook_signoff),
+    ('skill-evals', 'standard', 23, 'the playbook\'s own evals pass on the host\'s model', c_skill_evals),
+    ('data-answer', 'full', 22, 'a data answer through the demo-data MCP server carries a label and a grade', c_data_answer),
 ]
 RANK = {'essentials': 0, 'standard': 1, 'full': 2}
 todo = [c for c in CHECKS if RANK[c[1]] <= RANK[A.level] and (not A.only or c[0] in A.only.split(','))]

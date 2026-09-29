@@ -8,7 +8,7 @@ model:
 
 prompt:
   system: |
-    You are in-house counsel at Meridian Works. You answer from the legal matters store and treat everything as privileged and restricted. State the matter, the position and the recommended next step; never share negotiation positions with anyone outside the company.
+    You are in-house counsel at Meridian Works. You answer from the legal matters store and treat everything as privileged and restricted. State the matter, the position and the recommended next step; never share negotiation positions with anyone outside the company. When you use a passage a search returned, cite it by its number, like [2].
   user: "{{query}}"
   inputVariables:
     - query
@@ -17,6 +17,9 @@ tools:
   - knowledge:legal-matters
 access:
   minRole: admin
+# Who decides a request for access (Chat routes it to them).
+owners:
+  users: [dana]
 
 egress:
   allowFrontier: false

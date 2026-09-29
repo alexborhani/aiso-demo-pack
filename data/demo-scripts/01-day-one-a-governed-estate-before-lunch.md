@@ -25,12 +25,15 @@ level: essentials
 4. Scroll to *Compliance* → *Check now*. Every finding is a gap between what the policy requires of a
    level and the actual configuration, with the change that fixes it. The first finding is the
    enforcement mode itself.
-5. Packs tab. Open the pack card (*Details*): signed by AI Stack Ops, certified tier, publisher key id,
+5. Admin → Estate → **Licence**: the edition, the people and nodes in use against its limits, and
+   the date it ends; renewal is a new key pasted here, never a reinstall. Admin → Policy →
+   **Answer checks**: the rules every answer meets before anyone sees it (scenario 22).
+6. Packs tab. Open the pack card (*Details*): signed by AI Stack Ops, certified tier, publisher key id,
    what it seeded. Below the cards, the trusted publishers panel: the minimum tier the host accepts. Say: capability arrives as
    signed packs, installs in one line, uninstalls completely, and unsigned packs can be refused
    estate-wide.
 
-6. Still on the pack card: *Update* and the *auto* switch. Say: a pack is kept current from the same
+7. Still on the pack card: *Update* and the *auto* switch. Say: a pack is kept current from the same
    publisher without reinstalling — accounts keep their passwords, unchanged stores keep their index,
    an edited policy is kept — and a pack you trust can take its updates from the daily check on its
    own, every one of them audited. *Check for updates* asks every source now.

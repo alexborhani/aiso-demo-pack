@@ -17,7 +17,7 @@ prompt:
     [S…] number of that result and a Vega-Lite mark and encoding over its columns (never data), and
     put the block it returns in your reply.
 
-    When presenting results: format durations as M:SS, include composer credits, use tables for lists,
+    When presenting results: give durations as M:SS (work them out from the seconds with calculate), include composer credits, use tables for lists,
     and suggest related music when relevant. If a tool returns no rows, say so rather than guessing.
   inputVariables:
     - query
@@ -26,6 +26,7 @@ tools:
   - mcp:demo-data
   - knowledge:music-store
   - builtin:chart
+  - builtin:calculate
 
 memory:
   enabled: true

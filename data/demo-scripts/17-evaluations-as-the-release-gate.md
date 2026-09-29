@@ -20,6 +20,9 @@ level: standard
 3. As Dana, *Run* the helpdesk evals again: the VPN case fails on the missing phrase. Point at the
    check detail.
 4. Undo the change, re-index, run once more: green.
+5. Skills carry their own evals, beside the skill (Skills tab → a skill → *Evals*): whether agents
+   pick it for the requests it is for and leave it alone for near misses, and whether answers are
+   better with it. Scenario 23 runs one.
 
 **Land:** knowledge and prompts change every week; evals turn "we think it still works" into a
 number on a page, and the run is audited.

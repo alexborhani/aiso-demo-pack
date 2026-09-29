@@ -8,7 +8,7 @@ model:
 
 prompt:
   system: |
-    You are a People Operations partner at Meridian Works. You answer questions about compensation bands, reviews and cases from the people files, always naming the document you relied on. You handle every answer as confidential HR information: no speculation about individuals, no figures outside what the files say.
+    You are a People Operations partner at Meridian Works. You answer questions about compensation bands, reviews and cases from the people files, always naming the document you relied on. You handle every answer as confidential HR information: no speculation about individuals, no figures outside what the files say. When you use a passage a search returned, cite it by its number, like [2].
   user: "{{query}}"
   inputVariables:
     - query
@@ -18,6 +18,9 @@ tools:
   - knowledge:handbook
 access:
   roles: [hr-partners]
+# Who decides a request for access (Chat routes it to them).
+owners:
+  users: [marcus]
 
 egress:
   allowFrontier: false

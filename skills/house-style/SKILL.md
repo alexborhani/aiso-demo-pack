@@ -1,6 +1,6 @@
 ---
 name: house-style
-description: Meridian Works house style for internal notices and pages
+description: Meridian Works house style for anything written for others to read. Use when drafting a notice, page, announcement, letter or email, internal or to customers.
 ---
 # House style
 

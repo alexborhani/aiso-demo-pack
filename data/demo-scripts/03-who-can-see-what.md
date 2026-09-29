@@ -21,6 +21,9 @@ level: essentials
 4. As Dana, Admin → People → Roles: open `hr-partners` and `finance-analysts`. Each is a handful of
    permissions plus a clearance (confidential, one category). Open the audit log, filter
    `knowledge.access.denied`: Jordan's attempts, with the reason.
+5. Say who decides a request for more: each restricted agent and store names its owners (Marcus
+   for the people partner and the HR files, Lena for the finance analyst and the close package).
+   A request goes to them, not to a queue in IT; scenario 21 shows it.
 
 **Land:** one platform, one set of stores, and each person sees exactly their slice, enforced at
 retrieval on every chunk, not by which assistant they were given.

@@ -31,6 +31,6 @@ handling:
     minTier: admin
     localOnly: true
     retentionDays: 3650
+# Labels other systems put on data (Purview, Snowflake, …), mapped to these levels: none in the demo.
 mappings:
-  purview: {}
-  purviewTrust: floor
+  external: {}

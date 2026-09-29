@@ -1,7 +1,7 @@
 {
   "id": "aiso-demo-pack",
   "name": "AI Stackops demo pack",
-  "version": "1.11.1",
+  "version": "1.12.0",
   "publisher": "AI Stack Ops",
   "tier": "certified",
   "description": "Meridian Works, a fictional company, for evaluating the whole platform as different people: six accounts with different tiers, roles and clearances, a classification policy, knowledge stores at every level, agents scoped to them, an all-hands store with notices at every level for the classification demo (enforcement starts off: switch to monitor, then enforce), an unlabelled site-notes store for the classifier, a presenter agent that runs the scripts aloud in a chosen or lent voice, an organisation with tickets and an agent CEO, routing objectives, a tool that needs approval, evals — plus the former sample agents, stores, functions, skills and workflows. Nothing in it is real.",
@@ -53,7 +53,8 @@
       "knowledge/web-docs.knowledge.yaml",
       "knowledge/site-notes.knowledge.yaml",
       "knowledge/product-faq.knowledge.yaml",
-      "knowledge/demo-scripts.knowledge.yaml"
+      "knowledge/demo-scripts.knowledge.yaml",
+      "knowledge/firmware-docs.knowledge.yaml"
     ],
     "bundles": [
       "data/all-hands",
@@ -73,7 +74,8 @@
       "data/site-notes",
       "data/product-faq",
       "data/demo-scripts",
-      "data/toolbox"
+      "data/toolbox",
+      "data/firmware-docs"
     ],
     "workflows": [
       "workflows/customer-notice.workflow.yaml",
@@ -86,7 +88,9 @@
       "skills/house-style",
       "skills/pii-guard",
       "skills/sandbox",
-      "skills/web-pilot"
+      "skills/web-pilot",
+      "skills/customer-notice",
+      "skills/safety-change-review"
     ],
     "functions": [
       "functions/calculator.function.mjs",
@@ -158,6 +162,17 @@
           "requestsPerMinute": 10,
           "tokensPerDay": 50000
         }
+      },
+      {
+        "name": "firmware-engineers",
+        "description": "Engineers on the MW-300 controller: confidential Security code in firmware/safety",
+        "permissions": [],
+        "clearance": {
+          "level": "confidential",
+          "categories": [
+            "Security"
+          ]
+        }
       }
     ],
     "users": [
@@ -171,7 +186,10 @@
         "username": "sam",
         "displayName": "Sam Reyes",
         "email": "sam.reyes@meridianworks.example",
-        "tier": "builder"
+        "tier": "builder",
+        "roles": [
+          "firmware-engineers"
+        ]
       },
       {
         "username": "priya",
@@ -243,7 +261,7 @@
     {
       "id": "essentials",
       "label": "Essentials",
-      "description": "The eight Meridian Works agents with one to three tools each, the nine stores the scripts use, the people, roles and policy. Scenarios 1–8, 13, 14, 16, 18, 19, 21.",
+      "description": "The eight Meridian Works agents with one to three tools each, the nine stores the scripts use, the people, roles and policy. Measured on Qwen 3.5 9B. Scenarios 1–8, 13, 14, 16, 18, 19, 21, 22.",
       "requires": {
         "modelClass": "small",
         "contextTokens": 16384
@@ -252,7 +270,7 @@
     {
       "id": "standard",
       "label": "Standard",
-      "description": "Adds the presenter, the writer and canvas, the agent CEO with its organisation, the two workflows, the evals and the demo scripts. Scenarios 0, 9–12, 15, 17.",
+      "description": "Adds the presenter, the writer with its customer-notice playbook, canvas, the agent CEO with its organisation, the two workflows, the evals and the demo scripts. Measured on Claude Haiku 4.5 standing in for a 27B-class model. Scenarios 0, 9–12, 15, 17, 23.",
       "requires": {
         "modelClass": "standard",
         "contextTokens": 32768
@@ -278,7 +296,8 @@
           "workflows/incident-brief.workflow.yaml"
         ],
         "skills": [
-          "skills/house-style"
+          "skills/house-style",
+          "skills/customer-notice"
         ],
         "evals": [
           "evals/chatbot.eval.yaml",
@@ -290,7 +309,7 @@
     {
       "id": "full",
       "label": "Full",
-      "description": "Adds the sample workshop agents (architect, marketer, web engineer, sandbox and media agents) and the sample stores, and the demo-data MCP server (MCP Toolbox over the music-store and pet-store databases). Scenario 20 and the builder workshop.",
+      "description": "Adds the sample workshop agents and stores, the demo-data MCP server (MCP Toolbox over the music-store and pet-store databases), the firmware docs and the safety change review skill for coding agents. Measured on Claude Haiku 4.5. Scenarios 20, 22 (part two), 24 and the builder workshop.",
       "requires": {
         "modelClass": "large",
         "contextTokens": 32768
@@ -319,7 +338,8 @@
           "knowledge/patient-records.knowledge.yaml",
           "knowledge/pet-store.knowledge.yaml",
           "knowledge/transcripts.knowledge.yaml",
-          "knowledge/web-docs.knowledge.yaml"
+          "knowledge/web-docs.knowledge.yaml",
+          "knowledge/firmware-docs.knowledge.yaml"
         ],
         "bundles": [
           "data/music-store",
@@ -327,7 +347,8 @@
           "data/pdf-patients",
           "data/pet-store",
           "data/transcripts",
-          "data/toolbox"
+          "data/toolbox",
+          "data/firmware-docs"
         ],
         "workflows": [
           "workflows/example.workflow.yaml",
@@ -337,7 +358,8 @@
         "skills": [
           "skills/pii-guard",
           "skills/sandbox",
-          "skills/web-pilot"
+          "skills/web-pilot",
+          "skills/safety-change-review"
         ],
         "functions": [
           "functions/text-formatter.function.mjs"
@@ -354,6 +376,6 @@
     "alg": "ed25519",
     "keyId": "a4470c96bdcc103c",
     "publicKey": "q2F/I5FwWGRdIG/Jhwgl6eGo1WMy0DKS0U05m0ROSIA=",
-    "signature": "NK3oySYd4mp8GU6O4y4LhpYlqbwLWl0XMms9vYG7LulHyNe73DR8APS7V6G2CnWwMuwak6LyM9udsNUehlYSDg=="
+    "signature": "CeatDE+CzQLVWkMeMIEedqY01lPc6Ulcb95uw5++joQ//DvcgmSUfdHCA7I7vEStAZw/KbIq4Lg+h9BwcFM3Dw=="
   }
 }

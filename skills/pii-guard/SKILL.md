@@ -1,6 +1,6 @@
 ---
 name: pii-guard
-description: PII and OWASP security filtering rules
+description: PII and OWASP security filtering rules. Use when an answer could include personal data or credentials, or when text from a person reaches a tool.
 ---
 
 # PII Guard

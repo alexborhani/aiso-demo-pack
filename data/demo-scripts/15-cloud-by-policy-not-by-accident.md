@@ -13,9 +13,11 @@ default.* Stronger with a cloud key on the host (Anthropic, or OpenRouter — `p
 
 **You are** Dana; Jordan in the second window.
 
-1. Models tab → *Frontier providers* → add one: provider Anthropic, name `claude`, model `claude-sonnet-4-5`,
-   key `${ANTHROPIC_API_KEY}`, access minimum role admin, budget 5 USD a day, pricing 3/15 per
-   million, maximum classification internal. Save. Say: four decisions were just made about a cloud
+1. Models tab → *Frontier providers* → add one: provider Anthropic (or OpenRouter, or Azure for
+   Claude and OpenAI models in the organisation's own Azure tenant), name `claude`, model
+   `claude-sonnet-4-6` (on OpenRouter `anthropic/claude-sonnet-4.6`), key `${ANTHROPIC_API_KEY}`,
+   access minimum role admin, budget 5 USD a day, pricing 3/15 per million, maximum classification
+   internal. Save. Say: four decisions were just made about a cloud
    model before anyone could use it: who, how much, what data, at what price.
 2. Agents → *New agent* `board-analyst`: model `claude`, tool `knowledge:handbook`, prompt "You are a
    concise business analyst." Save.

@@ -15,13 +15,19 @@ security review or an auditor asks for, produced by the platform.*
 1. Admin → Audit. Filter by action: `knowledge.access.denied`, `classification.monitor`,
    `tools.approval.granted`, `models.route`. Every row has the actor, the target, the outcome, the
    reason and a request id that matches the engine call. Say: the log is hash-chained; a removed or
-   altered row breaks the chain, and the chain is verified.
-2. Usage tab: calls, tokens and cost by person, by agent, by model entry, by kind, by day. Click a
+   altered row breaks the chain. Press **Verify chain**: every link checked, and where the check
+   starts. Filter `answer.recorded`: one row per answer, with its record hash.
+2. Admin → Audit → **Look up an answer**: paste a run id from any Sources line. The answer's record
+   opens: who asked, each step with its statement and row count, the figures checked, the grade.
+   Which skills shaped it, and which version, is in the audit rows `skills.loaded` for the same
+   run. Scenario 22 keeps and verifies one.
+3. Usage tab: calls, tokens and cost by person, by agent, by model entry, by kind, by day. Click a
    person to drill. *Export CSV*: one row per month, person, agent and model, ready for chargeback.
-3. Admin → Data → *Evidence bundle*: choose the last 30 days, download. One JSON file, signed with the
+4. Admin → Data → *Evidence bundle*: choose the last 30 days, download. One JSON file, signed with the
    workspace key, containing the setup checklist, the compliance report, the taxonomy version, the
-   packs, the limits, the usage totals and the audit rows. Open it and show the signature block.
-4. Admin → Estate → *Estate report*: nodes and active people, signed the same way.
+   packs, the limits, the usage totals, the development projects and the audit rows. Open it and
+   show the signature block.
+5. Admin → Estate → *Estate report*: nodes and active people, signed the same way.
 
 **Land:** nothing here was assembled by hand for the meeting. The evidence a control framework asks
 for is a download, and it is tamper-evident.

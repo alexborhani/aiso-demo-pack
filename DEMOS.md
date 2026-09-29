@@ -1,4 +1,4 @@
-# Twenty demonstrations of AI Stackops, on one Mac, as Meridian Works
+# Demonstrations of AI Stackops, on one Mac, as Meridian Works
 
 Scripts for a presenter showing AI Stackops to senior business and technology leaders. Every
 scenario runs on a single Mac with the demo pack installed and the local model; nothing in the
@@ -16,57 +16,83 @@ the pack card (agents above the level are removed, the people and the policy sta
 below says which level it needs; the people, the stores of the essentials and the scripts are the
 same at every level, so a story told at Essentials reads the same at Full.
 
-| Level | Reference model | What it adds | Scenarios |
+| Level | Model it was measured on | What it adds | Scenarios |
 | --- | --- | --- | --- |
-| **Essentials** | a 9B-class local model, 16K–32K context (Qwen 3.5 9B on a 24 GB Mac) | the eight Meridian agents with one to three tools each, the nine stores the scripts use | 1–8, 13, 14, 16, 18, 19 |
-| **Standard** | a 27B-class local model at 32K (a 48 GB Mac or larger), or a cloud entry | the presenter, the writer and canvas, the agent CEO and its organisation, the two workflows, the evals, the demo scripts | 0, 9–12, 15, 17 |
-| **Full** | a 70B-class model or a frontier provider | the sample workshop agents (architect, marketer, web engineer, sandbox, media) and the sample stores | 20, and the builder workshop |
+| **Essentials** | Qwen 3.5 9B (4-bit) on MLX Serve, 32K context, on a 24 GB Mac | the eight Meridian agents with one to three tools each, the nine stores the scripts use | 1–8, 13, 14, 16, 18, 19, 21, 22 |
+| **Standard** | Claude Haiku 4.5 through OpenRouter, standing in for a 27B-class local model | the presenter, the writer with its customer-notice playbook, canvas, the agent CEO and its organisation, the two workflows, the evals, the demo scripts | 0, 9–12, 15, 17, 23 |
+| **Full** | Claude Haiku 4.5 through OpenRouter, standing in for a 70B-class model or a frontier provider | the sample workshop agents, the sample stores, the demo-data MCP server, the firmware docs and the safety review skill | 20, 22 (part two), 24, and the builder workshop |
 
 The boundaries come from measurement, not taste: on a 9B a single tool with ten actions was
 already unreliable, so nothing at Essentials has more than three one-action tools, and the
-presenter and the CEO — long prompts, many actions — wait for Standard.
+presenter and the CEO — long prompts, many actions — wait for Standard. Standard and Full were
+measured on a small cloud model; no 27B or 70B local model was measured for this release, so treat
+those rows as the size the scenarios need, not a promise about a particular local model.
+`scripts/bench.py` runs every scripted call of a level against the model your host serves and
+says, check by check, whether that level operates on it.
 
 ## Before the day
 
-**Install and prepare (once, about 20 minutes)**
+**Install and prepare (once, about 30 minutes)**
 
-1. Install or update AI Stackops on the Mac and give the engine a 16K context. With the macOS deploy
-   kit that is `sudo ./install.sh --orcha <binary> --ctx-size 16384` (32768 is fine on 24 GB or more);
-   otherwise pass `--ctx-size 16384` to `mlx-serve`. This is not optional for the full set: the
-   engine's own default of 4096 tokens is enough for a chat, not for an agent with tools and
-   retrieved documents. Every scenario below was exercised against the real engine; the ones marked
-   *needs room* fail with "prompt exceeds maximum context length" or take minutes at 4096 and are
-   written for 16K.
-2. Sign in as the first admin, then Packs → *Install* → `https://github.com/alexborhani/aiso-demo-pack`,
-   and pick the level your model carries (above).
-   Copy the six passwords from the dialog into a password manager: Dana (admin), Sam (builder),
-   Priya, Marcus, Lena (members with roles), Jordan (contractor, public only). *Reset passwords* on
-   the pack card mints new ones at any time.
-3. Knowledge tab: index `handbook`, `it-runbooks`, `people-files`, `finance-close`,
-   `security-incidents`, `legal-matters`, `all-hands`, `site-notes`, `product-faq`, `scratchpad`.
-   Ten stores, a few minutes in total on the local embedding model.
-4. Models tab: confirm the default chat entry is the engine's Gemma and the embedding entry is
-   `bge-small`. Nothing else is required. Scenario 15 adds a cloud entry live. Scenario 16 is
-   stronger with the cloud entry below, added once; skip it and the scenario runs on the local model.
+1. Install or update AI Stackops on the Mac (the deploy kit installs AI Stackops only; the engine is
+   MLX Core, run separately). Give the engine at least a 16K context, 32K on 24 GB or more: in MLX
+   Core's settings, or `--ctx-size 32768` if you start `mlx-serve` yourself. This is not optional:
+   the engine's own default of 4096 tokens is enough for a chat, not for an agent with tools and
+   retrieved documents. The scenarios marked *needs room* fail with "prompt exceeds maximum context
+   length" or take minutes at 4096. Load Qwen 3.5 9B (`mlx-community/Qwen3.5-9B-MLX-4bit`) and an
+   embedding model (`bge-small` or `Qwen3-Embedding-0.6B`).
+2. Sign in as the first admin. Admin → Estate → **Licence**: paste the demo Enterprise key (issued
+   by AI Stack Ops for the demo). The Licence panel shows the edition, the people and nodes used and
+   the date it ends. On the Free edition the pack still installs, but the chargeback export and the
+   evidence bundle's projects section (scenarios 18 and 24) say *edition required*.
+3. Packs → *Install* → `https://github.com/alexborhani/aiso-demo-pack`, and pick the level your
+   model carries (above). Copy the six passwords from the dialog into a password manager: Dana
+   (admin), Sam (builder), Priya, Marcus, Lena (members with roles), Jordan (contractor, public
+   only). *Reset passwords* on the pack card mints new ones at any time.
+4. Knowledge tab: the pack's stores index on install. Check each shows *indexed* (a few minutes in
+   total on the local embedding model). The HR and finance stores are listed only to the people
+   whose roles open them, so sign in as Marcus and Lena to see those two.
+5. Models tab: the default chat entry is the engine's Qwen 3.5 9B and the embedding entry is the
+   engine's embedding model. Nothing else is required. Scenario 15 adds a cloud entry live.
+   Scenarios 16, 22 and 24, and Standard and Full on a small Mac, are stronger with the cloud entry
+   below, added once; without it they run on the local model.
 
-   *Scenario 16's Claude entry.* Models tab → Anthropic, name `claude-haiku`, model
-   `claude-haiku-4-5-20251001`, key `${ANTHROPIC_API_KEY}`, Max Tokens 2048, Thinking budget 0,
-   access minimum role **member** (Priya asks the questions; a new cloud entry starts admin-only),
-   classification ceiling internal (the runbooks are internal), pricing 1 / 5 per million, and
-   USD / day **1**. Save. That dollar a day is the demo's own fence: a rehearsal and a run share it,
-   because the window is a rolling 24 hours. Do not make it the default and leave `helpdesk` on
-   `default`; the scenario switches it live. Keep to Haiku 4.5 or a 4.6 model here: the helpdesk
-   sends a temperature, and Sonnet 5, Opus 4.7 and later refuse one.
-5. Open the Studio in two browser profiles (or one normal and one private window) so you can be Dana
+   *The cloud entry.* Models tab → OpenRouter (or Anthropic), name `claude-haiku`, model
+   `anthropic/claude-haiku-4.5` on OpenRouter or `claude-haiku-4-5-20251001` on Anthropic, key
+   `${OPENROUTER_API_KEY}` or `${ANTHROPIC_API_KEY}` (the key in the host's environment or the
+   secret store, never in the file), Max Tokens 2048, Thinking budget 0, access minimum role
+   **member** (Priya asks the questions; a new cloud entry starts admin-only), classification
+   ceiling **internal** (the runbooks are internal; the firmware safety code, confidential, stays
+   off it), pricing 1 / 5 per million, and USD / day **1**. Save. That dollar a day is the demo's own
+   fence: a rehearsal and a run share it, because the window is a rolling 24 hours. Do not make it
+   the default; the scenarios switch agents to it live.
+   *Standard and Full on a 9B-class Mac.* Keep the local model as the default and give the cloud
+   entry only to the agents those levels add: Agents → `writer`, `canvas`, `meridian-ceo`,
+   `music-librarian`, the workshop agents and `skill-builder` (added the first time Skills → *New
+   skill* is opened) → Model → `claude-haiku`. The finance, HR, legal and
+   security agents and the presenter refuse cloud models by policy (their `egress` says so), so
+   they stay on the local model whatever the default is; a cloud default would stop them.
+6. Admin → Policy → **Answer checks**: leave the checks on, and set *Model for decisions* to the
+   local chat entry. The second-model judge and the grades (scenario 22) then run on the local model,
+   where the engine returns token probabilities; nothing about an answer leaves the Mac to be judged.
+7. On a 24 GB Mac, load only what the day needs: the chat model and the embedding model, and the
+   voices only for scenario 0. The models, the engine's prompt cache and a browser fill 24 GB;
+   once the Mac swaps, a reply that takes seconds takes minutes. Close other large apps, and start
+   a scenario only when the Knowledge tab shows every store *indexed*: the engine serves requests
+   side by side, and a chat slows while a store is still embedding.
+8. Open the Studio in two browser profiles (or one normal and one private window) so you can be Dana
    in one and another person in the other without signing out. Scenario 14 needs a third window with
    no session at all.
+9. For scenario 24 only (Full): Claude Code on the Mac, the `ai-stackops` command on the PATH (the
+   same binary the host runs), and a clone of `https://github.com/alexborhani/meridian-pump-controller`
+   in a folder of its own.
 
 **The people you will be**
 
 | Sign in as | Tier and roles | Clears | Use them for |
 | --- | --- | --- | --- |
 | Dana | admin | restricted, every category | policy, approvals, audit, the CEO |
-| Sam | builder | internal | building: agents, workflows, the IDE |
+| Sam | builder, firmware-engineers | internal, and confidential Security | building: agents, workflows, skills, the IDE, the firmware repository |
 | Priya | member, staff | internal | the everyday employee |
 | Marcus | member, staff, hr-partners | confidential within HR | people questions |
 | Lena | member, staff, finance-analysts | confidential within Finance | finance questions |
@@ -78,7 +104,9 @@ reinstalled in under five minutes, which returns every account, store and policy
 ---
 
 ## 0. Meet the presenter
-**Level:** Standard.
+**Level:** Standard, on a Standard-class local model: the presenter refuses cloud models (its
+`egress` says so), and a 9B does not drive it reliably (measured: Qwen 3.5 9B started a scenario in
+0 of 3 runs).
 
 
 *Optional opener: the platform introduces itself, in a voice the room chooses, and can present the
@@ -124,7 +152,7 @@ mkdir -p mlx-community/Qwen3-TTS-12Hz-0.6B-Base-8bit/speech_tokenizer && curl -s
 ```
 
 Then Models tab → activate the Qwen3-TTS entry for the *tts* role, and load Kokoro once from the Local
-LLM tab (it stays resident; both fit beside Gemma). The presenter's presets name the model as the
+LLM tab (it stays resident; both fit beside Qwen 3.5 9B). The presenter's presets name the model as the
 engine lists it, `Kokoro-82M-MLX-Serve`.
 
 ---
@@ -151,12 +179,15 @@ engine lists it, `Kokoro-82M-MLX-Serve`.
 4. Scroll to *Compliance* → *Check now*. Every finding is a gap between what the policy requires of a
    level and the actual configuration, with the change that fixes it. The first finding is the
    enforcement mode itself.
-5. Packs tab. Open the pack card (*Details*): signed by AI Stack Ops, certified tier, publisher key id,
+5. Admin → Estate → **Licence**: the edition, the people and nodes in use against its limits, and
+   the date it ends; renewal is a new key pasted here, never a reinstall. Admin → Policy →
+   **Answer checks**: the rules every answer meets before anyone sees it (scenario 22).
+6. Packs tab. Open the pack card (*Details*): signed by AI Stack Ops, certified tier, publisher key id,
    what it seeded. Below the cards, the trusted publishers panel: the minimum tier the host accepts. Say: capability arrives as
    signed packs, installs in one line, uninstalls completely, and unsigned packs can be refused
    estate-wide.
 
-6. Still on the pack card: *Update* and the *auto* switch. Say: a pack is kept current from the same
+7. Still on the pack card: *Update* and the *auto* switch. Say: a pack is kept current from the same
    publisher without reinstalling — accounts keep their passwords, unchanged stores keep their index,
    an edited policy is kept — and a pack you trust can take its updates from the daily check on its
    own, every one of them audited. *Check for updates* asks every source now.
@@ -210,6 +241,9 @@ a contractor and useful for an HR partner without anyone building two assistants
 4. As Dana, Admin → People → Roles: open `hr-partners` and `finance-analysts`. Each is a handful of
    permissions plus a clearance (confidential, one category). Open the audit log, filter
    `knowledge.access.denied`: Jordan's attempts, with the reason.
+5. Say who decides a request for more: each restricted agent and store names its owners (Marcus
+   for the people partner and the HR files, Lena for the finance analyst and the close package).
+   A request goes to them, not to a queue in IT; scenario 21 shows it.
 
 **Land:** one platform, one set of stores, and each person sees exactly their slice, enforced at
 retrieval on every chunk, not by which assistant they were given.
@@ -341,27 +375,35 @@ policy's handling rules are checked against the configuration, not promised.
 
 ---
 
-## 9. Drafting on the canvas, in house style, filed on the record
+## 9. A customer notice by the playbook: drafted, signed off, filed
 **Level:** Standard.
 
 
-*Knowledge work with an output you can see, and an agent writing back into the estate under audit.*
+*A procedure the organisation wrote down once, followed by an agent every time: it asks for what
+it needs, drafts in house style, and waits for a person before anything goes on the record.*
 
-**You are** Sam (builder).
+**You are** Sam (builder) in one window, Dana in the other for the sign-off.
 
-1. `writer`: **"Draft the customer notice about the 2027 price change, effective 1 November, on the
-   canvas in house style."** The canvas pane opens beside the chat with the rendered notice. The
-   `house-style` skill shaped it: tone, structure, the sign-off.
-2. **"Shorten it to three paragraphs and add the service-desk contact."** The canvas updates in place.
-3. **"File it in the scratchpad store as '2027 price change notice'."** The agent calls
-   `knowledge_add`. Knowledge → `scratchpad` → *Sources*: the new document, decided by a person,
-   with who added it and when. Admin → Audit: `knowledge.add` names the title and the sources, never
-   the text.
-4. Knowledge → `scratchpad` → *Search* for "price change": the notice is retrievable by every agent
-   that has the store.
+1. As Sam, `writer`: **"Draft a customer notice about the 2027 price list."** It asks for the
+   effective date before drafting anything: the playbook declares it as a required input, and a
+   required input is asked for, never guessed.
+2. **"1 November 2026, for all customers."** Open the tool trace under the reply: the writer loaded
+   two skills by itself, `house-style` and `customer-notice` (`load_skill`), because the request
+   matched their descriptions, and read the playbook's `references/notice-rules.md`. The canvas
+   opens with the notice: what changes, from when and for whom in the first three lines, clause 7.2
+   and the 30 days' notice, the service desk as the contact.
+3. **"File it."** The writer calls `knowledge_add`, and the run pauses: an approval card, because
+   the playbook says filing a customer notice needs an administrator, and a different person from
+   the one who asked. Sam cannot approve it.
+4. As Dana, Approvals: the card names the tool, the title and the store. *Approve*, with a note.
+   The run resumes; Knowledge → `scratchpad` → *Sources*: the notice, added by Sam. Admin → Audit:
+   `skills.loaded` (which skills, which version), `tools.approval.requested` and `.granted`, and
+   `knowledge.add` with the title and never the text.
+5. Skills tab → `customer-notice`: the playbook as the organisation wrote it: the inputs, the
+   approval and who gives it, the *Done when* list, the reference file.
 
-**Land:** the canvas is where a leader sees the work; the audit is where the organisation keeps it.
-An agent that writes into the estate does so with a name attached.
+**Land:** a procedure the organisation wrote down once, not a prompt someone remembered: the agent
+asks for what it needs, follows the house rules, and the step that matters waits for a person.
 
 ---
 
@@ -494,9 +536,11 @@ default.* Stronger with a cloud key on the host (Anthropic, or OpenRouter — `p
 
 **You are** Dana; Jordan in the second window.
 
-1. Models tab → *Frontier providers* → add one: provider Anthropic, name `claude`, model `claude-sonnet-4-5`,
-   key `${ANTHROPIC_API_KEY}`, access minimum role admin, budget 5 USD a day, pricing 3/15 per
-   million, maximum classification internal. Save. Say: four decisions were just made about a cloud
+1. Models tab → *Frontier providers* → add one: provider Anthropic (or OpenRouter, or Azure for
+   Claude and OpenAI models in the organisation's own Azure tenant), name `claude`, model
+   `claude-sonnet-4-6` (on OpenRouter `anthropic/claude-sonnet-4.6`), key `${ANTHROPIC_API_KEY}`,
+   access minimum role admin, budget 5 USD a day, pricing 3/15 per million, maximum classification
+   internal. Save. Say: four decisions were just made about a cloud
    model before anyone could use it: who, how much, what data, at what price.
 2. Agents → *New agent* `board-analyst`: model `claude`, tool `knowledge:handbook`, prompt "You are a
    concise business analyst." Save.
@@ -595,6 +639,9 @@ recorded with who, what and how much.
 3. As Dana, *Run* the helpdesk evals again: the VPN case fails on the missing phrase. Point at the
    check detail.
 4. Undo the change, re-index, run once more: green.
+5. Skills carry their own evals, beside the skill (Skills tab → a skill → *Evals*): whether agents
+   pick it for the requests it is for and leave it alone for near misses, and whether answers are
+   better with it. Scenario 23 runs one.
 
 **Land:** knowledge and prompts change every week; evals turn "we think it still works" into a
 number on a page, and the run is audited.
@@ -613,13 +660,19 @@ security review or an auditor asks for, produced by the platform.*
 1. Admin → Audit. Filter by action: `knowledge.access.denied`, `classification.monitor`,
    `tools.approval.granted`, `models.route`. Every row has the actor, the target, the outcome, the
    reason and a request id that matches the engine call. Say: the log is hash-chained; a removed or
-   altered row breaks the chain, and the chain is verified.
-2. Usage tab: calls, tokens and cost by person, by agent, by model entry, by kind, by day. Click a
+   altered row breaks the chain. Press **Verify chain**: every link checked, and where the check
+   starts. Filter `answer.recorded`: one row per answer, with its record hash.
+2. Admin → Audit → **Look up an answer**: paste a run id from any Sources line. The answer's record
+   opens: who asked, each step with its statement and row count, the figures checked, the grade.
+   Which skills shaped it, and which version, is in the audit rows `skills.loaded` for the same
+   run. Scenario 22 keeps and verifies one.
+3. Usage tab: calls, tokens and cost by person, by agent, by model entry, by kind, by day. Click a
    person to drill. *Export CSV*: one row per month, person, agent and model, ready for chargeback.
-3. Admin → Data → *Evidence bundle*: choose the last 30 days, download. One JSON file, signed with the
+4. Admin → Data → *Evidence bundle*: choose the last 30 days, download. One JSON file, signed with the
    workspace key, containing the setup checklist, the compliance report, the taxonomy version, the
-   packs, the limits, the usage totals and the audit rows. Open it and show the signature block.
-4. Admin → Estate → *Estate report*: nodes and active people, signed the same way.
+   packs, the limits, the usage totals, the development projects and the audit rows. Open it and
+   show the signature block.
+5. Admin → Estate → *Estate report*: nodes and active people, signed the same way.
 
 **Land:** nothing here was assembled by hand for the meeting. The evidence a control framework asks
 for is a download, and it is tamper-evident.
@@ -698,7 +751,7 @@ have been started with `UFP_ENABLED=false` in its environment: that locks federa
 
 
 *A member never picks an agent. Chat answers from what they may use, refuses the rest
-by name, and asks the admins on their behalf.*
+by name, and asks the people who own it on their behalf.*
 
 **You are** Jordan, then Marcus, then Dana (two windows).
 
@@ -706,18 +759,178 @@ by name, and asks the admins on their behalf.*
    **"How do I reset my VPN certificate?"** Chat hands the question to the helpdesk and answers
    from the runbook, naming it.
 2. Still as Jordan: **"How much holiday do I carry over at year end?"** Chat says the people
-   partner owns that and it is outside Jordan's access, and offers to ask the administrators. Say
-   **"Yes, please ask."** Chat confirms the request was sent.
-3. As Marcus, Chat: the same holiday question. This time it reaches the people partner and answers.
-   Say: same chat, same question, different person, different destinations.
-4. As Dana, Approvals: Jordan's request is waiting, with `hr-partners` pre-selected because that is
-   the role `people-partner` names. *Grant*. Admin → Audit → *Chat routing* lists Jordan's refused
-   route and Marcus's successful one.
-5. As Jordan again (sign out and in — the role is read at sign-in): the holiday question now
-   reaches the people partner.
+   partner owns that and it is outside Jordan's access, and offers to ask. Say **"Yes, please ask
+   the people who decide access for me."** Chat confirms the request was sent; a card under the
+   reply shows it waiting.
+3. As Marcus, Approvals → *Access requests*: Jordan's request is here because Marcus owns the
+   people partner (its *Owners* list names him), not because he is an admin. An owner has one
+   choice: *Grant access to "people-partner"*, that agent and nothing else, never a role. Grant it
+   with a note.
+4. As Jordan, without signing out (the card under the reply turns *granted*): **"How many days of
+   annual leave do I get?"** It now reaches the people partner, which answers from the handbook:
+   25 days, 28 after five years. The HR files stay closed: the grant opened the agent, and Jordan's
+   clearance is still public.
+5. As Dana, Approvals shows the same request, answered by Marcus as owner; an admin could have
+   assigned a role instead. Admin → Audit: `access.request`, `access.grant` with *as: owner*, and
+   *Chat routing* lists Jordan's refused route and his successful one.
+6. As Marcus, Account → *Access you granted*: Jordan and the people partner. *Revoke*. Jordan's
+   next question is refused again.
 
-**Land:** one chat for members, resolved per person on every request; nothing is granted by
-Chat, and every route and every request is on the record.
+**Land:** one chat for members, resolved per person on every request; access is asked of the
+people who own the thing, granted for that one thing, and taken back in one click, all on the
+record.
+
+---
+
+## 22. Numbers you can check
+**Level:** Essentials for part one; part two needs Full (the demo-data server).
+
+
+*Every answer carries where its figures came from, whether each figure was found there, and a
+grade, before anyone acts on it. The platform checks the answer; it does not ask the audience to
+trust the model.*
+
+**You are** Lena for part one, Dana for part two and the settings.
+
+*Part one: documents (Essentials).*
+
+1. As Lena, `finance-analyst`: **"What was Q2 2026 revenue, and how does the full-year forecast
+   compare with the plan?"** Under the reply, the Sources line: *Documents*, the close package
+   passages it read, *Figures found in sources*, and a *Grade* badge. Open it: each figure is
+   matched to a passage; the difference and the percentage are marked as worked out from them, by
+   the calculator, not by the model in its head. The grade's reasons say why it is High or Medium.
+2. Mark the answer: thumbs down, *What was wrong?* → a figure, a short note. Every mark is kept with
+   the answer and counts towards tuning the checks (Admin → Policy → Answer checks → *How the checks
+   have done*).
+3. As Dana, Admin → Policy → **Answer checks**: the policy in one place. Answers built on data are
+   held and checked before they are shown; one repair turn is allowed; figures from query results
+   are filled in by the platform, not typed by the model; the second-model judge; clarifying
+   questions; the minimum grade and what happens below it. *Model for decisions* is the local
+   model: nothing about an answer leaves the Mac to be judged.
+
+*Part two: data (Full).*
+
+4. As Dana, `music-librarian` (answers from the demo-data MCP server: named, parameterised queries
+   over the store's database; there is no free SQL tool). **"What has customer Heather Leacock
+   purchased, and how much did she spend in total?"** While it is held the reply says *Checking the answer against the results…*, then the table
+   appears. Sources: *Governed*, the named query `customer_purchases`, 38 rows, *Figures found in
+   sources*, Grade High. Open the step: the statement
+   that ran and its row count. Press *Show result*: the rows themselves.
+5. Answer checks → *Clarifying questions* → On. Ask **"Which artists play in two genres?"** The
+   librarian asks which genres before running anything. **"Rock and Metal."** The named query
+   `artists_in_both_genres` runs with those two, four artists come back, graded High. Set it back.
+6. Under that answer, **Keep** with a title. **Verify**: the signature, the record, the results,
+   the audit row, the checks and the grade are each checked again and pass. **Export** → HTML: one
+   file a reviewer can open without the Studio. Account → *Kept answers* lists it; Admin → Audit →
+   *Look up an answer* finds it by its run id.
+7. Optional, to show a check catching something: ask the librarian how long the longest track is in
+   hours and minutes. If the model does the arithmetic in its head, the Sources line says *1 figure
+   not found in sources* and the grade drops to Low.
+
+**Land:** an answer is not a paragraph to be trusted; it is a record: what was asked, what ran, what
+came back, which figures were found where, and a grade, signed and verifiable after the fact.
+
+---
+
+## 23. Skills: built by interview, proven by evals, offered by policy
+**Level:** Standard (the skill builder needs a Standard-class model; on a 9B it drafts slowly and
+unreliably).
+
+
+*How a procedure gets into the platform: the person who does the work is interviewed, the draft is
+checked, its evals decide whether it may be offered widely, and an admin decides where.*
+
+**You are** Sam (builder), then Dana.
+
+1. As Sam, Skills tab → **New skill**. The skill builder asks about the work one question at a time.
+   Answer as a service coordinator: **"I handle warranty claims for the service desk. A customer
+   reports a fault on a pump under warranty. I check the serial number and the purchase date, check
+   the fault is covered (seals, bearings and the controller are; damage and misuse are not), and if
+   it is, book a field engineer. Claims over 2,000 pounds need sign-off from the service manager.
+   It is done when the claim is approved with a booking, or refused with the reason."** Then give
+   two real examples and a near miss when it asks: **"Claim for MW-300 serial 0412, seal leak,
+   bought March 2025"**, **"Is this pump covered? It is a controller fault"**, and the near miss
+   **"How many warranty claims did we have last quarter?"**.
+2. The builder says which form fits (a skill, a workflow, or a skill that starts one) and why, then
+   drafts. Under the conversation: the draft file by file, `SKILL.md` with its inputs (serial
+   number, purchase date, fault), the steps, a *Done when* list, and `evals/evals.yaml` built from
+   the examples, the near miss marked *should not trigger*. Read the warnings: if the draft puts
+   the manager's sign-off under approvals against a tool this workspace does not have, the check
+   says it would pause nothing, and the builder asks which system books the engineer. Say: an
+   approval is only real if it pauses a real tool; the checks will not let a draft pretend.
+   **Save skill**: Sam owns it; its evals start.
+3. Open the new skill: **Evals** shows the trigger cases (was the skill picked for the requests and
+   left alone for the near miss) and the answers with the skill against without it, on the host's
+   model. *Versions*: this one, with its fingerprint.
+4. As Dana, Skills → `customer-notice` (the playbook from scenario 9) → **Where it is offered** →
+   *Every agent* → Save. Refused while its evals have not passed on this version: *Run evals*
+   (a few minutes), then save again. Say: a skill reaches every agent only when a person other
+   than its author has reviewed it (a signed pack counts) and its evals pass, including a check
+   that it does not take the requests of the skills already offered.
+5. Admin → Audit: `skills.draft.save`, `skills.evals.run`, `skills.scope.set` with before and
+   after.
+
+**Land:** procedures come from the people who do the work, are tested before they spread, and reach
+every agent only when an admin puts them there, with every step recorded.
+
+---
+
+## 24. Coding agents inside the policy
+**Level:** Full. Needs Claude Code, the `ai-stackops` command, a clone of
+`meridian-pump-controller`, and the cloud entry (see *Before the day*).
+
+
+*Claude Code works through AI Stackops: the project decides which models it may use, what it may
+read, which code may never go to a cloud model, and every line an AI wrote is on the record.*
+
+**You are** Dana in the Studio, Sam in a terminal in the clone.
+
+1. As Dana, **Projects** → *New project* `pump-controller`: repository
+   `alexborhani/meridian-pump-controller`, level internal. Models: `claude-haiku-4-5` routed to the
+   `claude-haiku` entry, and `claude-local-qwen` routed to the local chat entry. Members: Sam.
+   *Docs for agents*: `firmware-docs`. **Code** → *Path rules*: `firmware/safety/**` confidential,
+   Security. *Classified code*: **Enforce**. Mint a CI key and copy it.
+2. Skills → `safety-change-review` → *Where it is offered* → *Development projects*:
+   `pump-controller` → Save. If it is refused, run its evals first (*Evals* → *Run evals*);
+   scenario 23 shows why.
+3. As Sam, in the terminal, in the clone: `ai-stackops dev login --hub <the Studio's URL>`. It
+   prints a code; approve it in the Studio as Sam under Account → *Sign in a terminal*. The login
+   points Claude Code (and Codex and OpenCode) at the project through AI Stackops by itself. Then
+   Projects → pump-controller → *Setup files* → `.mcp.json`: save it in the clone's root; it gives
+   Claude Code the project's docs, code map and skills. Index the code as CI would:
+   `AISO_URL=<the Studio's URL> AISO_CI_KEY=<the key> AISO_PROJECT=pump-controller ai-stackops code index`
+   It reports the files, the contract, the owners, and *Classified above internal: 1 files*: the
+   server keeps fingerprints of those lines, never the lines.
+4. `claude`, then `/model claude-haiku-4-5`, then: **"What does the service API expose, and who
+   owns firmware/safety?"** Claude Code answers through AI Stackops with the project's code map
+   (the OpenAPI contract), `code_owners` (`@meridian/safety-engineering`) and `search_docs` (the
+   service API guide): one read-only endpoint, owned by the service platform team.
+5. **/mcp__aiso-pump-controller__safety-change-review feature/raise-trip** (the project's skill,
+   served to Claude Code as a command): it loads the safety checklist from AI Stackops and asks for
+   the change's files.
+6. **"Show me what firmware/safety/interlock.c does."** Claude Code reads the file on the Mac and
+   sends it to the model, and the call is refused before it leaves: *This conversation carries
+   classified code from firmware/safety/interlock.c (confidential, 27 lines), which
+   claude-haiku-4-5 may not receive: the model is cleared for internal at most. Switch to
+   claude-local-qwen for this work, or remove that code from the conversation (for example
+   /clear).* Nothing reached the cloud provider. `/clear` to go on.
+7. **"Add a bar-to-psi conversion function to src/controller/units.c, next to bar_to_kpa."** Claude
+   Code writes it. Commit it on a branch, then `ai-stackops code attest --base main` (with the same
+   `AISO_URL`, `AISO_CI_KEY` and `AISO_PROJECT`): *4 lines added (2 long enough to tell), written
+   by a model through AI Stackops: 2 (100%), from cloud models: 2 — claude-haiku-4-5*, and a signed
+   attestation with the `cosign` command that checks it.
+8. As Dana, Projects → pump-controller → **Code**: *What the code rules did* (the refusal, the file,
+   the person) and **AI provenance** (the change and its AI lines); **Usage** (tokens and cost by
+   model and person). Admin → Audit: `gateway.call` rows carry the model, the tokens and the cost,
+   never the prompt; `code.attest` names the change.
+
+Optional, for engineering leaders: *Classified code* also offers a guard that stops Claude Code
+reading the file at all, before anything is sent. It is a managed setting installed on the Mac
+(Projects → *Setup files* → managed settings, which needs an administrator on the Mac), so it is
+left out of the live run.
+
+**Land:** coding agents are governed like every other agent: the project picks the models, the policy
+keeps classified code on the models allowed to carry it, and what the AI wrote is attested.
 
 ---
 
@@ -729,14 +942,15 @@ Chat, and every route and every request is on the record.
 | 6 | 2. New starter | value in the first minute, and the first hard line |
 | 13 | 3. Who can see what | the model of control, on real questions |
 | 20 | 4. Classification switched on | the before and after |
-| 28 | 7. Incident copilot with approval | an agent that acts, safely |
-| 35 | 13. An assistant that remembers you | personal, and provably private |
-| 41 | 15. Cloud by policy | the cloud question, answered |
-| 48 | 18. On the record | the evidence |
+| 28 | 22. Numbers you can check (part one) | an answer is a record, with its figures checked |
+| 35 | 21. One chat for everyone | access asked of the owner, granted for one thing |
+| 42 | 15. Cloud by policy | the cloud question, answered |
+| 49 | 18. On the record | the evidence |
 | 55 | 20. Two nodes | the estate |
 
-Keep 5, 10 and 12 ready as follow-ups for the technical people in the room; 14 for a commercial
-audience; 19 for anyone with a privacy remit.
+On Standard or Full, swap scenario 21 for 9 (the playbook with its sign-off). Keep 5, 10, 12 and 23
+ready as follow-ups for the technical people in the room, 24 for engineering leaders, 14 for a
+commercial audience, and 19 for anyone with a privacy remit.
 
 ## Reset between runs
 
@@ -754,6 +968,13 @@ audience; 19 for anyone with a privacy remit.
 - Scenario 17: restore the runbook and reindex.
 - Scenario 19: reinstall the pack to bring Jordan back (Packs → uninstall → install).
 - Scenario 20: revoke the enrollment on the hub and stop the spoke process.
+- Scenario 21: Marcus → Account → *Access you granted* → *Revoke*, if the scenario did not end there.
+- Scenario 22: Answer checks → *Clarifying questions* back to Off; kept answers stay (Account →
+  *Kept answers*).
+- Scenario 23: the skill Sam built stays (delete its folder in the IDE tab if you want it gone);
+  Skills → `customer-notice` → *Where it is offered* → untick *Every agent*.
+- Scenario 24: Projects → pump-controller → *Archive*; Account → *Signed-in machines* → sign the
+  terminal out; delete the demo branch in the clone.
 
 A full reset is Packs → uninstall → install: accounts, stores, policy and the organisation return to
 the starting state, with new passwords.

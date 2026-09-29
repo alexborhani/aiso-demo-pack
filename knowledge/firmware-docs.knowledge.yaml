@@ -1,0 +1,31 @@
+name: firmware-docs
+description: "MW-300 controller documentation for engineers and their coding agents: the service API guide, the commissioning runbook, the controller overview — internal"
+
+source:
+  type: directory
+  path: bundles/aiso-demo-pack/firmware-docs
+  pattern: "*.md"
+
+loader:
+  type: okf
+
+# No links between the documents: no graph, one search tool.
+graph:
+  fromLinks: false
+
+splitter:
+  type: recursive
+  chunkSize: 700
+  chunkOverlap: 80
+
+embedding: default
+
+classification:
+  level: internal
+  auto: false
+
+egress:
+  allowFrontier: true
+
+search:
+  defaultK: 4

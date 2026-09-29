@@ -27,6 +27,9 @@ classification:
   auto: false
 access:
   roles: [hr-partners]
+# Who decides a request for access (Chat routes it to them).
+owners:
+  users: [marcus]
 egress:
   allowFrontier: false
 
