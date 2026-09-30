@@ -6,7 +6,7 @@ level: full
 ---
 **Level:** Full (the kept answers come from the music librarian, which needs the demo-data server).
 Needs the `ai-stackops` command on the Mac (as for scenario 24) and both cloud entries from *Before
-the day* (`claude-haiku` and `deepseek-flash`). Measured: passed on Gemini 3.7 Flash, with the two
+the day* (`gemini-flash` and `deepseek-flash`). Measured: passed on Gemini 3.7 Flash, with the two
     replay steps (the `ai-stackops` command) not run in the automated pass.
 
 
@@ -21,8 +21,8 @@ kept answer is replayed here too. Enforcement on Monitor or Off, as for scenario
    MLX Serve: the chat entry carries a lock and **pinned**. Say: this is the model every agent
    without a model of its own answers with, and from now on nothing moves it by accident. (The name
    matters: the `mlx-serve` alias follows whatever the engine serves, which no pin can hold.)
-2. Models tab → the OpenRouter tab → pick `claude-haiku` → **Make default**. Refused: *llm.mlx-serve
-   is pinned: "default" currently resolves to it; re-pointing to "claude-haiku" would replace the
+2. Models tab → the OpenRouter tab → pick `gemini-flash` → **Make default**. Refused: *llm.mlx-serve
+   is pinned: "default" currently resolves to it; re-pointing to "gemini-flash" would replace the
    pinned model. Unpin it first (pinned: false) to make this change.* Admin → Audit, action
    `models.pin.bypass`: one row, outcome denied, reason *config-write: …*, Dana as the actor. Say:
    the same refusal meets an edit of `models.yaml` that changes the pinned model, a federation
@@ -34,7 +34,7 @@ kept answer is replayed here too. Enforcement on Monitor or Off, as for scenario
    **"What has customer Heather Leacock purchased, and how much did she spend in total?"**
    (*Heather Leacock*). Account → *Kept answers* lists them, with scenario 22's if it ran.
 4. In the terminal, with the host's workspace, ask whether the librarian could move from
-   `claude-haiku` to the cheaper `deepseek-flash`:
+   `gemini-flash` to the cheaper `deepseek-flash`:
    `WORKSPACE=<the host's workspace> ai-stackops eval --from-kept --model deepseek-flash --agent music-librarian`
    Each kept answer is given to `deepseek-flash` with the librarian's instructions, the question
    and the results it was built from (no query runs again), and checked and graded like a live

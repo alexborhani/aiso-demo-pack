@@ -14,12 +14,12 @@ read, which code may never go to a cloud model, and every line an AI wrote is on
 **You are** Dana in the Studio, Sam in a terminal in the clone.
 
 1. As Dana, **Projects** → *New project* `pump-controller`: repository
-   `alexborhani/meridian-pump-controller`, level internal. Models: `claude-haiku-4-5` routed to the
-   `claude-haiku` entry, and `claude-local-qwen` routed to the local chat entry. Members: Sam.
+   `alexborhani/meridian-pump-controller`, level internal. Models: `claude-gemini-flash` routed to the
+   `gemini-flash` entry, and `claude-local-qwen` routed to the local chat entry. Members: Sam.
    A cloud id must contain `claude` for Claude Code's model picker to keep it; to route it to a model
-   that is not Claude, set its *Claude Code picker behaves as* to `claude-haiku-4-5`. With the
-   `claude-haiku` entry on OpenRouter the gateway translates Claude Code's Anthropic calls for
-   OpenRouter's Chat Completions API; that path was verified live with a local model only.
+   that is not Claude, set its *Claude Code picker behaves as* to `claude-haiku-4-5` (as `claude-gemini-flash` does).
+   With the `gemini-flash` entry on OpenRouter the gateway translates Claude Code's Anthropic calls
+   for OpenRouter's Chat Completions API; measured live with Gemini 3.7 Flash.
    *Docs for agents*: `firmware-docs`. **Code** → *Path rules*: `firmware/safety/**` confidential,
    Security. *Classified code*: **Enforce**. Mint a CI key and copy it.
 2. Skills → `safety-change-review` → *Where it is offered* → *Development projects*:
@@ -33,7 +33,7 @@ read, which code may never go to a cloud model, and every line an AI wrote is on
    `AISO_URL=<the Studio's URL> AISO_CI_KEY=<the key> AISO_PROJECT=pump-controller ai-stackops code index`
    It reports the files, the contract, the owners, and *Classified above internal: 1 files*: the
    server keeps fingerprints of those lines, never the lines.
-4. `claude`, then `/model claude-haiku-4-5`, then: **"What does the service API expose, and who
+4. `claude`, then `/model claude-gemini-flash`, then: **"What does the service API expose, and who
    owns firmware/safety?"** Claude Code answers through AI Stackops with the project's code map
    (the OpenAPI contract), `code_owners` (`@meridian/safety-engineering`) and `search_docs` (the
    service API guide): one read-only endpoint, owned by the service platform team.
@@ -43,7 +43,7 @@ read, which code may never go to a cloud model, and every line an AI wrote is on
 6. **"Show me what firmware/safety/interlock.c does."** Claude Code reads the file on the Mac and
    sends it to the model, and the call is refused before it leaves: *This conversation carries
    classified code from firmware/safety/interlock.c (confidential, 27 lines), which
-   claude-haiku-4-5 may not receive: the model is cleared for internal at most. Switch to
+   claude-gemini-flash may not receive: the model is cleared for internal at most. Switch to
    claude-local-qwen for this work, or remove that code from the conversation (for example
    /clear).* Nothing reached the cloud provider. `/clear` to go on. A careful model may stop one step
    earlier: it calls `code_classification` for the path first, is told the cloud model may not receive
@@ -52,7 +52,7 @@ read, which code may never go to a cloud model, and every line an AI wrote is on
 7. **"Add a bar-to-psi conversion function to src/controller/units.c, next to bar_to_kpa."** Claude
    Code writes it. Commit it on a branch, then `ai-stackops code attest --base main` (with the same
    `AISO_URL`, `AISO_CI_KEY` and `AISO_PROJECT`): *4 lines added (2 long enough to tell), written
-   by a model through AI Stackops: 2 (100%), from cloud models: 2 — claude-haiku-4-5*, and a signed
+   by a model through AI Stackops: 2 (100%), from cloud models: 2 — claude-gemini-flash*, and a signed
    attestation with the `cosign` command that checks it.
 8. As Dana, Projects → pump-controller → **Code**: *What the code rules did* (the refusal, the file,
    the person) and **AI provenance** (the change and its AI lines); **Usage** (tokens and cost by

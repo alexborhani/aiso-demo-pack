@@ -28,29 +28,27 @@ tags: []
    Scenarios 16, 22 and 24, and Standard and Full on a small Mac, are stronger with the cloud entry
    below, added once; without it they run on the local model.
 
-   *The cloud entry.* Models tab → the OpenRouter tab (or Anthropic) → **New entry**. **Name**
-   `claude-haiku` (the scenarios and agents refer to the entry by this name; a new entry is named
-   after its model until you type one), model
-   `anthropic/claude-haiku-4.5` on OpenRouter or `claude-haiku-4-5-20251001` on Anthropic, key
-   `${OPENROUTER_API_KEY}` or `${ANTHROPIC_API_KEY}` (the key in the host's environment or the
-   secret store, never in the file), Max Tokens 2048, Thinking budget 0, access minimum role
+   *The cloud entries.* Two, one per level, the ones this release was measured on. Models tab → the
+   OpenRouter tab → **New entry**. **Name** `deepseek-flash` (the scenarios and agents refer to the
+   entries by these names; a new entry is named after its model until you type one), model
+   `deepseek/deepseek-v4.1-flash`, key `${OPENROUTER_API_KEY}` (the key in the host's environment or
+   the secret store, never in the file), Max Tokens 4096, Thinking budget 0, access minimum role
    **member** (Priya asks the questions; a new cloud entry starts admin-only), classification
    ceiling **internal** (the runbooks are internal; the firmware safety code, confidential, stays
-   off it), pricing 1 / 5 per million, and USD / day **1**. Save. That dollar a day is the demo's own
-   fence: a rehearsal and a run share it, because the window is a rolling 24 hours. Do not make it
-   the default; the scenarios switch agents to it live. From then on the provider's tab lists each
-   entry by name above the form: pick `claude-haiku` there to edit it (scenario 16 changes its
-   budget), or **New entry** for another.
-   *A second cloud entry, for scenario 28 only.* OpenRouter tab → **New entry**: name
-   `deepseek-flash`, model `deepseek/deepseek-v4.1-flash`, the same key, access, ceiling and USD / day,
-   pricing from the model's OpenRouter page on the day. It is the cheaper model scenario 28 tests
-   before any switch; no agent uses it.
+   off it), pricing from the model's OpenRouter page on the day (0.30 / 1.20 per million when
+   measured), and USD / day **1**. Save. Then **New entry** again: name `gemini-flash`, model
+   `google/gemini-3.7-flash`, the same key, access and ceiling, its own pricing (0.75 / 3.75 when
+   measured) and USD / day **1**. That dollar a day per entry is the demo's own fence: a rehearsal
+   and a run share it, because the window is a rolling 24 hours. Make neither the default; the
+   scenarios switch agents to them live. From then on the provider's tab lists each entry by name
+   above the form: pick one there to edit it (scenario 16 changes `deepseek-flash`'s budget).
    *Standard and Full on a 9B-class Mac.* Keep the local model as the default and give the cloud
-   entry only to the agents those levels add: Agents → `writer`, `canvas`, `meridian-ceo`,
-   `music-librarian`, the workshop agents and `skill-builder` (added the first time Skills → *New
-   skill* is opened) → Model → `claude-haiku`. The finance, HR, legal and
-   security agents and the presenter refuse cloud models by policy (their `egress` says so), so
-   they stay on the local model whatever the default is; a cloud default would stop them.
+   entries only to the agents those levels add: for Standard, Agents → `writer`, `canvas`,
+   `meridian-ceo` and `skill-builder` (added the first time Skills → *New skill* is opened) → Model
+   → `deepseek-flash`; for Full, `music-librarian`, `data-analyst` and the workshop agents → Model →
+   `gemini-flash`. The finance, HR, legal and security agents and the presenter refuse cloud models
+   by policy (their `egress` says so), so they stay on the local model whatever the default is; a
+   cloud default would stop them, and the eval judge too.
 6. Admin → Policy → **Answer checks**: leave the checks on, and set *Model for decisions* to the
    local chat entry. The second-model judge and the grades (scenario 22) then run on the local model,
    where the engine returns token probabilities; nothing about an answer leaves the Mac to be judged.

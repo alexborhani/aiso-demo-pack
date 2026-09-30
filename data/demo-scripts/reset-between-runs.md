@@ -15,7 +15,7 @@ tags: []
 - Scenario 15: leave the entry; delete `board-analyst` if you prefer a clean agent list. After
   step 8, restart the host without `EGRESS_ALLOW_FRONTIER=false`.
 - Scenario 16: member Requests / min back to empty; `helpdesk`'s model back to `default`;
-  `claude-haiku` USD / day back to 1 (or, without a key, the pricing removed from `mlx-serve`).
+  `deepseek-flash` USD / day back to 1 (or, without a key, the pricing removed from `mlx-serve`).
   Leave the entry: the next run needs it.
 - Scenario 17: restore the runbook and reindex.
 - Scenario 19: reinstall the pack to bring Jordan back (Packs → uninstall → install).

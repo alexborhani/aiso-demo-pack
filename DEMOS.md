@@ -69,29 +69,27 @@ says, check by check, whether that level operates on it.
    Scenarios 16, 22 and 24, and Standard and Full on a small Mac, are stronger with the cloud entry
    below, added once; without it they run on the local model.
 
-   *The cloud entry.* Models tab → the OpenRouter tab (or Anthropic) → **New entry**. **Name**
-   `claude-haiku` (the scenarios and agents refer to the entry by this name; a new entry is named
-   after its model until you type one), model
-   `anthropic/claude-haiku-4.5` on OpenRouter or `claude-haiku-4-5-20251001` on Anthropic, key
-   `${OPENROUTER_API_KEY}` or `${ANTHROPIC_API_KEY}` (the key in the host's environment or the
-   secret store, never in the file), Max Tokens 2048, Thinking budget 0, access minimum role
+   *The cloud entries.* Two, one per level, the ones this release was measured on. Models tab → the
+   OpenRouter tab → **New entry**. **Name** `deepseek-flash` (the scenarios and agents refer to the
+   entries by these names; a new entry is named after its model until you type one), model
+   `deepseek/deepseek-v4.1-flash`, key `${OPENROUTER_API_KEY}` (the key in the host's environment or
+   the secret store, never in the file), Max Tokens 4096, Thinking budget 0, access minimum role
    **member** (Priya asks the questions; a new cloud entry starts admin-only), classification
    ceiling **internal** (the runbooks are internal; the firmware safety code, confidential, stays
-   off it), pricing 1 / 5 per million, and USD / day **1**. Save. That dollar a day is the demo's own
-   fence: a rehearsal and a run share it, because the window is a rolling 24 hours. Do not make it
-   the default; the scenarios switch agents to it live. From then on the provider's tab lists each
-   entry by name above the form: pick `claude-haiku` there to edit it (scenario 16 changes its
-   budget), or **New entry** for another.
-   *A second cloud entry, for scenario 28 only.* OpenRouter tab → **New entry**: name
-   `deepseek-flash`, model `deepseek/deepseek-v4.1-flash`, the same key, access, ceiling and USD / day,
-   pricing from the model's OpenRouter page on the day. It is the cheaper model scenario 28 tests
-   before any switch; no agent uses it.
+   off it), pricing from the model's OpenRouter page on the day (0.30 / 1.20 per million when
+   measured), and USD / day **1**. Save. Then **New entry** again: name `gemini-flash`, model
+   `google/gemini-3.7-flash`, the same key, access and ceiling, its own pricing (0.75 / 3.75 when
+   measured) and USD / day **1**. That dollar a day per entry is the demo's own fence: a rehearsal
+   and a run share it, because the window is a rolling 24 hours. Make neither the default; the
+   scenarios switch agents to them live. From then on the provider's tab lists each entry by name
+   above the form: pick one there to edit it (scenario 16 changes `deepseek-flash`'s budget).
    *Standard and Full on a 9B-class Mac.* Keep the local model as the default and give the cloud
-   entry only to the agents those levels add: Agents → `writer`, `canvas`, `meridian-ceo`,
-   `music-librarian`, the workshop agents and `skill-builder` (added the first time Skills → *New
-   skill* is opened) → Model → `claude-haiku`. The finance, HR, legal and
-   security agents and the presenter refuse cloud models by policy (their `egress` says so), so
-   they stay on the local model whatever the default is; a cloud default would stop them.
+   entries only to the agents those levels add: for Standard, Agents → `writer`, `canvas`,
+   `meridian-ceo` and `skill-builder` (added the first time Skills → *New skill* is opened) → Model
+   → `deepseek-flash`; for Full, `music-librarian`, `data-analyst` and the workshop agents → Model →
+   `gemini-flash`. The finance, HR, legal and security agents and the presenter refuse cloud models
+   by policy (their `egress` says so), so they stay on the local model whatever the default is; a
+   cloud default would stop them, and the eval judge too.
 6. Admin → Policy → **Answer checks**: leave the checks on, and set *Model for decisions* to the
    local chat entry. The second-model judge and the grades (scenario 22) then run on the local model,
    where the engine returns token probabilities; nothing about an answer leaves the Mac to be judged.
@@ -562,11 +560,11 @@ default.* Stronger with a cloud key on the host (Anthropic, or OpenRouter — `p
 
 **You are** Dana; Jordan in the second window.
 
-1. Models tab → the Anthropic tab (or OpenRouter, or Azure for Claude and OpenAI models in the
-   organisation's own Azure tenant) → **New entry**: name `claude`, model
-   `claude-sonnet-4-6` (on OpenRouter `anthropic/claude-sonnet-4.6`), key `${ANTHROPIC_API_KEY}`,
-   access minimum role admin, budget 5 USD a day, pricing 3/15 per million, maximum classification
-   internal. Save. Say: four decisions were just made about a cloud
+1. Models tab → the OpenRouter tab (or Anthropic, or Azure for Claude and OpenAI models in the
+   organisation's own Azure tenant) → **New entry**: name `cloud`, model
+   `deepseek/deepseek-v4.1-flash` (the model this was measured on; on Anthropic `claude-sonnet-4-6`
+   reads the same), key `${OPENROUTER_API_KEY}`, access minimum role admin, budget 1 USD a day,
+   pricing 0.30 / 1.20 per million, maximum classification internal. Save. Say: four decisions were just made about a cloud
    model before anyone could use it: who, how much, what data, at what price.
 
    *With Azure* (**Needs:** an Azure subscription with an Azure OpenAI or Foundry resource and a
@@ -577,21 +575,21 @@ default.* Stronger with a cloud key on the host (Anthropic, or OpenRouter — `p
    budget and pricing as for any cloud entry. Say: the model runs in the organisation's own tenant
    under its own agreement; with managed identity there is no key to leak. The steps that follow
    read the same with the Azure entry.
-2. Agents → *New agent* `board-analyst`: model `claude`, tool `knowledge:handbook`, prompt "You are a
+2. Agents → *New agent* `board-analyst`: model `cloud`, tool `knowledge:handbook`, prompt "You are a
    concise business analyst." Save.
 3. As Jordan, `board-analyst`: **"Summarise our values in one line."** Refused before anything is
-   dialled: access to model `claude` needs role admin. Admin → Audit: `model.access.denied`.
+   dialled: access to model `cloud` needs role admin. Admin → Audit: `model.access.denied`.
 4. As Dana, same question. With a key on the host, the answer comes from Claude and the usage row
-   carries the cost at the pricing you set. Without one, the attempt reaches Anthropic and is refused
+   carries the cost at the pricing you set. Without one, the attempt reaches the provider and is refused
    by them; the point stands: the only person who could reach the cloud was the one the policy allows.
-5. Try `counsel` with the cloud entry (edit its model to `claude`): refused for everyone, because the
+5. Try `counsel` with the cloud entry (edit its model to `cloud`): refused for everyone, because the
    agent and the legal store both say `allowFrontier: false`. Then Admin → Setup: the checklist
    shows the cloud entry needs a budget and access (it has both), and the compliance report says
    whether any restricted store could reach it (it cannot, ceiling internal).
 6. Mention the operator lock: `EGRESS_ALLOW_FRONTIER=false` in the host's environment refuses every
    cloud call for everyone, and no setting in the Studio can override it. Step 8 shows it live.
 7. The router, local first and cloud only when the local model cannot: IDE tab → `models.yaml`, add an
-   entry `frontline` with `provider: router` and `candidates: [mlx-serve, claude]`, and set `helpdesk`'s
+   entry `frontline` with `provider: router` and `candidates: [mlx-serve, cloud]`, and set `helpdesk`'s
    model to `frontline`. As Dana, `helpdesk`: **"How do I reset my VPN certificate?"** — answered by
    the local model; Admin → Audit, `models.route`: candidate `mlx-serve`, reason *first candidate*.
    Then open `bundles/aiso-demo-pack/long-reads/riverside-commissioning-report.md` in the IDE tab
@@ -604,7 +602,7 @@ default.* Stronger with a cloud key on the host (Anthropic, or OpenRouter — `p
    measured: pending). Quit AI Stackops and start it again with `EGRESS_ALLOW_FRONTIER=false` in its
    environment (the deploy kit's service environment, or `EGRESS_ALLOW_FRONTIER=false ai-stackops
    start`). Models tab: *Frontier providers* **locked by operator**: *Cloud models are off for
-   everyone on this node.* As Dana, `board-analyst` (on `claude`): refused before anything is
+   everyone on this node.* As Dana, `board-analyst` (on `cloud`): refused before anything is
    dialled, for the admin too. Admin → Audit: `egress.denied`, reason *EGRESS_ALLOW_FRONTIER=false
    locks this host to local models*. No Studio setting turns it back on; restart without it.
 
@@ -618,17 +616,17 @@ attached, and the answer to "did anything leave the building" is in the audit lo
 
 
 *Budgets and rate limits as circuit breakers, per person, per agent, per model, on real answers
-and real dollars.* Stronger with the `claude-haiku` entry from *Before the day*; complete without
+and real dollars.* Stronger with the `deepseek-flash` entry from *Before the day*; complete without
 one (see the end).
 
-**You are** Dana; Priya in the second window. A run is about ten helpdesk answers, roughly 10–15
-cents on Haiku; the entry's 1 USD a day stops anything beyond that.
+**You are** Dana; Priya in the second window. A run is about ten helpdesk answers, a cent or two on
+DeepSeek V4.1 Flash; the entry's 1 USD a day stops anything beyond that.
 
-1. As Dana, Agents → `helpdesk` → edit its model to `claude-haiku`. Save. Say: the most-used
+1. As Dana, Agents → `helpdesk` → edit its model to `deepseek-flash`. Save. Say: the most-used
    assistant in the building now runs on a paid cloud model, and three fences sit around it.
-2. As Priya, `helpdesk`: **"How do I reset my VPN certificate?"** Claude answers from the VPN reset
-   runbook and quotes the step. As Dana, Usage tab → the *Model entries* table → `claude-haiku`: one
-   row, its tokens and its cost at the pricing on the entry, about a cent. Note that per-answer cost; step 4
+2. As Priya, `helpdesk`: **"How do I reset my VPN certificate?"** The cloud model answers from the VPN
+   reset runbook and quotes the step. As Dana, Usage tab → the *Model entries* table → `deepseek-flash`:
+   one row, its tokens and its cost at the pricing on the entry, a fraction of a cent. Note that per-answer cost; step 4
    uses it.
 3. **The person fence, by rate.** Admin → Policy → Limits: member tier, Requests / min **2**. Save.
    As Priya, ask three in a row without waiting: **"The plant floor lost network, what do I do
@@ -636,28 +634,29 @@ cents on Haiku; the entry's 1 USD a day stops anything beyond that.
    for a new starter on day one?"** Two answers; the third is refused with *Limit reached: 2
    requests per minute for priya — retry in …s*. Wait it out, ask the third again: answered.
    The count is questions, not model calls. Set Requests / min back to empty.
-4. **The model fence, by spend.** As Dana, Usage shows what `claude-haiku` has spent in the last 24
-   hours. Models tab → the OpenRouter tab (or Anthropic, wherever you created it) → pick
-   `claude-haiku` in the list of entries above the form → USD / day: type that figure plus about
-   three answers' worth (spent $0.06 and a cent an answer: **0.09**). Type it; the arrows step by 0.50. Save. As Priya,
+4. **The model fence, by spend.** As Dana, Usage shows what `deepseek-flash` has spent in the last 24
+   hours. Models tab → the OpenRouter tab → pick
+   `deepseek-flash` in the list of entries above the form → USD / day: type that figure plus about
+   three answers' worth (spent $0.008 and about $0.001 an answer: **0.011**). Type it; the arrows step
+   by 0.50. Save. As Priya,
    keep asking runbook questions (**"How do I rebuild my laptop?"**, the VPN question again). A few
-   are answered, then: *Limit reached: $0.09 per day for model entry "claude-haiku" (used $0.09).
+   are answered, then: *Limit reached: $… per day for model entry "deepseek-flash" (used $…).
    It frees up as the rolling 24 hours pass; an admin can raise it in the model entry's budget on
    the Models tab.* The check runs before each call, so the answer that crosses the line still
    arrives and the next one is refused. Usage: Priya's rows add up to it, at the price you set,
-   and the same calls are on the Anthropic bill.
+   and the same calls are on the OpenRouter bill.
 5. Admin → Audit, action `limits.exceeded`: the rate refusal (scope principal) and the spend
    refusal (scope model), each throttled to one row per five minutes so a loop cannot flood the
    log.
 6. Show the third scope without running it: an agent's own `limits` (runs per minute, spend per
    month) in its definition. Say: a runaway loop, a leaked API key, or an over-enthusiastic pilot
    all hit the same three fences.
-7. Reset now (the list at the end): `helpdesk` back to `default`, `claude-haiku` back to 1 USD a day.
+7. Reset now (the list at the end): `helpdesk` back to `default`, `deepseek-flash` back to 1 USD a day.
 
-*Without a cloud key:* skip step 1 and give the `mlx-serve` entry pricing 1 / 5 per million on the
-Models tab. The local model answers, Usage prices each call as if it were Haiku, nothing is billed,
-and steps 3–5 run the same with `mlx-serve` in place of `claude-haiku`. A 9B answer costs more
-tokens than Claude's, so read the per-answer cost from Usage before setting the cap. Remove the
+*Without a cloud key:* skip step 1 and give the `mlx-serve` entry pricing 0.30 / 1.20 per million on the
+Models tab. The local model answers, Usage prices each call as if it were DeepSeek V4.1 Flash, nothing is billed,
+and steps 3–5 run the same with `mlx-serve` in place of `deepseek-flash`. A 9B answer may use more
+tokens than the cloud model's, so read the per-answer cost from Usage before setting the cap. Remove the
 pricing afterwards.
 
 **Land:** spend and load are bounded by policy before they become an invoice, and every refusal is
@@ -967,12 +966,12 @@ read, which code may never go to a cloud model, and every line an AI wrote is on
 **You are** Dana in the Studio, Sam in a terminal in the clone.
 
 1. As Dana, **Projects** → *New project* `pump-controller`: repository
-   `alexborhani/meridian-pump-controller`, level internal. Models: `claude-haiku-4-5` routed to the
-   `claude-haiku` entry, and `claude-local-qwen` routed to the local chat entry. Members: Sam.
+   `alexborhani/meridian-pump-controller`, level internal. Models: `claude-gemini-flash` routed to the
+   `gemini-flash` entry, and `claude-local-qwen` routed to the local chat entry. Members: Sam.
    A cloud id must contain `claude` for Claude Code's model picker to keep it; to route it to a model
-   that is not Claude, set its *Claude Code picker behaves as* to `claude-haiku-4-5`. With the
-   `claude-haiku` entry on OpenRouter the gateway translates Claude Code's Anthropic calls for
-   OpenRouter's Chat Completions API; that path was verified live with a local model only.
+   that is not Claude, set its *Claude Code picker behaves as* to `claude-haiku-4-5` (as `claude-gemini-flash` does).
+   With the `gemini-flash` entry on OpenRouter the gateway translates Claude Code's Anthropic calls
+   for OpenRouter's Chat Completions API; measured live with Gemini 3.7 Flash.
    *Docs for agents*: `firmware-docs`. **Code** → *Path rules*: `firmware/safety/**` confidential,
    Security. *Classified code*: **Enforce**. Mint a CI key and copy it.
 2. Skills → `safety-change-review` → *Where it is offered* → *Development projects*:
@@ -986,7 +985,7 @@ read, which code may never go to a cloud model, and every line an AI wrote is on
    `AISO_URL=<the Studio's URL> AISO_CI_KEY=<the key> AISO_PROJECT=pump-controller ai-stackops code index`
    It reports the files, the contract, the owners, and *Classified above internal: 1 files*: the
    server keeps fingerprints of those lines, never the lines.
-4. `claude`, then `/model claude-haiku-4-5`, then: **"What does the service API expose, and who
+4. `claude`, then `/model claude-gemini-flash`, then: **"What does the service API expose, and who
    owns firmware/safety?"** Claude Code answers through AI Stackops with the project's code map
    (the OpenAPI contract), `code_owners` (`@meridian/safety-engineering`) and `search_docs` (the
    service API guide): one read-only endpoint, owned by the service platform team.
@@ -996,7 +995,7 @@ read, which code may never go to a cloud model, and every line an AI wrote is on
 6. **"Show me what firmware/safety/interlock.c does."** Claude Code reads the file on the Mac and
    sends it to the model, and the call is refused before it leaves: *This conversation carries
    classified code from firmware/safety/interlock.c (confidential, 27 lines), which
-   claude-haiku-4-5 may not receive: the model is cleared for internal at most. Switch to
+   claude-gemini-flash may not receive: the model is cleared for internal at most. Switch to
    claude-local-qwen for this work, or remove that code from the conversation (for example
    /clear).* Nothing reached the cloud provider. `/clear` to go on. A careful model may stop one step
    earlier: it calls `code_classification` for the path first, is told the cloud model may not receive
@@ -1005,7 +1004,7 @@ read, which code may never go to a cloud model, and every line an AI wrote is on
 7. **"Add a bar-to-psi conversion function to src/controller/units.c, next to bar_to_kpa."** Claude
    Code writes it. Commit it on a branch, then `ai-stackops code attest --base main` (with the same
    `AISO_URL`, `AISO_CI_KEY` and `AISO_PROJECT`): *4 lines added (2 long enough to tell), written
-   by a model through AI Stackops: 2 (100%), from cloud models: 2 — claude-haiku-4-5*, and a signed
+   by a model through AI Stackops: 2 (100%), from cloud models: 2 — claude-gemini-flash*, and a signed
    attestation with the `cosign` command that checks it.
 8. As Dana, Projects → pump-controller → **Code**: *What the code rules did* (the refusal, the file,
    the person) and **AI provenance** (the change and its AI lines); **Usage** (tokens and cost by
@@ -1176,7 +1175,7 @@ anything in force.
 ## 28. The model stays put until you move it
 **Level:** Full (the kept answers come from the music librarian, which needs the demo-data server).
 Needs the `ai-stackops` command on the Mac (as for scenario 24) and both cloud entries from *Before
-the day* (`claude-haiku` and `deepseek-flash`). Measured: passed on Gemini 3.7 Flash, with the two
+the day* (`gemini-flash` and `deepseek-flash`). Measured: passed on Gemini 3.7 Flash, with the two
     replay steps (the `ai-stackops` command) not run in the automated pass.
 
 
@@ -1191,8 +1190,8 @@ kept answer is replayed here too. Enforcement on Monitor or Off, as for scenario
    MLX Serve: the chat entry carries a lock and **pinned**. Say: this is the model every agent
    without a model of its own answers with, and from now on nothing moves it by accident. (The name
    matters: the `mlx-serve` alias follows whatever the engine serves, which no pin can hold.)
-2. Models tab → the OpenRouter tab → pick `claude-haiku` → **Make default**. Refused: *llm.mlx-serve
-   is pinned: "default" currently resolves to it; re-pointing to "claude-haiku" would replace the
+2. Models tab → the OpenRouter tab → pick `gemini-flash` → **Make default**. Refused: *llm.mlx-serve
+   is pinned: "default" currently resolves to it; re-pointing to "gemini-flash" would replace the
    pinned model. Unpin it first (pinned: false) to make this change.* Admin → Audit, action
    `models.pin.bypass`: one row, outcome denied, reason *config-write: …*, Dana as the actor. Say:
    the same refusal meets an edit of `models.yaml` that changes the pinned model, a federation
@@ -1204,7 +1203,7 @@ kept answer is replayed here too. Enforcement on Monitor or Off, as for scenario
    **"What has customer Heather Leacock purchased, and how much did she spend in total?"**
    (*Heather Leacock*). Account → *Kept answers* lists them, with scenario 22's if it ran.
 4. In the terminal, with the host's workspace, ask whether the librarian could move from
-   `claude-haiku` to the cheaper `deepseek-flash`:
+   `gemini-flash` to the cheaper `deepseek-flash`:
    `WORKSPACE=<the host's workspace> ai-stackops eval --from-kept --model deepseek-flash --agent music-librarian`
    Each kept answer is given to `deepseek-flash` with the librarian's instructions, the question
    and the results it was built from (no query runs again), and checked and graded like a live
@@ -1319,7 +1318,7 @@ when it runs out. Loosening any of that takes a second admin.*
    Tightening applies at once. Point at *Each member, USD per day*: the same cap per person inside
    the pool (left empty here, so the pool is what runs out). (The stand-in is the project's local id,
    `claude-local-qwen`; the `mlx-serve` entry must carry no pricing, or it spends the same budget.)
-2. As Sam, in the clone: `claude`, `/model claude-haiku-4-5`, and ask for a few small changes
+2. As Sam, in the clone: `claude`, `/model claude-gemini-flash`, and ask for a few small changes
    until the spend passes three cents. From then on Claude Code's background calls (conversation
    titles, summaries, compaction) are moved to the local model instead of failing, and his next
    main call is refused: *Limit reached: $0.03 per day for project pump-controller (used
@@ -1332,7 +1331,7 @@ when it runs out. Loosening any of that takes a second admin.*
    last visit*: *Project pump-controller has spent 8x % of its daily budget*, then *… has spent its
    daily budget ($0.03 of $0.03)* (the project's name as created in scenario 24).
 4. Make it permanent for background work: Projects → `pump-controller` → **Models** →
-   `claude-haiku-4-5` → **By kind** → *auxiliary*: `mlx-serve`, *compaction*: `mlx-serve` → **Save
+   `claude-gemini-flash` → **By kind** → *auxiliary*: `mlx-serve`, *compaction*: `mlx-serve` → **Save
    models**. Now background calls run locally whatever the budget; only the work itself goes to the
    cloud model. The project's **Usage** → *By: Kind of request* shows the split after a few turns.
 5. Now loosen it. **Overview** → clear *Project, USD per day* (no daily cap). Save. The toast: *This
@@ -1547,7 +1546,7 @@ model change, 14 for a commercial audience, and 19 for anyone with a privacy rem
 - Scenario 15: leave the entry; delete `board-analyst` if you prefer a clean agent list. After
   step 8, restart the host without `EGRESS_ALLOW_FRONTIER=false`.
 - Scenario 16: member Requests / min back to empty; `helpdesk`'s model back to `default`;
-  `claude-haiku` USD / day back to 1 (or, without a key, the pricing removed from `mlx-serve`).
+  `deepseek-flash` USD / day back to 1 (or, without a key, the pricing removed from `mlx-serve`).
   Leave the entry: the next run needs it.
 - Scenario 17: restore the runbook and reindex.
 - Scenario 19: reinstall the pack to bring Jordan back (Packs → uninstall → install).

@@ -20,7 +20,7 @@ when it runs out. Loosening any of that takes a second admin.*
    Tightening applies at once. Point at *Each member, USD per day*: the same cap per person inside
    the pool (left empty here, so the pool is what runs out). (The stand-in is the project's local id,
    `claude-local-qwen`; the `mlx-serve` entry must carry no pricing, or it spends the same budget.)
-2. As Sam, in the clone: `claude`, `/model claude-haiku-4-5`, and ask for a few small changes
+2. As Sam, in the clone: `claude`, `/model claude-gemini-flash`, and ask for a few small changes
    until the spend passes three cents. From then on Claude Code's background calls (conversation
    titles, summaries, compaction) are moved to the local model instead of failing, and his next
    main call is refused: *Limit reached: $0.03 per day for project pump-controller (used
@@ -33,7 +33,7 @@ when it runs out. Loosening any of that takes a second admin.*
    last visit*: *Project pump-controller has spent 8x % of its daily budget*, then *… has spent its
    daily budget ($0.03 of $0.03)* (the project's name as created in scenario 24).
 4. Make it permanent for background work: Projects → `pump-controller` → **Models** →
-   `claude-haiku-4-5` → **By kind** → *auxiliary*: `mlx-serve`, *compaction*: `mlx-serve` → **Save
+   `claude-gemini-flash` → **By kind** → *auxiliary*: `mlx-serve`, *compaction*: `mlx-serve` → **Save
    models**. Now background calls run locally whatever the budget; only the work itself goes to the
    cloud model. The project's **Usage** → *By: Kind of request* shows the split after a few turns.
 5. Now loosen it. **Overview** → clear *Project, USD per day* (no daily cap). Save. The toast: *This
