@@ -4,8 +4,9 @@ title: "25. Labels the files already carry"
 tags: ["scenario-25"]
 level: essentials
 ---
-**Level:** Essentials. Steps 1–6 need no model (step 5 needs only the embedding model); step 7 needs
-the chat model. Not yet run on Qwen 3.5 9B (measured: pending).
+**Level:** Essentials for steps 1–6 (no chat model; step 5 needs only the embedding model):
+measured end to end on Qwen 3.5 9B, 3 of 3 runs. Step 7 (Chat finding the board pack for Lena) did
+not work on the 9B in any run: treat it as Standard, or skip it.
 
 
 *Most organisations have already labelled their documents in Microsoft 365. The platform reads

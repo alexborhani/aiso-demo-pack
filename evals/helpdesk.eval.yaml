@@ -8,7 +8,9 @@ cases:
     input: "My VPN certificate expired, what do I do?"
     expect:
       contains: ["revoke", "enrol"]
-      judge: "the reply follows the VPN reset runbook: revoke the old certificate, issue a new one, send the enrolment link through a ticket"
+      # The validity is a fact only the runbook holds: scenario 17 changes it, and the case must notice.
+      regex: "12[- ]month"
+      judge: "the reply follows the VPN reset runbook: revoke the old certificate, issue a new one valid for 12 months, send the enrolment link through a ticket"
   - id: leave
     input: "How many days of annual leave do I get?"
     expect:

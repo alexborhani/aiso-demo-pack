@@ -13,7 +13,7 @@ autoApplyConfidence: 0.8
 criteria:
   levels:
     public: Published or safe to publish — the handbook, product pages, press releases, anything a visitor could read.
-    internal: Day-to-day operating information for staff — runbooks, procedures, meeting notes, plans without figures.
+    internal: Day-to-day operating information for staff — runbooks, procedures, meeting notes, plans without figures. A note that gives money amounts, prices or discounts is at least confidential, never internal.
     confidential: Information whose disclosure would harm a person or the company — personnel files, compensation, financial results before release, customer contracts, and commercial figures such as quotes, proposals, prices and discounts discussed with a customer.
     restricted: Information whose disclosure would cause serious harm or legal exposure — legal matters handled by counsel (disputes, claims, counsel's advice), security incidents, credentials, regulator correspondence. A sales conversation or a customer's price proposal is not a legal matter.
   categories:

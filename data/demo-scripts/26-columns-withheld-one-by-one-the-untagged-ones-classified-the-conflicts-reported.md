@@ -6,7 +6,8 @@ level: full
 ---
 **Level:** Full (the demo-data server is a Full resource). Steps 1–2, 6 and 8–9 need no model. Steps
 3–5 need the music librarian's model (the cloud entry). Step 7 needs the local classifier model; a
-9B-class model carries it. None of it is measured yet (measured: pending).
+9B-class model carries it. Measured: every step but one passed on Gemini 3.7 Flash; the 9B classifier
+ decided all 46 untagged columns (in Monitor).
 
 
 *A database answer is filtered column by column: the customer's city comes through, the email

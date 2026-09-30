@@ -7,7 +7,7 @@ level: full
 **Level:** Full, with Claude Code: the project's spend comes from scenarios 24 and 31. The
 chargeback export itself works at any level with the Enterprise licence (*Before the day*, step 2).
 The bill check **Needs:** an Anthropic or OpenAI organisation admin key (OpenRouter and Azure
-publish no usage report the check reads); not tested. The rest not yet run (measured: pending).
+publish no usage report the check reads); not tested. The rest (usage by project, the chargeback CSV) passed in the measured run.
 
 
 *What the platform metered, compared with what the provider billed, and the spend split by

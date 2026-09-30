@@ -6,8 +6,8 @@ level: full
 ---
 **Level:** Full: the `demo-sql` server (one free-SQL tool, `run_sql`, over a copy of the music
 store) and the `data-analyst` agent come with that level. Standard-class model or better: writing SQL over an
-unfamiliar schema is beyond what a 9B does reliably. Start on the cloud entry. Not yet run
-(measured: pending).
+unfamiliar schema is beyond what a 9B does reliably. Start on the cloud entry. Measured: passed on Gemini 3.7 Flash (it wrote a LIMIT
+itself, so step 3's *Low* grade did not show; the refusal in step 4 did).
 
 
 *Named queries are governed; free SQL is not. Here free SQL is offered only to builders, read

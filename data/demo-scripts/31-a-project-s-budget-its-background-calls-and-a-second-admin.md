@@ -6,7 +6,8 @@ level: full
 ---
 **Level:** Full, with Claude Code. Needs what scenario 24 needs (Claude Code, `ai-stackops`, the
 clone, the project `pump-controller` from scenario 24 step 1), and the host's first admin account
-(the one made at install) as the second admin. Not yet run (measured: pending).
+(the one made at install) as the second admin. Measured: the API steps passed; the Claude Code spend
+    steps (2–3) were not run.
 
 
 *A development project has its own money: a pool, a share per person, and a rule for what happens

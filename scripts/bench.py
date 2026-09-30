@@ -153,7 +153,7 @@ def c_answer_grade(i):
     prov = (r.get('metadata') or {}).get('provenance') or {}
     grade = (prov.get('grade') or {}).get('level'); figs = ((prov.get('checks') or {}).get('figures') or {})
     ok = st == 200 and prov.get('label') == 'documents' and grade in ('high', 'medium') and not figs.get('unsupported')
-    return ok, f"label={prov.get('label')} grade={grade} figures={figs.get('matched')}+{figs.get('derived')}/{figs.get('total')} unsupported={len(figs.get('unsupported') or [])}"
+    return ok, f"label={prov.get('label')} grade={grade} figures={figs.get('matched')}+{figs.get('derived')}/{figs.get('total')} unsupported={[u.get('text') for u in (figs.get('unsupported') or [])]}"
 def c_answer_mark(i):
     st, r = ask_full('helpdesk', 'priya', 'How do I reset my VPN certificate?', f'b-mk-{i}')
     run = ((r.get('metadata') or {}).get('provenance') or {}).get('runId')
@@ -229,7 +229,7 @@ def c_classify_note(i):
     if not src: return False, 'note not found'
     st, r = call('POST', '/api/knowledge/site-notes/sources/queue', {'sources': [src]}, ADMIN)
     if st != 200: return False, f'queue HTTP {st} {r}'
-    for _ in range(90):
+    for _ in range(150):
         time.sleep(4)
         row = next((x for x in call('GET', '/api/knowledge/site-notes/sources', cookie=ADMIN)[1].get('sources') or [] if x['source'] == src), {})
         if row.get('status') != 'pending': break

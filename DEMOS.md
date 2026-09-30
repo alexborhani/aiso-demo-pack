@@ -19,17 +19,25 @@ same at every level, so a story told at Essentials reads the same at Full.
 
 | Level | Model it was measured on | What it adds | Scenarios |
 | --- | --- | --- | --- |
-| **Essentials** | Qwen 3.5 9B (4-bit) on MLX Serve, 32K context, on a 24 GB Mac | the eight Meridian agents with one to three tools each, the nine stores the scripts use, the labelled files | 1–8, 13, 14, 16, 18, 19, 21, 22, 25; 35 (needs an unsigned pack repository, not built; not tested) |
-| **Standard** | Claude Haiku 4.5 through OpenRouter, standing in for a 27B-class local model | the presenter, the writer with its customer-notice playbook, canvas, the agent CEO and its organisation, the two workflows, the evals, the demo scripts | 0, 9–12, 15, 17, 23, 27; 34 (needs Snowflake or Databricks, not tested); 36 (needs a Microsoft 365 tenant, not tested) |
-| **Full** | Claude Haiku 4.5 through OpenRouter, standing in for a 70B-class model or a frontier provider | the sample workshop agents, the sample stores, the demo-data MCP server and its column catalog, the firmware docs and the safety review skill | 20, 22 (part two), 24, 26, 28–30, 31–33 (with Claude Code, continuing from 24; 32 also needs a pack with a pre-send hook, not tested), and the builder workshop |
+| **Essentials** | Qwen 3.5 9B (4-bit) on MLX Serve, 32K context, on a 24 GB Mac | the eight Meridian agents with one to three tools each, the nine stores the scripts use, the labelled files | 1–8, 13, 14, 16, 18, 19, 21, 22 (part one), 25 (steps 1–6); 35 (needs an unsigned pack repository, not built; not tested) |
+| **Standard** | DeepSeek V4.1 Flash through OpenRouter for the writer, canvas, CEO and helpdesk, standing in for a 27B-class local model | the presenter, the writer with its customer-notice playbook, canvas, the agent CEO and its organisation, the two workflows, the evals, the demo scripts | 0, 9–12, 15, 17, 23, 27; 34 (needs Snowflake or Databricks, not tested); 36 (needs a Microsoft 365 tenant, not tested) |
+| **Full** | Gemini 3.7 Flash through OpenRouter for the librarian, the data analyst and Claude Code, standing in for a 70B-class model or a frontier provider | the sample workshop agents, the sample stores, the demo-data and demo-sql MCP servers and the column catalog, the firmware docs and the safety review skill | 20, 22 (part two), 24, 26, 28–30, 31–33 (with Claude Code, continuing from 24; 32 also needs a pack with a pre-send hook, not tested), and the builder workshop |
 
-Scenarios 25–36 are new in this release and have not been run on either model yet (measured:
-pending). Each says which parts need a model and which need a system the Mac does not have.
+**Measured on 2026-09-29/30.** Essentials: every scenario in the row ran end to end three times
+in a row on the 9B with every step passing, and `scripts/bench.py --level essentials` passed all 18
+checks 10 of 10. Scenario 25's step 7 did not work on the 9B. Standard, with the agents above on
+DeepSeek: 0, 9, 10, 11, 12, 15, 17 and 27 passed end to end; 23 built, drafted and saved the skill,
+and its eval gate held because the evals ran on the host's 9B default (see the note in 23). On the
+9B alone, 0, 10 and 11 also passed; the rest of Standard did not. Full, on Gemini: 20, 24, 28, 30,
+31 and 33 passed end to end; 22 part two passed but for the clarifying question, which the local
+decision model did not ask; 26 passed but for one column left over from an earlier run; 29 passed
+once its label was read as *Governed or Mixed*. Steps that need Claude Code's spend (31), seven
+days (29), a provider admin key (33) or a live tenant (34, 36) were not run.
 
 The boundaries come from measurement, not taste: on a 9B a single tool with ten actions was
 already unreliable, so nothing at Essentials has more than three one-action tools, and the
 presenter and the CEO — long prompts, many actions — wait for Standard. Standard and Full were
-measured on a small cloud model; no 27B or 70B local model was measured for this release, so treat
+measured on small cloud models; no 27B or 70B local model was measured for this release, so treat
 those rows as the size the scenarios need, not a promise about a particular local model.
 `scripts/bench.py` runs every scripted call of a level against the model your host serves and
 says, check by check, whether that level operates on it.
@@ -668,11 +676,12 @@ recorded with who, what and how much.
 1. Admin → Setup → *Evaluations*: `helpdesk.eval.yaml`, three cases, threshold 50 percent. *Run*.
    Each case shows pass or fail with its checks: a phrase that must appear, a phrase that must not,
    a judgement by the local model. Expect a pass.
-2. As Sam, IDE tab → `bundles/aiso-demo-pack/it-runbooks/vpn-reset.md`: change the first step so it no
-   longer says to revoke the old certificate. Save. Knowledge → `it-runbooks` → *Re-index* (a few
-   seconds; only the changed file is embedded).
-3. As Dana, *Run* the helpdesk evals again: the VPN case fails on the missing phrase. Point at the
-   check detail.
+2. As Sam, IDE tab → `bundles/aiso-demo-pack/it-runbooks/vpn-reset.md`: change the new certificate's
+   validity from 12 months to 6 months. Save. Knowledge → `it-runbooks` → *Re-index* (a few seconds;
+   only the changed file is embedded).
+3. As Dana, *Run* the helpdesk evals again: the VPN case fails. Its pattern check expects the
+   12-month validity the runbook used to give, and the agent now answers 6 months from the runbook.
+   Point at the check detail: this is the eval catching a change in what the agent says.
 4. Undo the change, re-index, run once more: green.
 5. Skills carry their own evals, beside the skill (Skills tab → a skill → *Evals*): whether agents
    pick it for the requests it is for and leave it alone for near misses, and whether answers are
@@ -866,7 +875,8 @@ renamed columns from the cloud librarian: that is scenario 26, not this one.
 4. As Dana, `music-librarian` (answers from the demo-data MCP server: named, parameterised queries
    over the store's database; there is no free SQL tool). **"What has customer Heather Leacock
    purchased, and how much did she spend in total?"** While it is held the reply says *Checking the answer against the results…*, then the table
-   appears. Sources: *Governed*, the named query `customer_purchases`, 38 rows, *Figures found in
+   appears. Sources: *Governed* (or *Mixed*, if the librarian also searched the catalogue), the named
+   query `customer_purchases`, 38 rows, *Figures found in
    sources*, Grade High. Open the step: the statement
    that ran and its row count. Press *Show result*: the rows themselves. Open the grade. When the
    model used references to the result (it is told to while *Fill in figures from the results* is
@@ -934,7 +944,10 @@ checked, its evals decide whether it may be offered widely, and an admin decides
    *Every agent* → Save. Refused while its evals have not passed on this version: *Run evals*
    (a few minutes), then save again. Say: a skill reaches every agent only when a person other
    than its author has reviewed it (a signed pack counts) and its evals pass, including a check
-   that it does not take the requests of the skills already offered.
+   that it does not take the requests of the skills already offered. The evals run on the model
+   the eval file names (`model:` in `evals/evals.yaml`), else the host's default. On a Qwen 3.5 9B
+   default the near-miss trigger checks failed in our runs, so the save stayed refused: on such a
+   host, name the cloud entry in the eval file first, or show the refusal as the point.
 5. Admin → Audit: `skills.draft.save`, `skills.evals.run`, `skills.scope.set` with before and
    after.
 
@@ -985,7 +998,10 @@ read, which code may never go to a cloud model, and every line an AI wrote is on
    classified code from firmware/safety/interlock.c (confidential, 27 lines), which
    claude-haiku-4-5 may not receive: the model is cleared for internal at most. Switch to
    claude-local-qwen for this work, or remove that code from the conversation (for example
-   /clear).* Nothing reached the cloud provider. `/clear` to go on.
+   /clear).* Nothing reached the cloud provider. `/clear` to go on. A careful model may stop one step
+   earlier: it calls `code_classification` for the path first, is told the cloud model may not receive
+   it, and says so without reading the file. Either way the file stays on the Mac; show whichever
+   happened (the refusal, or the `code_classification` call in the transcript).
 7. **"Add a bar-to-psi conversion function to src/controller/units.c, next to bar_to_kpa."** Claude
    Code writes it. Commit it on a branch, then `ai-stackops code attest --base main` (with the same
    `AISO_URL`, `AISO_CI_KEY` and `AISO_PROJECT`): *4 lines added (2 long enough to tell), written
@@ -1009,8 +1025,9 @@ Scenarios 31 and 32 continue from this project; scenario 33 charges back its spe
 ---
 
 ## 25. Labels the files already carry
-**Level:** Essentials. Steps 1–6 need no model (step 5 needs only the embedding model); step 7 needs
-the chat model. Not yet run on Qwen 3.5 9B (measured: pending).
+**Level:** Essentials for steps 1–6 (no chat model; step 5 needs only the embedding model):
+measured end to end on Qwen 3.5 9B, 3 of 3 runs. Step 7 (Chat finding the board pack for Lena) did
+not work on the 9B in any run: treat it as Standard, or skip it.
 
 
 *Most organisations have already labelled their documents in Microsoft 365. The platform reads
@@ -1056,7 +1073,8 @@ a file the platform cannot open is reported, not guessed at.
 ## 26. Columns: withheld one by one, the untagged ones classified, the conflicts reported
 **Level:** Full (the demo-data server is a Full resource). Steps 1–2, 6 and 8–9 need no model. Steps
 3–5 need the music librarian's model (the cloud entry). Step 7 needs the local classifier model; a
-9B-class model carries it. None of it is measured yet (measured: pending).
+9B-class model carries it. Measured: every step but one passed on Gemini 3.7 Flash; the 9B classifier
+ decided all 46 untagged columns (in Monitor).
 
 
 *A database answer is filtered column by column: the customer's city comes through, the email
@@ -1119,8 +1137,8 @@ missing or weaker than the policy, the platform says so; the data team decides w
 
 ## 27. A policy drafted with you
 **Level:** Standard. Every step after the first needs a model: a long interview, a nine-section policy
-in Markdown and one tool call with a nested schema. Not run on any model yet (measured: pending); a
-9B is not expected to carry it.
+in Markdown and one tool call with a nested schema. Measured: passed end to end on DeepSeek V4.1 Flash; on Qwen 3.5 9B it ran the interview and filed
+a proposal but missed two of eight checks.
 
 
 *An organisation with no written classification policy gets one by answering eight questions. The
@@ -1158,7 +1176,8 @@ anything in force.
 ## 28. The model stays put until you move it
 **Level:** Full (the kept answers come from the music librarian, which needs the demo-data server).
 Needs the `ai-stackops` command on the Mac (as for scenario 24) and both cloud entries from *Before
-the day* (`claude-haiku` and `deepseek-flash`). Not yet run (measured: pending).
+the day* (`claude-haiku` and `deepseek-flash`). Measured: passed on Gemini 3.7 Flash, with the two
+    replay steps (the `ai-stackops` command) not run in the automated pass.
 
 
 *A model that changes under an organisation changes its answers. Here the model is pinned, a
@@ -1211,7 +1230,7 @@ one edit (an edit that drops `pinned` and changes the model together is refused)
 ---
 
 ## 29. A chart drawn from the query result
-**Level:** Full (the demo-data server). Not measured on any model yet (measured: pending):
+**Level:** Full (the demo-data server). Measured on Gemini 3.7 Flash: every step but the seven-day expiry.
 `builtin:chart` needs the model to name the result and write a small Vega-Lite spec; start on the
 cloud entry.
 
@@ -1222,8 +1241,9 @@ from the rows the query returned.*
 **You are** Dana; Jordan in the second window for the last step.
 
 1. `music-librarian` (on the cloud entry): **"Chart the 10 longest tracks."** The librarian calls
-   `longest_tracks` with 10, then `chart` naming that result, and the reply ends with a bar
-   chart: one bar per track, its length in seconds. The chart appears once the reply is finished.
+   `longest_tracks` with 10, then `chart` naming that result, and the reply shows a bar chart: one
+   bar per track, its length in seconds. The chart appears once the reply is finished (where the
+   model placed it, or under the reply when it did not).
 2. Open the tool trace: the `chart` call's arguments are a step number (`S1`) and a mark and
    encoding over the result's columns (`track`, `seconds`), and nothing else. Say: there is no
    field for data. The model cannot pass numbers to the chart; a spec that tries (`data`, `url`,
@@ -1245,8 +1265,8 @@ travels with the signed answer.
 ## 30. SQL read before it runs
 **Level:** Full: the `demo-sql` server (one free-SQL tool, `run_sql`, over a copy of the music
 store) and the `data-analyst` agent come with that level. Standard-class model or better: writing SQL over an
-unfamiliar schema is beyond what a 9B does reliably. Start on the cloud entry. Not yet run
-(measured: pending).
+unfamiliar schema is beyond what a 9B does reliably. Start on the cloud entry. Measured: passed on Gemini 3.7 Flash (it wrote a LIMIT
+itself, so step 3's *Low* grade did not show; the refusal in step 4 did).
 
 
 *Named queries are governed; free SQL is not. Here free SQL is offered only to builders, read
@@ -1285,7 +1305,8 @@ to be fixed, and an answer built on SQL written on the spot says so in its label
 ## 31. A project's budget, its background calls, and a second admin
 **Level:** Full, with Claude Code. Needs what scenario 24 needs (Claude Code, `ai-stackops`, the
 clone, the project `pump-controller` from scenario 24 step 1), and the host's first admin account
-(the one made at install) as the second admin. Not yet run (measured: pending).
+(the one made at install) as the second admin. Measured: the API steps passed; the Claude Code spend
+    steps (2–3) were not run.
 
 
 *A development project has its own money: a pool, a share per person, and a rule for what happens
@@ -1370,7 +1391,7 @@ and stopped, with the refusal on the record and the text nowhere in it.
 **Level:** Full, with Claude Code: the project's spend comes from scenarios 24 and 31. The
 chargeback export itself works at any level with the Enterprise licence (*Before the day*, step 2).
 The bill check **Needs:** an Anthropic or OpenAI organisation admin key (OpenRouter and Azure
-publish no usage report the check reads); not tested. The rest not yet run (measured: pending).
+publish no usage report the check reads); not tested. The rest (usage by project, the chargeback CSV) passed in the measured run.
 
 
 *What the platform metered, compared with what the provider billed, and the spend split by

@@ -2,7 +2,7 @@
 
 A pack that turns a vanilla AI Stackops install into a fictional company, **Meridian Works**, so the whole platform can be evaluated as different people. Nothing in it is real: the people, documents, figures and matters are invented.
 
-**Presenting to leaders?** [DEMOS.md](DEMOS.md) has thirty-seven scripted scenarios (0–36), a 60-minute tour and the reset list. Scenarios 25–36 are new and not yet measured; 34–36 need a system the demo Mac does not have (a warehouse, an unsigned pack's repository, a Microsoft 365 tenant).
+**Presenting to leaders?** [DEMOS.md](DEMOS.md) has thirty-seven scripted scenarios (0–36), a 60-minute tour and the reset list. Scenarios 25–33 were measured in this release (DEMOS.md → *Levels*); 34–36 need a system the demo Mac does not have (a warehouse, an unsigned pack's repository, a Microsoft 365 tenant) and were not run.
 
 ## What it installs
 
@@ -34,8 +34,8 @@ The pack installs at one of three levels — pick the one your default chat mode
 | Level | For | Adds |
 | --- | --- | --- |
 | Essentials | a 9B-class local model, 16K+ context (measured on Qwen 3.5 9B) | the eight Meridian agents (one to three tools each), the nine stores the scripts use, the people, roles and policy; Chat (21), checked answers (22) and files that carry Purview labels (25) |
-| Standard | a 27B-class local model at 32K, or a cloud entry for the agents this level adds (measured on Claude Haiku 4.5) | the presenter, the writer with its playbook, canvas, the agent CEO and its organisation, the workflows, the evals, the demo scripts |
-| Full | a 70B-class model or a frontier provider (measured on Claude Haiku 4.5) | the sample workshop agents and stores, the `demo-data` MCP server and its column-tag catalog (26), the firmware docs and the safety review skill |
+| Standard | a 27B-class local model at 32K, or a cloud entry for the agents this level adds (measured on DeepSeek V4.1 Flash) | the presenter, the writer with its playbook, canvas, the agent CEO and its organisation, the workflows, the evals, the demo scripts |
+| Full | a 70B-class model or a frontier provider (measured on Gemini 3.7 Flash) | the sample workshop agents and stores, the `demo-data` MCP server and its column-tag catalog (26), the firmware docs and the safety review skill |
 
 [DEMOS.md](DEMOS.md) says which level each scenario needs. `scripts/bench.py` checks a level against the model on a host (see *Benchmarking a level*).
 
@@ -66,15 +66,15 @@ python3 scripts/bench.py --url http://127.0.0.1:3333 --admin <admin>:<password> 
                          [--install <pack dir or git url>] [--runs 10] [--gate 9] [--only id,id] [--json out.json]
 ```
 
-Measured for 1.12.0 on 2026-09-29, 3 runs per check, a check passing at 2 of 3, on a 24 GB Mac:
+Measured for 1.13.0 on 2026-09-29/30 on a 24 GB Mac. Essentials: 10 runs per check, a check passing at 9 of 10.
 
 | Level | Model | Result |
 | --- | --- | --- |
-| Essentials | Qwen 3.5 9B (4-bit) on MLX Serve, 32K context | 16 of 16 checks: the runbooks, the refused and the allowed handoff, classification under enforcement, the legal store refused, memory, Chat's refusal, handoff and request, counsel, finance, a documents answer graded with its figures found, marking an answer, a request granted by the agent's owner |
-| Standard | Claude Haiku 4.5 (OpenRouter) for the writer | the playbook asks for its missing date 3/3, the filing waits for an admin and files 3/3, the playbook's own evals pass 3/3 |
-| Full | Claude Haiku 4.5 for the music librarian | a governed data answer with its figures found and a grade 3/3 |
+| Essentials | Qwen 3.5 9B (4-bit) on MLX Serve, 32K context | 18 of 18 checks, each 10 of 10: the runbooks, the refused and the allowed handoff, classification under enforcement, the legal store refused, memory, Chat's refusal, handoff and request, counsel, finance, a documents answer graded with its figures found, marking an answer, the revoke waiting for Dana's approval (7), the classifier filing the Nordvik note (5), a request granted by the agent's owner. Every Essentials scenario also ran end to end three times in a row with every step passing (end-to-end harness, not shipped). |
+| Standard | DeepSeek V4.1 Flash (OpenRouter) for the writer, canvas, CEO and helpdesk | scenarios 0, 9, 10, 11, 12, 15, 17 and 27 end to end; 23 up to its eval gate (the evals ran on the 9B default) |
+| Full | Gemini 3.7 Flash (OpenRouter) for the librarian, the data analyst and Claude Code | scenarios 20, 24, 28, 30, 31 and 33 end to end; 22 part two, 26 and 29 all but one step each (see DEMOS.md) |
 
-The presenter (scenario 0) refuses cloud models and started a scenario in 0 of 3 runs on the 9B: it needs a Standard-class local model. Scenarios 23 (the skill builder) and 24 (Claude Code through the gateway) were run end to end once on Claude Haiku 4.5; they are not in the bench. Scenarios 25–36 are new and not in the bench yet (measured: pending). On a 24 GB Mac some calls to the 9B took minutes when the machine was swapping; see *Before the day* in DEMOS.md.
+The presenter (scenario 0) stays on the local model and passed on the 9B. The Standard and Full rows are end-to-end runs, not bench runs: the bench's Standard and Full checks were not re-run for 1.13.0. On a 24 GB Mac some calls to the 9B stalled for two minutes when the machine was swapping; see *Before the day* in DEMOS.md.
 
 ## Uninstall
 

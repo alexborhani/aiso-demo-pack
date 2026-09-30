@@ -5,8 +5,8 @@ tags: ["scenario-27"]
 level: standard
 ---
 **Level:** Standard. Every step after the first needs a model: a long interview, a nine-section policy
-in Markdown and one tool call with a nested schema. Not run on any model yet (measured: pending); a
-9B is not expected to carry it.
+in Markdown and one tool call with a nested schema. Measured: passed end to end on DeepSeek V4.1 Flash; on Qwen 3.5 9B it ran the interview and filed
+a proposal but missed two of eight checks.
 
 
 *An organisation with no written classification policy gets one by answering eight questions. The

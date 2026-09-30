@@ -4,7 +4,7 @@ title: "29. A chart drawn from the query result"
 tags: ["scenario-29"]
 level: full
 ---
-**Level:** Full (the demo-data server). Not measured on any model yet (measured: pending):
+**Level:** Full (the demo-data server). Measured on Gemini 3.7 Flash: every step but the seven-day expiry.
 `builtin:chart` needs the model to name the result and write a small Vega-Lite spec; start on the
 cloud entry.
 
@@ -15,8 +15,9 @@ from the rows the query returned.*
 **You are** Dana; Jordan in the second window for the last step.
 
 1. `music-librarian` (on the cloud entry): **"Chart the 10 longest tracks."** The librarian calls
-   `longest_tracks` with 10, then `chart` naming that result, and the reply ends with a bar
-   chart: one bar per track, its length in seconds. The chart appears once the reply is finished.
+   `longest_tracks` with 10, then `chart` naming that result, and the reply shows a bar chart: one
+   bar per track, its length in seconds. The chart appears once the reply is finished (where the
+   model placed it, or under the reply when it did not).
 2. Open the tool trace: the `chart` call's arguments are a step number (`S1`) and a mark and
    encoding over the result's columns (`track`, `seconds`), and nothing else. Say: there is no
    field for data. The model cannot pass numbers to the chart; a spec that tries (`data`, `url`,

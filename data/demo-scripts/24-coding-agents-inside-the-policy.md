@@ -45,7 +45,10 @@ read, which code may never go to a cloud model, and every line an AI wrote is on
    classified code from firmware/safety/interlock.c (confidential, 27 lines), which
    claude-haiku-4-5 may not receive: the model is cleared for internal at most. Switch to
    claude-local-qwen for this work, or remove that code from the conversation (for example
-   /clear).* Nothing reached the cloud provider. `/clear` to go on.
+   /clear).* Nothing reached the cloud provider. `/clear` to go on. A careful model may stop one step
+   earlier: it calls `code_classification` for the path first, is told the cloud model may not receive
+   it, and says so without reading the file. Either way the file stays on the Mac; show whichever
+   happened (the refusal, or the `code_classification` call in the transcript).
 7. **"Add a bar-to-psi conversion function to src/controller/units.c, next to bar_to_kpa."** Claude
    Code writes it. Commit it on a branch, then `ai-stackops code attest --base main` (with the same
    `AISO_URL`, `AISO_CI_KEY` and `AISO_PROJECT`): *4 lines added (2 long enough to tell), written

@@ -17,11 +17,11 @@ steps:
       - id: security
         agent: security-lead
         input:
-          query: "Summarise what the security incidents store says about {{input.incident}} in five lines."
+          query: "Search the security incidents store for the record {{input.incident}} and summarise that record in five lines: what happened, what was done, what is still open and who owns it."
       - id: runbooks
         agent: helpdesk
         input:
-          query: "Which IT runbooks are relevant to {{input.incident}}? List them with one line each."
+          query: "List the IT runbooks for revoking a person's access, for handling a device or removable-media incident, and for incident response, one line each (for incident {{input.incident}})."
     merge:
       expect: all
       onMissing: flag

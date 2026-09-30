@@ -37,7 +37,10 @@ checked, its evals decide whether it may be offered widely, and an admin decides
    *Every agent* → Save. Refused while its evals have not passed on this version: *Run evals*
    (a few minutes), then save again. Say: a skill reaches every agent only when a person other
    than its author has reviewed it (a signed pack counts) and its evals pass, including a check
-   that it does not take the requests of the skills already offered.
+   that it does not take the requests of the skills already offered. The evals run on the model
+   the eval file names (`model:` in `evals/evals.yaml`), else the host's default. On a Qwen 3.5 9B
+   default the near-miss trigger checks failed in our runs, so the save stayed refused: on such a
+   host, name the cloud entry in the eval file first, or show the refusal as the point.
 5. Admin → Audit: `skills.draft.save`, `skills.evals.run`, `skills.scope.set` with before and
    after.
 

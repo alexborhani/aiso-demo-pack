@@ -6,7 +6,8 @@ level: full
 ---
 **Level:** Full (the kept answers come from the music librarian, which needs the demo-data server).
 Needs the `ai-stackops` command on the Mac (as for scenario 24) and both cloud entries from *Before
-the day* (`claude-haiku` and `deepseek-flash`). Not yet run (measured: pending).
+the day* (`claude-haiku` and `deepseek-flash`). Measured: passed on Gemini 3.7 Flash, with the two
+    replay steps (the `ai-stackops` command) not run in the automated pass.
 
 
 *A model that changes under an organisation changes its answers. Here the model is pinned, a

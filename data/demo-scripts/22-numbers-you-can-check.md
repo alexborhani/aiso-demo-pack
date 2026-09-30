@@ -38,7 +38,8 @@ renamed columns from the cloud librarian: that is scenario 26, not this one.
 4. As Dana, `music-librarian` (answers from the demo-data MCP server: named, parameterised queries
    over the store's database; there is no free SQL tool). **"What has customer Heather Leacock
    purchased, and how much did she spend in total?"** While it is held the reply says *Checking the answer against the results…*, then the table
-   appears. Sources: *Governed*, the named query `customer_purchases`, 38 rows, *Figures found in
+   appears. Sources: *Governed* (or *Mixed*, if the librarian also searched the catalogue), the named
+   query `customer_purchases`, 38 rows, *Figures found in
    sources*, Grade High. Open the step: the statement
    that ran and its row count. Press *Show result*: the rows themselves. Open the grade. When the
    model used references to the result (it is told to while *Fill in figures from the results* is
