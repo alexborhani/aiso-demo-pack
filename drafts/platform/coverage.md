@@ -18,7 +18,7 @@ and were merged on 2026-09-29. None of 25–36 or the additions has been run yet
 | Data stays in its source, read as the person asking | 22 part two (data read through MCP, never copied in); 34 (per-person sign-in, *as you*) | covered-local for "stays in its source"; needs-system (Snowflake or Databricks) for "as the person asking" |
 | Developers keep their coding tools | 24 (Claude Code; the login also sets up Codex and OpenCode, not shown) | covered-local (needs Claude Code) |
 | Skills written once with approvals | 9, 23 | covered-local (Standard) |
-| Automation has no meter | 5 (classifier on the local model), 10–12 (workflows, the CEO heartbeat), 16 without a key (priced, not billed) | covered-local, with a caveat: on a 9B Mac the Standard workflows run on the cloud entry, so the "no meter" point holds only on a Standard-class local model. No scenario shows a scheduled trigger. |
+| Automation has no meter | 5 (classifier on the local model), 10–11 (workflows), 12 (an agent on a schedule, on the 9B), 16 without a key (priced, not billed) | covered-local, with a caveat: on a 9B Mac the Standard workflows run on the cloud entry, so the "no meter" point holds for them only on a Standard-class local model. |
 | One rulebook and self-proving audit log | 1, 4, 18 (**Verify chain**, signed evidence bundle) | covered-local |
 | A proven setup spreads as one pack | 1 (signed pack, update, auto), 20 (hub floors), 35 (any git repo, unknown publisher held apart) | covered-local for 1 and 20; 35 needs-system (a small unsigned pack repo, not built) |
 | A policy drafted with you | 1 step 3 (*Extract criteria*); 27 (the onboarding agent) | covered-local (draft; 27 needs the onboarding agent added, which the pack does not ship) |

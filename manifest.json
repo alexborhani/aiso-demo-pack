@@ -1,10 +1,10 @@
 {
   "id": "aiso-demo-pack",
   "name": "AI Stackops demo pack",
-  "version": "1.14.0",
+  "version": "1.15.0",
   "publisher": "AI Stack Ops",
   "tier": "certified",
-  "description": "Meridian Works, a fictional company, for evaluating the whole platform as different people: six accounts with different tiers, roles and clearances, a classification policy, knowledge stores at every level, agents scoped to them, an all-hands store with notices at every level for the classification demo (enforcement starts off: switch to monitor, then enforce), an unlabelled site-notes store for the classifier, a presenter agent that runs the scripts aloud in a chosen or lent voice, an organisation with tickets and an agent CEO, routing objectives, a tool that needs approval, evals — plus the former sample agents, stores, functions, skills and workflows. Nothing in it is real.",
+  "description": "Meridian Works, a fictional company, for evaluating the whole platform as different people: six accounts with different tiers, roles and clearances, a classification policy, knowledge stores at every level, agents scoped to them, an all-hands store with notices at every level for the classification demo (enforcement starts off: switch to monitor, then enforce), an unlabelled site-notes store for the classifier, a presenter agent that runs the scripts aloud in a chosen or lent voice, routing objectives, a tool that needs approval, evals — plus the former sample agents, stores, functions, skills and workflows. Nothing in it is real.",
   "readOnly": false,
   "resources": {
     "agents": [
@@ -19,10 +19,8 @@
       "agents/image-creator.agent.yaml",
       "agents/investment-analyst.agent.yaml",
       "agents/marketer.agent.yaml",
-      "agents/meridian-ceo.agent.yaml",
       "agents/music-librarian.agent.yaml",
       "agents/network-security.agent.yaml",
-      "agents/org-ceo.agent.yaml",
       "agents/people-partner.agent.yaml",
       "agents/security-lead.agent.yaml",
       "agents/simple-toolbox.agent.yaml",
@@ -110,7 +108,6 @@
     ],
     "routing": "routing.fragment.yaml",
     "tools": "tools.fragment.yaml",
-    "organization": "organization.yaml",
     "mcp": "mcp/demo-data.mcp.json"
   },
   "seed": {
@@ -267,7 +264,7 @@
     {
       "id": "essentials",
       "label": "Essentials",
-      "description": "The nine Meridian Works agents with one to three tools each, the ten stores the scripts use (one of Word, Excel, PowerPoint and PDF files carrying Purview labels), the files for a person's own space, the people, roles and policy. Measured on Qwen 3.5 9B. Scenarios 1–8, 13, 14, 16, 18, 19, 21, 22, 25, 37–39.",
+      "description": "The nine Meridian Works agents with one to three tools each, the ten stores the scripts use (one of Word, Excel, PowerPoint and PDF files carrying Purview labels), the files for a person's own space, the people, roles and policy. Measured on Qwen 3.5 9B. Scenarios 1–8, 12, 13, 14, 16, 18, 19, 21, 22, 25, 37–39.",
       "requires": {
         "modelClass": "small",
         "contextTokens": 16384
@@ -276,7 +273,7 @@
     {
       "id": "standard",
       "label": "Standard",
-      "description": "Adds the presenter, the writer with its customer-notice playbook, canvas, the agent CEO with its organisation, the two workflows, the evals and the demo scripts. Measured on Claude Haiku 4.5 standing in for a 27B-class model. Scenarios 0, 9–12, 15, 17, 23.",
+      "description": "Adds the presenter, the writer with its customer-notice playbook, canvas, the two workflows, the evals and the demo scripts. Measured on Claude Haiku 4.5 standing in for a 27B-class model. Scenarios 0, 9–11, 15, 17, 23.",
       "requires": {
         "modelClass": "standard",
         "contextTokens": 32768
@@ -285,8 +282,7 @@
         "agents": [
           "agents/presenter.agent.yaml",
           "agents/writer.agent.yaml",
-          "agents/canvas.agent.yaml",
-          "agents/meridian-ceo.agent.yaml"
+          "agents/canvas.agent.yaml"
         ],
         "knowledge": [
           "knowledge/demo-scripts.knowledge.yaml",
@@ -308,8 +304,7 @@
         "evals": [
           "evals/chatbot.eval.yaml",
           "evals/helpdesk.eval.yaml"
-        ],
-        "organization": "organization.yaml"
+        ]
       }
     },
     {
@@ -330,7 +325,6 @@
           "agents/marketer.agent.yaml",
           "agents/music-librarian.agent.yaml",
           "agents/network-security.agent.yaml",
-          "agents/org-ceo.agent.yaml",
           "agents/simple-toolbox.agent.yaml",
           "agents/ufpvoice.agent.yaml",
           "agents/video-creator.agent.yaml",
@@ -384,6 +378,6 @@
     "alg": "ed25519",
     "keyId": "a4470c96bdcc103c",
     "publicKey": "q2F/I5FwWGRdIG/Jhwgl6eGo1WMy0DKS0U05m0ROSIA=",
-    "signature": "5L7XFTAxymkGgV3phZkD5EuzMDiykGn9HSRj54Pn8mfpYBTgJJpj02wAhna75mpaj4N0PwfYLoGjpn9SvIFSCA=="
+    "signature": "07YrgToT45AGf3kvLiM9JpDl1DBniR5+KoAGCrLVIptTU3QcmIbAFlPKHAYtfOKwYhHjsjIU/jKxzYAQYHuZBw=="
   }
 }

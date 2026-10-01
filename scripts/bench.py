@@ -312,6 +312,29 @@ def c_save_to_space(i):
     doc = (saved or {}).get('document', {}) if isinstance(saved, dict) else {}
     return has(content, r'41\.2') and st == 201 and doc.get('level') == 'confidential' and doc.get('classifiedBy') == 'source', f"save={st} level={doc.get('level')}/{doc.get('classifiedBy')} " + content[:50].replace('\n', ' ')
 
+def c_schedule_run(i):
+    body = {'name': f'Weekly VPN digest (bench {i})', 'agentName': 'helpdesk', 'cron': '0 9 * * 1', 'timezone': 'Europe/London',
+            'prompt': "Write this week's helpdesk digest: how to reset a VPN certificate, in three bullet points from the IT runbooks."}
+    st, s = call('POST', '/api/schedules', body, people['sam'])
+    if st != 201: return False, f'create HTTP {st} {s}'
+    try:
+        st, r = call('POST', f"/api/schedules/{s['id']}/run-now", {}, people['sam'])
+        run = (r or {}).get('run', {}) if isinstance(r, dict) else {}
+        for _ in range(200):
+            st, rs = call('GET', f"/api/schedules/{s['id']}/runs", cookie=people['sam'])
+            run = next((x for x in (rs.get('runs', []) if isinstance(rs, dict) else []) if x['id'] == run.get('id')), run)
+            if run.get('status') not in ('queued', 'running'): break
+            time.sleep(3)
+        out = ''
+        if run.get('taskId'):
+            st, task = call('GET', f"/api/tasks/{run['taskId']}", cookie=people['sam'])
+            res = task.get('result') if isinstance(task, dict) else None
+            out = str(res.get('output', '') if isinstance(res, dict) else res or '')
+        rows = audit_since('schedules.run', 'sam', run.get('startedAt', '9'))
+        return run.get('status') == 'completed' and has(out, r'vpn', r'certificat') and any(x.get('targetId') == s['id'] and x['outcome'] == 'success' for x in rows), f"run={run.get('status')} {run.get('reason') or ''} " + out[:70].replace('\n', ' ')
+    finally:
+        call('DELETE', f"/api/schedules/{s['id']}", cookie=people['sam'])
+
 CHECKS = [
     ('runbook', 'essentials', 2, 'helpdesk answers Priya from the IT runbooks', c_runbook),
     ('handoff-refused', 'essentials', 2, 'a contractor\'s pay question is not handed to the people partner', c_handoff_refused),
@@ -324,6 +347,7 @@ CHECKS = [
     ('chat-refused', 'essentials', 21, 'Chat refuses a contractor\'s holiday question by name and offers to ask', c_chat_refused),
     ('chat-works', 'essentials', 21, 'Chat hands an HR partner\'s holiday question to the people partner', c_chat_works),
     ('chat-request', 'essentials', 21, 'a yes in Chat files an access request the admins see', c_chat_request),
+    ('schedule-run', 'essentials', 12, 'Sam\'s schedule runs the helpdesk as Sam and writes the VPN digest from the runbook', c_schedule_run),
     ('counsel', 'essentials', 8, 'counsel answers the admin on a restricted matter', c_counsel),
     ('finance', 'essentials', 6, 'the finance analyst answers a finance analyst', c_finance),
     ('answer-grade', 'essentials', 22, 'a finance answer is labelled documents, its figures found in sources, graded high or medium', c_answer_grade),

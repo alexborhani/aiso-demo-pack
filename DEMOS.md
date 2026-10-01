@@ -19,14 +19,14 @@ same at every level, so a story told at Essentials reads the same at Full.
 
 | Level | Model it was measured on | What it adds | Scenarios |
 | --- | --- | --- | --- |
-| **Essentials** | Qwen 3.5 9B (4-bit) on MLX Serve, 32K context, on a 24 GB Mac | the nine Meridian agents with one to three tools each, the nine stores the scripts use, the labelled files, the files for a person's own space | 1–8, 13, 14, 16, 18, 19, 21, 22 (part one), 25 (steps 1–6), 37–39; 35 (needs an unsigned pack repository, not built; not tested) |
-| **Standard** | DeepSeek V4.1 Flash through OpenRouter for the writer, canvas, CEO and helpdesk, standing in for a 27B-class local model | the presenter, the writer with its customer-notice playbook, canvas, the agent CEO and its organisation, the two workflows, the evals, the demo scripts | 0, 9–12, 15, 17, 23, 27; 34 (needs Snowflake or Databricks, not tested); 36 (needs a Microsoft 365 tenant, not tested) |
+| **Essentials** | Qwen 3.5 9B (4-bit) on MLX Serve, 32K context, on a 24 GB Mac | the nine Meridian agents with one to three tools each, the nine stores the scripts use, the labelled files, the files for a person's own space | 1–8, 12, 13, 14, 16, 18, 19, 21, 22 (part one), 25 (steps 1–6), 37–39; 35 (needs an unsigned pack repository, not built; not tested) |
+| **Standard** | DeepSeek V4.1 Flash through OpenRouter for the writer, canvas and helpdesk, standing in for a 27B-class local model | the presenter, the writer with its customer-notice playbook, canvas, the two workflows, the evals, the demo scripts | 0, 9–11, 15, 17, 23, 27; 34 (needs Snowflake or Databricks, not tested); 36 (needs a Microsoft 365 tenant, not tested) |
 | **Full** | Gemini 3.7 Flash through OpenRouter for the librarian, the data analyst and Claude Code, standing in for a 70B-class model or a frontier provider | the sample workshop agents, the sample stores, the demo-data and demo-sql MCP servers and the column catalog, the firmware docs and the safety review skill | 20, 22 (part two), 24, 26, 28–30, 31–33 (with Claude Code, continuing from 24; 32 also needs a pack with a pre-send hook, not tested), and the builder workshop |
 
 **Measured on 2026-09-29/30.** Essentials: every scenario in the row ran end to end three times
 in a row on the 9B with every step passing, and `scripts/bench.py --level essentials` passed all 18
 checks 10 of 10. Scenario 25's step 7 did not work on the 9B. Standard, with the agents above on
-DeepSeek: 0, 9, 10, 11, 12, 15, 17 and 27 passed end to end; 23 built, drafted and saved the skill,
+DeepSeek: 0, 9, 10, 11, 15, 17 and 27 passed end to end; 23 built, drafted and saved the skill,
 and its eval gate held because the evals ran on the host's 9B default (see the note in 23). On the
 9B alone, 0, 10 and 11 also passed; the rest of Standard did not. Full, on Gemini: 20, 24, 28, 30,
 31 and 33 passed end to end; 22 part two passed but for the clarifying question, which the local
@@ -39,9 +39,14 @@ row on the 9B with every step passing (the pack reinstalled before each pass), a
 checks (`space-answer`, `instructions`, `save-to-space`) passed 10 of 10 each. The other checks and
 scenarios were not re-run for 1.14.0. Spaces at Standard and Full: measured: pending.
 
+**Measured on 2026-10-01 (1.15.0).** Scenario 12 (*Work on a schedule*) ran end to end three times in a
+row on the 9B with every step passing (one install, the schedule deleted at the end of each pass), and
+the new bench check `schedule-run` passed 10 of 10. Nothing else was re-run for 1.15.0: the release
+removes the organisation and its two CEO agents and adds no other agent, store or step.
+
 The boundaries come from measurement, not taste: on a 9B a single tool with ten actions was
 already unreliable, so nothing at Essentials has more than three one-action tools, and the
-presenter and the CEO — long prompts, many actions — wait for Standard. Standard and Full were
+presenter — a long prompt, many actions — waits for Standard. Standard and Full were
 measured on small cloud models; no 27B or 70B local model was measured for this release, so treat
 those rows as the size the scenarios need, not a promise about a particular local model.
 `scripts/bench.py` runs every scripted call of a level against the model your host serves and
@@ -89,8 +94,8 @@ says, check by check, whether that level operates on it.
    scenarios switch agents to them live. From then on the provider's tab lists each entry by name
    above the form: pick one there to edit it (scenario 16 changes `deepseek-flash`'s budget).
    *Standard and Full on a 9B-class Mac.* Keep the local model as the default and give the cloud
-   entries only to the agents those levels add: for Standard, Agents → `writer`, `canvas`,
-   `meridian-ceo` and `skill-builder` (added the first time Skills → *New skill* is opened) → Model
+   entries only to the agents those levels add: for Standard, Agents → `writer`, `canvas`
+   and `skill-builder` (added the first time Skills → *New skill* is opened) → Model
    → `deepseek-flash`; for Full, `music-librarian`, `data-analyst` and the workshop agents → Model →
    `gemini-flash`. The finance, HR, legal and security agents and the presenter refuse cloud models
    by policy (their `egress` says so), so they stay on the local model whatever the default is; a
@@ -115,8 +120,8 @@ says, check by check, whether that level operates on it.
 
 | Sign in as | Tier and roles | Clears | Use them for |
 | --- | --- | --- | --- |
-| Dana | admin | restricted, every category | policy, approvals, audit, the CEO |
-| Sam | builder, firmware-engineers | internal, and confidential Security | building: agents, workflows, skills, the IDE, the firmware repository |
+| Dana | admin | restricted, every category | policy, approvals, audit |
+| Sam | builder, firmware-engineers | internal, and confidential Security | building: agents, workflows, skills, schedules, the IDE, the firmware repository |
 | Priya | member, staff | internal | the everyday employee |
 | Marcus | member, staff, hr-partners | confidential within HR | people questions |
 | Lena | member, staff, finance-analysts | confidential within Finance | finance questions |
@@ -481,30 +486,33 @@ The agents are the same ones people chat with; the workflow is the management la
 
 ---
 
-## 12. An organisation run by an agent CEO
-**Level:** Standard.
+## 12. Work on a schedule
+**Level:** Essentials.
 
 
-*Tickets, a team of agents, and a CEO that triages and delegates on a heartbeat.*
+*An agent that runs on its own, as the person who set it up, and stops when that person goes.*
 
-**You are** Dana. Organisations → Meridian Works. *Needs room:* the CEO's prompt carries the whole
-organisation (chart, open tickets, ten organisation tools), about 4,000 tokens before it says a word,
-so this scenario needs the 16K engine; at 4096 the heartbeat fails with a context-length error, which
-the CEO runs list shows as a failed run.
+**You are** Sam in one window, Dana in the other.
 
-1. Open the board: eight tickets across backlog, to do, in progress, in review, blocked, done, each
-   assigned to an agent: the helpdesk, the writer, the security lead.
-2. Open a ticket: description, priority, activity. Create a new one: **"Riverside test rig guard
-   interlock trips twice a shift"**, priority high, unassigned.
-3. Press *Wake CEO* (the CEO's manual heartbeat). Watch Activity: the `meridian-ceo` agent reads
-   the org context, the open tickets and the team, decides who should own the new ticket, updates
-   statuses, and writes its reasoning as comments. The CEO run appears under CEO runs with its
-   token count and cost.
-4. Show the heartbeat schedule (every 30 minutes by default, off until an admin enables it) and the
-   `org-ceo` skill that shapes how the CEO triages.
+1. As Sam, Agents → `helpdesk` → *Schedule…* in the chat header (or Activity → Schedules → *New
+   schedule*). Name **"Weekly VPN digest"**; *What to ask it*: **"Write this week's helpdesk digest:
+   how to reset a VPN certificate, in three bullet points from the IT runbooks."**; *Every week*,
+   Monday, 09:00, your time zone. *Create schedule*. Activity → Schedules lists it: *Mondays at
+   09:00*, when it runs next, *Active*.
+2. *Run now* (the bolt). Activity → Runs shows a `helpdesk` run under Sam. When it ends the row says
+   *Last: Completed*; open the row for its run history, and *Open in Activity* for the digest, built
+   from the VPN runbook.
+3. As Dana, Admin → People → Users → Sam → disable. Activity → Schedules → *Everyone's* → Sam's
+   schedule → *Run now*. The run is *Skipped*: its owner is disabled. It never runs as Dana, and
+   never as the system. Enable Sam again.
+4. As Dana, Admin → Audit, filter `schedules.`: `schedules.create` and `schedules.run_now` by Sam,
+   `schedules.run_now` by Dana, and `schedules.run` as Sam twice: the run that completed, then the
+   skip with its reason.
+5. As Sam, delete the schedule (it asks first); its run history goes with it.
 
-**Land:** the organisation object is where agents stop being chat windows and become a team with a
-backlog, an owner and a cadence, with every decision written down.
+**Land:** a timer here is not a service account. A schedule acts as the person who saved it, with
+their access, limits and approvals, checked again every time it fires, and every change and every
+firing is in the audit log.
 
 ---
 
@@ -1665,7 +1673,8 @@ for anyone asking what people do with it day to day, and 19 for anyone with a pr
   reindex `site-notes` after deleting its rows under Sources (classify each back to internal, then
   approve the lowerings).
 - Scenario 9: delete the filed notice from `scratchpad` (Sources) or leave it as a talking point.
-- Scenario 12: the CEO's ticket changes stay; add a fresh ticket next time.
+- Scenario 12: as Sam, delete *Weekly VPN digest* if a run stopped before step 5, and enable Sam if
+  step 3 left him disabled.
 - Scenario 13: Priya → Account → *Forget*.
 - Scenario 15: leave the entry; delete `board-analyst` if you prefer a clean agent list. After
   step 8, restart the host without `EGRESS_ALLOW_FRONTIER=false`.
@@ -1705,5 +1714,5 @@ for anyone asking what people do with it day to day, and 19 for anyone with a pr
 - Scenario 39: Lena → Spaces → `Board prep` → *Delete*, unless scenario 19 comes next (it deletes it
   under the hold). Delete it while no hold is active, or it is only hidden until the hold is cleared.
 
-A full reset is Packs → uninstall → install: accounts (with their spaces and instructions), stores, policy
-and the organisation return to the starting state, with new passwords.
+A full reset is Packs → uninstall → install: accounts (with their spaces, instructions and schedules), stores and policy
+return to the starting state, with new passwords.

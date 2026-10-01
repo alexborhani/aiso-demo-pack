@@ -10,7 +10,8 @@ tags: []
   reindex `site-notes` after deleting its rows under Sources (classify each back to internal, then
   approve the lowerings).
 - Scenario 9: delete the filed notice from `scratchpad` (Sources) or leave it as a talking point.
-- Scenario 12: the CEO's ticket changes stay; add a fresh ticket next time.
+- Scenario 12: as Sam, delete *Weekly VPN digest* if a run stopped before step 5, and enable Sam if
+  step 3 left him disabled.
 - Scenario 13: Priya → Account → *Forget*.
 - Scenario 15: leave the entry; delete `board-analyst` if you prefer a clean agent list. After
   step 8, restart the host without `EGRESS_ALLOW_FRONTIER=false`.
@@ -18,7 +19,8 @@ tags: []
   `deepseek-flash` USD / day back to 1 (or, without a key, the pricing removed from `mlx-serve`).
   Leave the entry: the next run needs it.
 - Scenario 17: restore the runbook and reindex.
-- Scenario 19: reinstall the pack to bring Jordan back (Packs → uninstall → install).
+- Scenario 19: *Delete disabled accounts* back to *Never* (People → Users) if the scenario did not end
+  there; the legal hold cleared; reinstall the pack to bring Jordan back (Packs → uninstall → install).
 - Scenario 20: revoke the enrollment on the hub and stop the spoke process.
 - Scenario 21: Marcus → Account → *Access you granted* → *Revoke*, if the scenario did not end there.
 - Scenario 22: Answer checks → *Clarifying questions* back to Off; kept answers stay (Account →
@@ -42,6 +44,12 @@ tags: []
 - Scenario 32: Admin → Policy → Packs → switch the hook off.
 - Scenario 34: Lena and Marcus → Account → *Connected services* → **Disconnect**.
 - Scenario 35: uninstall the community pack; *Minimum tier to install* back to what it was.
+- Scenario 37: as Sam, Spaces → `Riverside rig trips` → *Delete* (its documents and conversations go with
+  it). Spaces are personal: only the person who made one can delete it, and uninstalling the pack
+  deletes the accounts and their spaces with them.
+- Scenario 38: Lena and Priya → Account → *Personal instructions* → *Delete* (or save an empty text).
+- Scenario 39: Lena → Spaces → `Board prep` → *Delete*, unless scenario 19 comes next (it deletes it
+  under the hold). Delete it while no hold is active, or it is only hidden until the hold is cleared.
 
-A full reset is Packs → uninstall → install: accounts, stores, policy and the organisation return to
-the starting state, with new passwords.
+A full reset is Packs → uninstall → install: accounts (with their spaces, instructions and schedules), stores and policy
+return to the starting state, with new passwords.

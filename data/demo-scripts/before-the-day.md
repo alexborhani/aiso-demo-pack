@@ -43,8 +43,8 @@ tags: []
    scenarios switch agents to them live. From then on the provider's tab lists each entry by name
    above the form: pick one there to edit it (scenario 16 changes `deepseek-flash`'s budget).
    *Standard and Full on a 9B-class Mac.* Keep the local model as the default and give the cloud
-   entries only to the agents those levels add: for Standard, Agents → `writer`, `canvas`,
-   `meridian-ceo` and `skill-builder` (added the first time Skills → *New skill* is opened) → Model
+   entries only to the agents those levels add: for Standard, Agents → `writer`, `canvas`
+   and `skill-builder` (added the first time Skills → *New skill* is opened) → Model
    → `deepseek-flash`; for Full, `music-librarian`, `data-analyst` and the workshop agents → Model →
    `gemini-flash`. The finance, HR, legal and security agents and the presenter refuse cloud models
    by policy (their `egress` says so), so they stay on the local model whatever the default is; a
@@ -69,8 +69,8 @@ tags: []
 
 | Sign in as | Tier and roles | Clears | Use them for |
 | --- | --- | --- | --- |
-| Dana | admin | restricted, every category | policy, approvals, audit, the CEO |
-| Sam | builder, firmware-engineers | internal, and confidential Security | building: agents, workflows, skills, the IDE, the firmware repository |
+| Dana | admin | restricted, every category | policy, approvals, audit |
+| Sam | builder, firmware-engineers | internal, and confidential Security | building: agents, workflows, skills, schedules, the IDE, the firmware repository |
 | Priya | member, staff | internal | the everyday employee |
 | Marcus | member, staff, hr-partners | confidential within HR | people questions |
 | Lena | member, staff, finance-analysts | confidential within Finance | finance questions |
