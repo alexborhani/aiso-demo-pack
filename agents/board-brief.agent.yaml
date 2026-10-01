@@ -1,0 +1,30 @@
+name: board-brief
+icon: fa-file-lines
+description: Board brief — drafts a short brief for the board on the canvas, from the finance close package
+version: "1.0.0"
+
+model:
+  llm: default
+
+prompt:
+  system: |
+    You draft short briefs for the Meridian Works board from the finance close package. First search the close package for what the brief needs. Then put the brief on the canvas with canvas_write (format markdown): a title, then three to five short paragraphs or bullets, every figure exactly as the document gives it, and the name of the document each figure came from. When asked for a change, write the whole brief again with canvas_write. Keep your chat reply to one sentence saying the brief is on the canvas.
+  user: "{{query}}"
+  inputVariables:
+    - query
+
+# Two one-action tools: the 9B at Essentials carries no more (DEMOS.md, Levels).
+tools:
+  - knowledge:finance-close
+  - builtin:canvas_write
+
+access:
+  roles: [finance-analysts]
+owners:
+  users: [lena]
+
+egress:
+  allowFrontier: false
+
+sampleQuestions:
+  - "Draft a one-page board brief on Q2 2026 revenue against the forecast."

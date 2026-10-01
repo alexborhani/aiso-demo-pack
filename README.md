@@ -2,7 +2,7 @@
 
 A pack that turns a vanilla AI Stackops install into a fictional company, **Meridian Works**, so the whole platform can be evaluated as different people. Nothing in it is real: the people, documents, figures and matters are invented.
 
-**Presenting to leaders?** [DEMOS.md](DEMOS.md) has thirty-seven scripted scenarios (0–36), a 60-minute tour and the reset list. Scenarios 25–33 were measured in this release (DEMOS.md → *Levels*); 34–36 need a system the demo Mac does not have (a warehouse, an unsigned pack's repository, a Microsoft 365 tenant) and were not run.
+**Presenting to leaders?** [DEMOS.md](DEMOS.md) has forty scripted scenarios (0–39), a 60-minute tour and the reset list. Scenarios 37–39 (a person's own space, personal instructions, Save to space) and the extended 19 were measured in this release on Essentials (DEMOS.md → *Levels*); 34–36 need a system the demo Mac does not have (a warehouse, an unsigned pack's repository, a Microsoft 365 tenant) and were not run.
 
 ## What it installs
 
@@ -19,7 +19,8 @@ A pack that turns a vanilla AI Stackops install into a fictional company, **Meri
 
 - **A classification policy** (`policy.md`, `classification.yaml`): four levels, four categories, handling rules. Adopted on install, restored on uninstall.
 - **Knowledge stores** at every level: `handbook` (public), `it-runbooks` (internal), `people-files` (confidential · HR), `finance-close` (confidential · Finance), `legal-matters` and `security-incidents` (restricted), `scratchpad` (write-back target), plus the former samples (`music-store`, `pet-store`, `org-chart`, `patient-records`, `transcripts`, `web-docs`).
-- **Agents** scoped to them: `helpdesk` (everyone), `people-partner`, `finance-analyst`, `counsel`, `security-lead` (with the approval-gated `revoke_access` action), `writer` (canvas + knowledge write-back), `meridian-ceo`, plus the former sample agents. The restricted agents and stores name their **owners** (Marcus for HR, Lena for finance, Dana for legal and security): Chat sends a request for access to them.
+- **Agents** scoped to them: `helpdesk` (everyone), `people-partner`, `finance-analyst`, `counsel`, `security-lead` (with the approval-gated `revoke_access` action), `writer` (canvas + knowledge write-back), `board-brief` (a board brief on the canvas from the close package, for Save to space), `meridian-ceo`, plus the former sample agents. The restricted agents and stores name their **owners** (Marcus for HR, Lena for finance, Dana for legal and security): Chat sends a request for access to them.
+- **Space files** (`data/space-files`): what Sam uploads into his own space in scenario 37 — a Word file carrying the Purview label *Confidential*, his notes, and a sensor log too large for a space. Spaces themselves are personal: the pack seeds none.
 - **Workflows**: an evaluator loop (`customer-notice`), a parallel research-and-merge (`incident-brief`), and the former examples.
 - **An organisation**, Meridian Works, with an agent CEO, members and eight tickets.
 - **A data source** (full level): `demo-data`, MCP Toolbox for Databases over the music-store and pet-store SQLite files, with five named queries in `data/toolbox/tools.yaml` and no free SQL. The music librarian answers purchases and track lengths from it, so its replies carry a Sources line with the statement that ran. It needs Node's `npx` on the server's path; the first call downloads the pinned `@toolbox-sdk/server@1.13.1`.
@@ -33,7 +34,7 @@ The pack installs at one of three levels — pick the one your default chat mode
 
 | Level | For | Adds |
 | --- | --- | --- |
-| Essentials | a 9B-class local model, 16K+ context (measured on Qwen 3.5 9B) | the eight Meridian agents (one to three tools each), the nine stores the scripts use, the people, roles and policy; Chat (21), checked answers (22) and files that carry Purview labels (25) |
+| Essentials | a 9B-class local model, 16K+ context (measured on Qwen 3.5 9B) | the nine Meridian agents (one to three tools each), the nine stores the scripts use, the people, roles and policy; Chat (21), checked answers (22), files that carry Purview labels (25) and a person's own space (37–39) |
 | Standard | a 27B-class local model at 32K, or a cloud entry for the agents this level adds (measured on DeepSeek V4.1 Flash) | the presenter, the writer with its playbook, canvas, the agent CEO and its organisation, the workflows, the evals, the demo scripts |
 | Full | a 70B-class model or a frontier provider (measured on Gemini 3.7 Flash) | the sample workshop agents and stores, the `demo-data` MCP server and its column-tag catalog (26), the firmware docs and the safety review skill |
 
@@ -73,6 +74,8 @@ Measured for 1.13.0 on 2026-09-29/30 on a 24 GB Mac. Essentials: 10 runs per che
 | Essentials | Qwen 3.5 9B (4-bit) on MLX Serve, 32K context | 18 of 18 checks, each 10 of 10: the runbooks, the refused and the allowed handoff, classification under enforcement, the legal store refused, memory, Chat's refusal, handoff and request, counsel, finance, a documents answer graded with its figures found, marking an answer, the revoke waiting for Dana's approval (7), the classifier filing the Nordvik note (5), a request granted by the agent's owner. Every Essentials scenario also ran end to end three times in a row with every step passing (end-to-end harness, not shipped). |
 | Standard | DeepSeek V4.1 Flash (OpenRouter) for the writer, canvas, CEO and helpdesk | scenarios 0, 9, 10, 11, 12, 15, 17 and 27 end to end; 23 up to its eval gate (the evals ran on the 9B default) |
 | Full | Gemini 3.7 Flash (OpenRouter) for the librarian, the data analyst and Claude Code | scenarios 20, 24, 28, 30, 31 and 33 end to end; 22 part two, 26 and 29 all but one step each (see DEMOS.md) |
+
+1.14.0, measured 2026-10-01 on Qwen 3.5 9B (MLX Serve, 32K context): the three new Essentials checks — Chat in a person's own confidential space (37), personal instructions (38), Save to space (39) — each 10 of 10; scenarios 37–39 and the extended 19 also ran end to end three times in a row with every step passing. The 18 earlier checks were not re-run.
 
 The presenter (scenario 0) stays on the local model and passed on the 9B. The Standard and Full rows are end-to-end runs, not bench runs: the bench's Standard and Full checks were not re-run for 1.13.0. On a 24 GB Mac some calls to the 9B stalled for two minutes when the machine was swapping; see *Before the day* in DEMOS.md.
 

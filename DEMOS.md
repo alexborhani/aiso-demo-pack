@@ -19,7 +19,7 @@ same at every level, so a story told at Essentials reads the same at Full.
 
 | Level | Model it was measured on | What it adds | Scenarios |
 | --- | --- | --- | --- |
-| **Essentials** | Qwen 3.5 9B (4-bit) on MLX Serve, 32K context, on a 24 GB Mac | the eight Meridian agents with one to three tools each, the nine stores the scripts use, the labelled files | 1–8, 13, 14, 16, 18, 19, 21, 22 (part one), 25 (steps 1–6); 35 (needs an unsigned pack repository, not built; not tested) |
+| **Essentials** | Qwen 3.5 9B (4-bit) on MLX Serve, 32K context, on a 24 GB Mac | the nine Meridian agents with one to three tools each, the nine stores the scripts use, the labelled files, the files for a person's own space | 1–8, 13, 14, 16, 18, 19, 21, 22 (part one), 25 (steps 1–6), 37–39; 35 (needs an unsigned pack repository, not built; not tested) |
 | **Standard** | DeepSeek V4.1 Flash through OpenRouter for the writer, canvas, CEO and helpdesk, standing in for a 27B-class local model | the presenter, the writer with its customer-notice playbook, canvas, the agent CEO and its organisation, the two workflows, the evals, the demo scripts | 0, 9–12, 15, 17, 23, 27; 34 (needs Snowflake or Databricks, not tested); 36 (needs a Microsoft 365 tenant, not tested) |
 | **Full** | Gemini 3.7 Flash through OpenRouter for the librarian, the data analyst and Claude Code, standing in for a 70B-class model or a frontier provider | the sample workshop agents, the sample stores, the demo-data and demo-sql MCP servers and the column catalog, the firmware docs and the safety review skill | 20, 22 (part two), 24, 26, 28–30, 31–33 (with Claude Code, continuing from 24; 32 also needs a pack with a pre-send hook, not tested), and the builder workshop |
 
@@ -33,6 +33,11 @@ and its eval gate held because the evals ran on the host's 9B default (see the n
 decision model did not ask; 26 passed but for one column left over from an earlier run; 29 passed
 once its label was read as *Governed or Mixed*. Steps that need Claude Code's spend (31), seven
 days (29), a provider admin key (33) or a live tenant (34, 36) were not run.
+
+**Measured on 2026-10-01 (1.14.0).** Scenarios 37–39 and the extended 19 ran end to end three times in a
+row on the 9B with every step passing (the pack reinstalled before each pass), and the three new bench
+checks (`space-answer`, `instructions`, `save-to-space`) passed 10 of 10 each. The other checks and
+scenarios were not re-run for 1.14.0. Spaces at Standard and Full: measured: pending.
 
 The boundaries come from measurement, not taste: on a 9B a single tool with ten actions was
 already unreliable, so nothing at Essentials has more than three one-action tools, and the
@@ -725,26 +730,44 @@ for is a download, and it is tamper-evident.
 ---
 
 ## 19. A person leaves
-**Level:** Essentials.
+**Level:** Essentials, no chat model. Measured (2026-10-01): end to end three times in a row, every step
+passing, after scenario 39 each time.
 
 
-*Subject access, erasure and legal hold, with the audit log kept intact.*
+*Subject access, a legal hold that stops every deletion, erasure and the grace period, with the audit
+log kept intact.*
 
-**You are** Dana.
+**You are** Dana; Lena in the second window for step 3. Best after scenario 39, which leaves Lena her
+`Board prep` space; without it, have Lena make any space and upload a file from `space-files`.
 
 1. Admin → People → Users → Jordan → the download icon (*Export their data first* on the delete
    dialog does the same): one JSON with the account, the roles, the
    documents Jordan added, the memories, the usage rows and the audit rows Jordan is the actor of.
    Say: this is the subject-access request, answered in one click.
-2. Admin → Data → *Legal hold*: set it, with a reason. The Setup checklist shows it; every prune
-   stops. Say: retention is suspended estate-wide for litigation without touching the data.
-3. Clear the hold. Back on Users → Jordan → *Erase*: keys revoked, memories and added documents
-   removed, usage rows pseudonymised, the account deleted. The audit rows are untouched: they name
-   the actor as they did. Admin → Audit: `users.erase` lists the steps.
-4. Say: reinstalling the pack brings Jordan back for the next demo.
+2. Admin → Data → *Legal hold*: set it, with a reason (*Northfield dispute*). The Setup checklist shows
+   it; every prune stops.
+3. As Lena, Spaces → `Board prep` → **Delete**. It leaves her list with a note: kept under a legal hold,
+   deleted when the hold is cleared. As Dana, the *Legal hold* panel counts one kept item. Say: under a
+   hold a person's own delete hides; it does not destroy.
+4. *Export held content* → person **lena** → *Export*: one JSON file signed with the workspace key, holding
+   the deleted space and the text of its documents, who deleted it and when. Admin → Audit, `hold.export`:
+   the filters and the counts, never the content.
+5. People → Users → *Delete disabled accounts* → **After 30 days**. Disable Jordan (his contract ended):
+   his row reads *disabled*, *deleted on* a date 30 days out. Say: a deactivation, which is what a SCIM
+   delete does, keeps the account and everything in it for the grace period so a returning person finds
+   it all; after that the account goes with its content.
+6. Now **Erase** Jordan, with a reason. Under the hold it waits: the row reads *deletion waits for the
+   legal hold*, and the erasure is recorded.
+7. Admin → Data → clear the hold. The toast: one kept item deleted, one deferred deletion done. Lena's
+   space is gone for good; Jordan is erased: keys revoked, memories and added documents removed, usage
+   rows pseudonymised, the account deleted. Admin → Audit: `users.erase` by *legal-hold* lists the
+   steps; the rows that name Jordan as the actor are untouched. Set *Delete disabled accounts* back to
+   *Never*.
+8. Say: reinstalling the pack brings Jordan back for the next demo.
 
-**Land:** the data-protection lifecycle is built in, per person, with the audit trail as the one
-thing that is never edited.
+**Land:** the data-protection lifecycle is built in, per person: a hold stops every deletion, people's
+own included, everything it held back runs when it lifts, and the audit trail is the one thing never
+edited.
 
 ---
 
@@ -1513,6 +1536,106 @@ the person asking, and cannot send or change anything.
 
 ---
 
+## 37. A space of your own
+**Level:** Essentials. Step 5 needs the `deepseek-flash` entry from *Before the day*; it needs no working
+key, because the refusal comes before anything is dialled. Measured on Qwen 3.5 9B (2026-10-01): end to end three times in a row, every step passing; its bench check (`space-answer`) 10 of 10.
+
+
+*A person keeps their own documents in one place and chats with them. The platform decides which models
+may read them, how much the space may hold, and that nobody else sees any of it.*
+
+**You are** Sam in one window, Dana in the other. Sam uploads three files from the pack's `space-files`
+folder (`<workspace>/bundles/aiso-demo-pack/space-files/`): a Word file carrying the Purview label
+*Confidential*, his own notes, and a sensor log.
+
+1. As Sam, **Spaces** → *New space* `Riverside rig trips`. Upload `riverside-interlock-trips.docx` and
+   `rig-trip-working-notes.md`. The Word file reads **confidential**, *Set by* **label**; the notes read
+   internal, *Set by* **default**. The space takes the highest level of its documents: confidential.
+2. Under the space, its limit: about 22,600 tokens, set by `mlx-serve`, the local model, whose window is
+   32,768 tokens (the rest is kept for instructions, the conversation and the reply; the figure assumes the
+   entry's Max Tokens at 4,096). Upload `halden-rig-sensor-log-2026.csv`, about 44,000 tokens: refused.
+   Every document goes into the chat whole, the model allowed to read this space cannot take it, and
+   *larger sets of documents belong in a knowledge store*. Say: the line between a personal space and a
+   governed knowledge store is set by the models the organisation runs.
+3. **Chat in this space**. Ask: **"Which sensor caused most of the rig trips, and what does the analysis
+   recommend doing about it?"** The local model answers from the Word file: sensor GS-2, 29 of the 41 trips,
+   a cracked bracket, a coded safety sensor in its place. With the reply, a note lists what a space chat
+   does not have: nothing in it is handed to another agent or saved where other people can read it.
+4. **"What do my working notes say I should check on Tuesday?"** The torque on the bracket bolts. Account
+   → the usage line: *(… from a prompt cache)*. Every turn sends the documents again; the engine kept
+   them from the first turn and read them back instead of working through them again. Say: that is what
+   keeps a space affordable, on the Mac and on a cloud provider.
+5. A new chat in the space, **With** `deepseek-flash`, the same question. Refused before anything is
+   sent: *The model "deepseek-flash" may only see internal data, and this space holds confidential
+   documents.* As Dana, Admin → Audit, `space.chat.refused`: the space id, the model and the levels,
+   never a name or a word of the space.
+6. As Dana, **Spaces** lists only her own. Admin → Data → **Spaces**: how many spaces, people,
+   documents and megabytes, nothing more. Admin → Audit, `space.upload`: ids, levels and sizes, and the
+   refused upload with its reason. Say: the one route by which an admin reaches a space is the
+   subject-access export of the whole account (scenario 19), and that export is on the record.
+
+**Land:** people get a private place to work with their own documents, and the organisation still
+decides which models read them, how much goes in, and that none of it reaches anyone else.
+
+---
+
+## 38. Instructions of your own
+**Level:** Essentials. Measured on Qwen 3.5 9B (2026-10-01): end to end three times in a row, every step passing; its bench check (`instructions`) 10 of 10.
+
+
+*Each person tells the assistant once how they want their answers. The same question then comes back
+shaped for each of them, and nobody else reads what they wrote.*
+
+**You are** Lena in one window, Priya in the other; Dana for the last step.
+
+1. As Lena, Account → **Personal instructions**: **"Answer in German. I work in Finance at Crestview."**
+   Save. As Priya: **"I am an operations coordinator at the Halden plant and I read answers on my phone.
+   Keep answers short and use bullet points."** Save.
+2. As Lena, Chat: **"How do I reset my VPN certificate?"** The steps from the VPN runbook, in German.
+3. As Priya, the same question: the same steps as short bullet points, in English. Chat's own
+   instructions say plain sentences and no lists; Priya's changed the form of the answer. Say: the
+   person's instructions come after the agent's and the admin's, marked as the person's preferences, and
+   access is enforced in code, so no instruction widens what anyone may see or use.
+4. As Dana, Admin → Data → **Personal instructions**: on or off, the length limit, and how many people
+   have written some. No text. Admin → Audit, `instructions.set`: who, and how many characters.
+
+**Land:** personalisation that costs nothing in control: one sentence per person, applied everywhere
+they chat, and read by nobody else.
+
+---
+
+## 39. Save to space
+**Level:** Essentials: the `board-brief` agent, two tools (the close package and the canvas).
+Measured on Qwen 3.5 9B (2026-10-01): end to end three times in a row, every step passing; its bench check (`save-to-space`) 10 of 10.
+
+
+*A draft an assistant made becomes a document the person keeps: versioned, linked to the conversation and
+the sources it came from, and never less sensitive than what it was made from.*
+
+**You are** Lena; Dana in the second window for the last step.
+
+1. As Lena, **Spaces** → *New space* `Board prep`.
+2. Agents → `board-brief`: **"Draft a one-page board brief on Q2 2026 revenue against the forecast."** It
+   searches the close package, and the canvas opens with the brief: 41.2 million against a forecast of
+   40.5 million, with the document named.
+3. Above the canvas, **Save to space** (the folder with a plus) → `Board prep`, level *The conversation's
+   level* → Save. The brief reads **confidential**, *Set by* **conversation**: the conversation read the
+   confidential close package. The space is now confidential too. Save it once more choosing *internal*:
+   refused, *This came from a conversation at confidential, so it is kept at confidential or higher.*
+4. Spaces → `Board prep` → the brief → **Text**: the conversation it came from, with a link back, and the
+   answer's sources: the close package.
+5. Back in the chat: **"Rewrite the brief on the canvas as three bullet points."** Save to space → *New
+   version of* the brief. The space lists it once, at version 2, still confidential; the first version
+   is kept and no longer counts toward the limits. Its **Text** now names the revision's answer, in the
+   same conversation.
+6. As Dana: nothing of it under her Spaces. Admin → Audit, `space.save`: the file id, the level, the
+   source level, the conversation and answer ids; never the title or a word of the brief.
+
+**Land:** what an assistant drafts can be kept without leaking down a level on the way out of the chat,
+and every document knows where it came from.
+
+---
+
 ## The 60-minute tour
 
 | Minute | Scenario | Why here |
@@ -1525,12 +1648,13 @@ the person asking, and cannot send or change anything.
 | 35 | 21. One chat for everyone | access asked of the owner, granted for one thing |
 | 42 | 15. Cloud by policy | the cloud question, answered |
 | 49 | 18. On the record | the evidence |
-| 55 | 20. Two nodes | the estate |
+| 55 | 37. A space of your own | personal AI use, inside the policy |
 
 On Standard or Full, swap scenario 21 for 9 (the playbook with its sign-off). Keep 5, 10, 12 and 23
 ready as follow-ups for the technical people in the room, 24 and 31–33 for engineering leaders, 25–27
 for whoever owns data classification, 26, 29 and 30 for the data team, 28 for whoever signs off a
-model change, 14 for a commercial audience, and 19 for anyone with a privacy remit.
+model change, 14 for a commercial audience, 20 for whoever runs more than one site, 38 and 39 after 37
+for anyone asking what people do with it day to day, and 19 for anyone with a privacy remit.
 
 ## Reset between runs
 
@@ -1549,7 +1673,8 @@ model change, 14 for a commercial audience, and 19 for anyone with a privacy rem
   `deepseek-flash` USD / day back to 1 (or, without a key, the pricing removed from `mlx-serve`).
   Leave the entry: the next run needs it.
 - Scenario 17: restore the runbook and reindex.
-- Scenario 19: reinstall the pack to bring Jordan back (Packs → uninstall → install).
+- Scenario 19: *Delete disabled accounts* back to *Never* (People → Users) if the scenario did not end
+  there; the legal hold cleared; reinstall the pack to bring Jordan back (Packs → uninstall → install).
 - Scenario 20: revoke the enrollment on the hub and stop the spoke process.
 - Scenario 21: Marcus → Account → *Access you granted* → *Revoke*, if the scenario did not end there.
 - Scenario 22: Answer checks → *Clarifying questions* back to Off; kept answers stay (Account →
@@ -1573,6 +1698,12 @@ model change, 14 for a commercial audience, and 19 for anyone with a privacy rem
 - Scenario 32: Admin → Policy → Packs → switch the hook off.
 - Scenario 34: Lena and Marcus → Account → *Connected services* → **Disconnect**.
 - Scenario 35: uninstall the community pack; *Minimum tier to install* back to what it was.
+- Scenario 37: as Sam, Spaces → `Riverside rig trips` → *Delete* (its documents and conversations go with
+  it). Spaces are personal: only the person who made one can delete it, and uninstalling the pack
+  deletes the accounts and their spaces with them.
+- Scenario 38: Lena and Priya → Account → *Personal instructions* → *Delete* (or save an empty text).
+- Scenario 39: Lena → Spaces → `Board prep` → *Delete*, unless scenario 19 comes next (it deletes it
+  under the hold). Delete it while no hold is active, or it is only hidden until the hold is cleared.
 
-A full reset is Packs → uninstall → install: accounts, stores, policy and the organisation return to
-the starting state, with new passwords.
+A full reset is Packs → uninstall → install: accounts (with their spaces and instructions), stores, policy
+and the organisation return to the starting state, with new passwords.

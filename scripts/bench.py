@@ -248,6 +248,70 @@ def c_data_answer(i):
     figs = ((prov.get('checks') or {}).get('figures') or {})
     return st == 200 and prov.get('label') == 'governed' and grade in ('high', 'medium') and not figs.get('unsupported'), f"label={prov.get('label')} grade={grade} figures={figs.get('matched')}/{figs.get('total')} " + (r.get('output') or '')[-60:]
 
+# ── Spaces (scenarios 37-39): a person's own space, personal instructions, Save to space ──────────
+import os, uuid
+SPACE_FILES = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'data', 'space-files')
+def stream_full(path, body, who, timeout=900):
+    """A Studio chat stream (an agent's or a model's, in a space or not): the text, the tool calls, the answer record."""
+    req = urllib.request.Request(B + path, method='POST', data=json.dumps(body).encode(), headers={'Content-Type': 'application/json', 'Cookie': people[who], 'Origin': B})
+    res = {'out': '', 'tools': [], 'prov': None, 'error': None}
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as r:
+            for line in r:
+                line = line.decode(errors='replace').strip()
+                if not line.startswith('data: '): continue
+                try: e = json.loads(line[6:])
+                except Exception: continue
+                t = e.get('type')
+                if t == 'content': res['out'] += e.get('content') or ''
+                elif t == 'tool_start': res['tools'].append((e.get('tool'), e.get('input') or e.get('args')))
+                elif t == 'provenance': res['prov'] = e
+                elif t == 'error': res['error'] = e.get('error') or e.get('message')
+    except urllib.error.HTTPError as e:
+        res['error'] = f'HTTP {e.code} {e.read().decode(errors="replace")[:120]}'
+    return res
+def upload_space_file(who, space_id, name):
+    bnd = uuid.uuid4().hex
+    with open(os.path.join(SPACE_FILES, name), 'rb') as f: data = f.read()
+    body = f'--{bnd}\r\nContent-Disposition: form-data; name="file"; filename="{name}"\r\nContent-Type: application/octet-stream\r\n\r\n'.encode() + data + f'\r\n--{bnd}--\r\n'.encode()
+    req = urllib.request.Request(B + f'/api/spaces/{space_id}/files', method='POST', data=body, headers={'Content-Type': f'multipart/form-data; boundary={bnd}', 'Cookie': people[who], 'Origin': B})
+    try:
+        with urllib.request.urlopen(req, timeout=300) as r: return r.status
+    except urllib.error.HTTPError as e: return e.code
+_SPACES = {}
+def bench_space(who, name, files):
+    """One space per person for the whole bench, made on first use and deleted at the end."""
+    if who not in _SPACES:
+        st, sp = call('POST', '/api/spaces', {'name': name}, people[who])
+        if st != 201: raise RuntimeError(f'space not created: HTTP {st} {sp}')
+        for f in files: upload_space_file(who, sp['id'], f)
+        _SPACES[who] = sp['id']
+    return _SPACES[who]
+def c_space_answer(i):
+    sid = bench_space('sam', 'Riverside rig trips (bench)', ['riverside-interlock-trips.docx', 'rig-trip-working-notes.md'])
+    r = stream_full('/api/agents/chat/stream', {'input': {'query': 'Which sensor caused most of the rig trips, and what does the analysis recommend doing about it?'}, 'sessionId': f'b-sp-{i}-{STAMP}', 'spaceId': sid}, 'sam')
+    figs = (((r['prov'] or {}).get('checks') or {}).get('figures') or {})
+    return not r['error'] and has(r['out'], r'GS-2') and has(r['out'], r'\b29\b|twenty-nine') and not figs.get('unsupported'), (r['error'] or '') + r['out'][:80]
+def c_instructions(i):
+    st, before = call('GET', '/api/auth/me/instructions', cookie=people['lena'])
+    call('PUT', '/api/auth/me/instructions', {'text': 'Answer in German. I work in Finance at Crestview.'}, people['lena'])
+    try:
+        r = stream_full('/api/agents/' + chat_name() + '/stream', {'input': {'query': 'How do I reset my VPN certificate?'}, 'sessionId': f'b-pi-{i}-{STAMP}'}, 'lena')
+    finally:
+        call('PUT', '/api/auth/me/instructions', {'text': (before or {}).get('text', '') if isinstance(before, dict) else ''}, people['lena'])
+    german = len(re.findall(r'\b(Sie|und|die|der|das|Zertifikat|Konsole|neues?)\b', r['out']))
+    return not r['error'] and german >= 4 and has(r['out'], r'VPN'), f'german words={german} ' + (r['error'] or '') + r['out'][:70]
+def c_save_to_space(i):
+    sid = bench_space('lena', 'Board prep (bench)', [])
+    sess = f'b-sv-{i}-{STAMP}'
+    r = stream_full('/api/agents/board-brief/stream', {'input': {'query': 'Draft a one-page board brief on Q2 2026 revenue against the forecast.'}, 'sessionId': sess}, 'lena')
+    cw = [x for t, x in r['tools'] if t == 'canvas_write' and isinstance(x, dict)]
+    if not cw: return False, 'no canvas: ' + (r['error'] or '') + r['out'][:60]
+    content = cw[-1].get('content', '')
+    st, saved = call('POST', f'/api/spaces/{sid}/canvas', {'content': content, 'format': cw[-1].get('format') or 'markdown', 'name': f'brief-{i}.md', 'sessionId': sess, 'runId': (r['prov'] or {}).get('runId')}, people['lena'])
+    doc = (saved or {}).get('document', {}) if isinstance(saved, dict) else {}
+    return has(content, r'41\.2') and st == 201 and doc.get('level') == 'confidential' and doc.get('classifiedBy') == 'source', f"save={st} level={doc.get('level')}/{doc.get('classifiedBy')} " + content[:50].replace('\n', ' ')
+
 CHECKS = [
     ('runbook', 'essentials', 2, 'helpdesk answers Priya from the IT runbooks', c_runbook),
     ('handoff-refused', 'essentials', 2, 'a contractor\'s pay question is not handed to the people partner', c_handoff_refused),
@@ -267,6 +331,9 @@ CHECKS = [
     ('revoke', 'essentials', 7, 'the security lead calls revoke_access and it runs once Dana approves', c_revoke),
     ('classify-note', 'essentials', 5, 'the local classifier files the Nordvik price proposal as confidential Finance', c_classify_note),
     ('owner-grant', 'essentials', 21, 'a contractor\'s request reaches the agent\'s owner, whose grant opens the agent', c_owner_grant),
+    ('space-answer', 'essentials', 37, 'Chat in a person\'s own confidential space answers from its document, every figure found in it', c_space_answer),
+    ('instructions', 'essentials', 38, 'a person\'s own instructions shape Chat\'s answer (German for Lena)', c_instructions),
+    ('save-to-space', 'essentials', 39, 'a brief drafted on the canvas from the close package is saved to a space at confidential, set by the conversation', c_save_to_space),
     ('presenter-start', 'standard', 4, 'the presenter starts a scenario through its tool', c_presenter),
     ('playbook-asks', 'standard', 9, 'the writer asks for the playbook\'s missing date and files nothing', c_playbook_asks),
     ('playbook-signoff', 'standard', 9, 'filing the notice waits for an admin\'s approval, then files', c_playbook_signoff),
@@ -290,6 +357,7 @@ for cid, lvl, sc, desc, fn in todo:
         if not ok: print(f'            ✗ {d}')
     results.append({'id': cid, 'level': lvl, 'scenario': sc, 'passed': passed, 'runs': A.runs, 'gate': A.gate, 'verdict': verdict, 'avgSeconds': round(dt, 1), 'failures': [d for ok, d in details if not ok]})
 enforce('off')
+for who, sid in _SPACES.items(): call('DELETE', f'/api/spaces/{sid}', cookie=people[who])
 fails = [r for r in results if r['verdict'] == 'FAIL']
 print(f'\n{len(results) - len(fails)}/{len(results)} checks passed at level {A.level} in {round((time.time() - t_all) / 60, 1)} min')
 if A.json: json.dump({'level': A.level, 'runs': A.runs, 'gate': A.gate, 'results': results, 'ranAt': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())}, open(A.json, 'w'), indent=1)
