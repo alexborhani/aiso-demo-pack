@@ -345,11 +345,12 @@ def c_space_shared(i):
     st, _ = call('GET', f'/api/spaces/{sid}', cookie=people['priya'])
     r = stream_full('/api/agents/chat/stream', {'input': {'query': 'Which sensor caused most of the rig trips, and what does the analysis recommend doing about it?'}, 'sessionId': f'b-ss-{i}-{STAMP}', 'spaceId': sid}, 'dana')
     return st == 403 and not r['error'] and has(r['out'], r'GS-2') and has(r['out'], r'\b29\b|twenty-nine'), f'priya HTTP {st} ' + (r['error'] or '') + r['out'][:70]
-PLAN_FILE = '/tmp/meridian/halden-outage-checklist.md'
 def c_plan_first(i):
     # The file is read through the agent's own sandbox_file_read result, so the bench also works against a remote host.
+    # Each run names its own file: a file left by an earlier run would be patched rather than written, as it should be.
     sess = f'b-pl-{i}-{STAMP}'
-    r = stream_full('/api/agents/runbook-editor/stream', {'input': {'query': f'Turn the plant network outage runbook into a checklist for the Halden night shift, saved as {PLAN_FILE}.'}, 'sessionId': sess}, 'sam')
+    plan_file = f'/tmp/meridian/halden-outage-checklist-{i}-{STAMP}.md'
+    r = stream_full('/api/agents/runbook-editor/stream', {'input': {'query': f'Turn the plant network outage runbook into a checklist for the Halden night shift, saved as {plan_file}.'}, 'sessionId': sess}, 'sam')
     p = r['plan'] or {}
     planned = p.get('kept') is True and 'sandbox_file_write' in (p.get('withheld') or []) and not any(t in ('sandbox_file_write', 'sandbox_file_patch') for t, _ in r['tools'])
     if not planned: return False, f"plan={ {k: p.get(k) for k in ('kept', 'withheld')} } tools={[t for t, _ in r['tools']]} " + (r['error'] or '') + r['out'][:60]

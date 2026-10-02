@@ -45,6 +45,15 @@ the database; they describe the product as it was on those dates. The harness sc
 for the new scenarios exist (`space-shared`, `plan-first`, `subagents`, `elicitation`,
 `sampling-off`); their results on the Essentials, Standard and Full models are still to come.
 
+*A trial, not a measurement.* On 2026-10-02 the five new scenarios ran on a free preview model through
+OpenRouter (`stealth/space-bunny-alpha`), in a scratch copy of the pack with every agent and store
+allowed to use a cloud model. It is not one of the reference models above, and it is not a level's
+model. 7's step 5, 40, 41 and 42 passed every step in three passes; 43 passed every behaviour, and its
+script was then corrected to accept the tool names with the server's prefix that AI Stackops shows. The
+bench checks `space-shared`, `subagents`, `elicitation` and `sampling-off` passed 10 of 10;
+`plan-first` passed 2 of 10, mostly because each run reused the previous run's file (since corrected:
+each run now names its own). 327 model calls, 85% of their input read from the prompt cache.
+
 The boundaries come from measurement, not taste: on a 9B a single tool with ten actions was
 already unreliable, so nothing at Essentials has more than three one-action tools, and the
 presenter — a long prompt, many actions — waits for Standard. Standard and Full were
