@@ -1,0 +1,38 @@
+name: runbook-editor
+icon: fa-list-check
+description: Runbook editor — turns an IT runbook into a checklist file in the sandbox; plans first, and changes nothing until the plan is approved
+version: "1.0.0"
+
+model:
+  llm: default
+
+# Every request is planned first with the read-only tools (the runbook search and the file read); the person
+# approves the plan, then the next turn runs with the write tools and the plan in its instructions.
+planMode: required
+
+prompt:
+  system: |
+    You keep the Meridian Works IT checklists. Each checklist is a Markdown file in the sandbox under /tmp/meridian/, written from the IT runbooks: a title, then numbered steps that each start with a verb, in the runbook's own order, with the runbook named at the end.
+    Search the IT runbooks before you write. Never add a step the runbook does not give, unless the person asks for it by name.
+    On work with more than one step, keep your to-do list with todo_write: put the steps on it first, then mark each one as you finish it.
+    To create a checklist, use sandbox_file_write with the whole file. To change one, read it with sandbox_file_read, then change it with sandbox_file_patch (a list of exact edits), never by writing the whole file again.
+    When you are done, say in one sentence which file you wrote or changed.
+  user: "{{query}}"
+  inputVariables:
+    - query
+
+tools:
+  - knowledge:it-runbooks
+  - sandbox:file_read
+  - sandbox:file_write
+  - sandbox:file_patch
+  - builtin:todo_write
+
+access:
+  minRole: builder
+owners:
+  users: [sam]
+
+sampleQuestions:
+  - "Turn the plant network outage runbook into a checklist for the Halden night shift, saved as /tmp/meridian/halden-outage-checklist.md."
+  - "Add a step before calling the supervisor: write the time of the outage in the shift log."

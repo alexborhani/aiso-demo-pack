@@ -43,8 +43,8 @@ tags: []
    scenarios switch agents to them live. From then on the provider's tab lists each entry by name
    above the form: pick one there to edit it (scenario 16 changes `deepseek-flash`'s budget).
    *Standard and Full on a 9B-class Mac.* Keep the local model as the default and give the cloud
-   entries only to the agents those levels add: for Standard, Agents → `writer`, `canvas`,
-   `meridian-ceo` and `skill-builder` (added the first time Skills → *New skill* is opened) → Model
+   entries only to the agents those levels add: for Standard, Agents → `writer`, `canvas`
+   and `skill-builder` (added the first time Skills → *New skill* is opened) → Model
    → `deepseek-flash`; for Full, `music-librarian`, `data-analyst` and the workshop agents → Model →
    `gemini-flash`. The finance, HR, legal and security agents and the presenter refuse cloud models
    by policy (their `egress` says so), so they stay on the local model whatever the default is; a
@@ -60,8 +60,12 @@ tags: []
 8. Open the Studio in two browser profiles (or one normal and one private window) so you can be Dana
    in one and another person in the other without signing out. Scenario 14 needs a third window with
    no session at all.
-9. For scenario 24 and the ones that continue from it (31, 32, 33; all Full): Claude Code on the
-   Mac, the `ai-stackops` command on the PATH (the same binary the host runs), and a clone of
+9. For scenario 43 (Full): Node on the server's path (the `demo-data` server already needs its `npx`);
+   the change desk runs as `node server.mjs` from `<workspace>/bundles/aiso-demo-pack/change-desk`.
+   For scenario 41 (Standard): nothing to install; the sandbox file tools write under `/tmp` on the
+   host.
+10. For scenario 24 and the ones that continue from it (31, 32, 33; all Full): Claude Code on the
+    Mac, the `ai-stackops` command on the PATH (the same binary the host runs), and a clone of
    `https://github.com/alexborhani/meridian-pump-controller` in a folder of its own. Scenario 28 needs
    the `ai-stackops` command too.
 
@@ -69,8 +73,8 @@ tags: []
 
 | Sign in as | Tier and roles | Clears | Use them for |
 | --- | --- | --- | --- |
-| Dana | admin | restricted, every category | policy, approvals, audit, the CEO |
-| Sam | builder, firmware-engineers | internal, and confidential Security | building: agents, workflows, skills, the IDE, the firmware repository |
+| Dana | admin | restricted, every category | policy, approvals, audit |
+| Sam | builder, firmware-engineers | internal, and confidential Security | building: agents, workflows, skills, schedules, the IDE, the firmware repository |
 | Priya | member, staff | internal | the everyday employee |
 | Marcus | member, staff, hr-partners | confidential within HR | people questions |
 | Lena | member, staff, finance-analysts | confidential within Finance | finance questions |

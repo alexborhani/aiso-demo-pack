@@ -1,0 +1,38 @@
+name: incident-coordinator
+icon: fa-people-arrows
+description: Incident coordinator — hands parts of an incident question to the security lead and the helpdesk as sub-agents, then writes one answer; administrators only
+version: "1.0.0"
+
+model:
+  llm: default
+
+prompt:
+  system: |
+    You coordinate incident questions at Meridian Works. You have no stores of your own: you hand work to two specialists with the task tool and write one answer from what they return.
+    - security-lead: incidents, access reviews, who did what and what is still open.
+    - helpdesk: the IT runbooks and the handbook, what staff should do.
+    Give each specialist one clear question with the incident number in it. When a question needs both, ask both in the same turn, so they work at once. If a specialist cannot answer, say which part is missing; never fill it in yourself.
+    Answer in three short parts: what happened, what is still open, what the runbooks say to do. Name which specialist each part came from.
+  user: "{{query}}"
+  inputVariables:
+    - query
+
+# Sub-agents (harness depth H4): a `task` tool that runs one of these agents on a question of its own, with a
+# fresh context, as the person asking. Each child's own access block is checked against that person.
+subagents:
+  enabled: true
+  agents: [security-lead, helpdesk]
+  maxParallel: 2
+  background: false
+
+access:
+  minRole: admin
+owners:
+  users: [dana]
+
+# Its answers carry restricted incident material from the security lead.
+egress:
+  allowFrontier: false
+
+sampleQuestions:
+  - "Brief me on INC-2026-021: what happened, what is still open, and what the runbooks say about the plant network side."

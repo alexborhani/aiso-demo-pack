@@ -19,14 +19,14 @@ same at every level, so a story told at Essentials reads the same at Full.
 
 | Level | Model it was measured on | What it adds | Scenarios |
 | --- | --- | --- | --- |
-| **Essentials** | Qwen 3.5 9B (4-bit) on MLX Serve, 32K context, on a 24 GB Mac | the nine Meridian agents with one to three tools each, the nine stores the scripts use, the labelled files, the files for a person's own space | 1–8, 13, 14, 16, 18, 19, 21, 22 (part one), 25 (steps 1–6), 37–39; 35 (needs an unsigned pack repository, not built; not tested) |
-| **Standard** | DeepSeek V4.1 Flash through OpenRouter for the writer, canvas, CEO and helpdesk, standing in for a 27B-class local model | the presenter, the writer with its customer-notice playbook, canvas, the agent CEO and its organisation, the two workflows, the evals, the demo scripts | 0, 9–12, 15, 17, 23, 27; 34 (needs Snowflake or Databricks, not tested); 36 (needs a Microsoft 365 tenant, not tested) |
-| **Full** | Gemini 3.7 Flash through OpenRouter for the librarian, the data analyst and Claude Code, standing in for a 70B-class model or a frontier provider | the sample workshop agents, the sample stores, the demo-data and demo-sql MCP servers and the column catalog, the firmware docs and the safety review skill | 20, 22 (part two), 24, 26, 28–30, 31–33 (with Claude Code, continuing from 24; 32 also needs a pack with a pre-send hook, not tested), and the builder workshop |
+| **Essentials** | Qwen 3.5 9B (4-bit) on MLX Serve, 32K context, on a 24 GB Mac | the nine Meridian agents with one to three tools each, the nine stores the scripts use, the labelled files, the files for a person's own space | 1–8, 12, 13, 14, 16, 18, 19, 21, 22 (part one), 25 (steps 1–6), 37–40; 35 (needs an unsigned pack repository, not built; not tested) |
+| **Standard** | DeepSeek V4.1 Flash through OpenRouter for the writer, canvas and helpdesk, standing in for a 27B-class local model | the presenter, the writer with its customer-notice playbook, canvas, the two workflows, the evals, the demo scripts, the runbook editor (plan mode) and the incident coordinator (sub-agents) | 0, 9–11, 15, 17, 23, 27, 41, 42; 34 (needs Snowflake or Databricks, not tested); 36 (needs a Microsoft 365 tenant, not tested) |
+| **Full** | Gemini 3.7 Flash through OpenRouter for the librarian, the data analyst and Claude Code, standing in for a 70B-class model or a frontier provider | the sample workshop agents, the sample stores, the demo-data and demo-sql MCP servers and the column catalog, the change desk MCP server and its clerk, the firmware docs and the safety review skill | 20, 22 (part two), 24, 26, 28–30, 43, 31–33 (with Claude Code, continuing from 24; 32 also needs a pack with a pre-send hook, not tested), and the builder workshop |
 
 **Measured on 2026-09-29/30.** Essentials: every scenario in the row ran end to end three times
 in a row on the 9B with every step passing, and `scripts/bench.py --level essentials` passed all 18
 checks 10 of 10. Scenario 25's step 7 did not work on the 9B. Standard, with the agents above on
-DeepSeek: 0, 9, 10, 11, 12, 15, 17 and 27 passed end to end; 23 built, drafted and saved the skill,
+DeepSeek: 0, 9, 10, 11, 15, 17 and 27 passed end to end; 23 built, drafted and saved the skill,
 and its eval gate held because the evals ran on the host's 9B default (see the note in 23). On the
 9B alone, 0, 10 and 11 also passed; the rest of Standard did not. Full, on Gemini: 20, 24, 28, 30,
 31 and 33 passed end to end; 22 part two passed but for the clarifying question, which the local
@@ -39,9 +39,33 @@ row on the 9B with every step passing (the pack reinstalled before each pass), a
 checks (`space-answer`, `instructions`, `save-to-space`) passed 10 of 10 each. The other checks and
 scenarios were not re-run for 1.14.0. Spaces at Standard and Full: measured: pending.
 
+**Measured on 2026-10-01 (1.15.0).** Scenario 12 (*Work on a schedule*) ran end to end three times in a
+row on the 9B with every step passing (one install, the schedule deleted at the end of each pass), and
+the new bench check `schedule-run` passed 10 of 10. Nothing else was re-run for 1.15.0: the release
+removes the organisation and its two CEO agents and adds no other agent, store or step.
+
+**1.16.0 (2026-10-02): measured: pending.** This release adds scenarios for the harness work in AI
+Stackops (main 222c921): 7's step 5 (an approval card that outlives a restart), 40 (a shared space),
+41 (plan mode, a to-do list, sandbox files and a rewind), 42 (sub-agents) and 43 (an MCP server that
+asks the person, and asks the host's model). None of them, and none of the earlier scenarios, has been
+run on the reference models for this release. Every result above was measured before the answer
+checks moved into turn hooks, before context was counted in tokens and before conversations moved into
+the database; they describe the product as it was on those dates. The harness scripts and bench checks
+for the new scenarios exist (`space-shared`, `plan-first`, `subagents`, `elicitation`,
+`sampling-off`); their results on the Essentials, Standard and Full models are still to come.
+
+*A trial, not a measurement.* On 2026-10-02 the five new scenarios ran on a free preview model through
+OpenRouter (`stealth/space-bunny-alpha`), in a scratch copy of the pack with every agent and store
+allowed to use a cloud model. It is not one of the reference models above, and it is not a level's
+model. 7's step 5, 40, 41 and 42 passed every step in three passes; 43 passed every behaviour, and its
+script was then corrected to accept the tool names with the server's prefix that AI Stackops shows. The
+bench checks `space-shared`, `subagents`, `elicitation` and `sampling-off` passed 10 of 10;
+`plan-first` passed 2 of 10, mostly because each run reused the previous run's file (since corrected:
+each run now names its own). 327 model calls, 85% of their input read from the prompt cache.
+
 The boundaries come from measurement, not taste: on a 9B a single tool with ten actions was
 already unreliable, so nothing at Essentials has more than three one-action tools, and the
-presenter and the CEO — long prompts, many actions — wait for Standard. Standard and Full were
+presenter — a long prompt, many actions — waits for Standard. Standard and Full were
 measured on small cloud models; no 27B or 70B local model was measured for this release, so treat
 those rows as the size the scenarios need, not a promise about a particular local model.
 `scripts/bench.py` runs every scripted call of a level against the model your host serves and
@@ -89,8 +113,8 @@ says, check by check, whether that level operates on it.
    scenarios switch agents to them live. From then on the provider's tab lists each entry by name
    above the form: pick one there to edit it (scenario 16 changes `deepseek-flash`'s budget).
    *Standard and Full on a 9B-class Mac.* Keep the local model as the default and give the cloud
-   entries only to the agents those levels add: for Standard, Agents → `writer`, `canvas`,
-   `meridian-ceo` and `skill-builder` (added the first time Skills → *New skill* is opened) → Model
+   entries only to the agents those levels add: for Standard, Agents → `writer`, `canvas`
+   and `skill-builder` (added the first time Skills → *New skill* is opened) → Model
    → `deepseek-flash`; for Full, `music-librarian`, `data-analyst` and the workshop agents → Model →
    `gemini-flash`. The finance, HR, legal and security agents and the presenter refuse cloud models
    by policy (their `egress` says so), so they stay on the local model whatever the default is; a
@@ -106,8 +130,12 @@ says, check by check, whether that level operates on it.
 8. Open the Studio in two browser profiles (or one normal and one private window) so you can be Dana
    in one and another person in the other without signing out. Scenario 14 needs a third window with
    no session at all.
-9. For scenario 24 and the ones that continue from it (31, 32, 33; all Full): Claude Code on the
-   Mac, the `ai-stackops` command on the PATH (the same binary the host runs), and a clone of
+9. For scenario 43 (Full): Node on the server's path (the `demo-data` server already needs its `npx`);
+   the change desk runs as `node server.mjs` from `<workspace>/bundles/aiso-demo-pack/change-desk`.
+   For scenario 41 (Standard): nothing to install; the sandbox file tools write under `/tmp` on the
+   host.
+10. For scenario 24 and the ones that continue from it (31, 32, 33; all Full): Claude Code on the
+    Mac, the `ai-stackops` command on the PATH (the same binary the host runs), and a clone of
    `https://github.com/alexborhani/meridian-pump-controller` in a folder of its own. Scenario 28 needs
    the `ai-stackops` command too.
 
@@ -115,8 +143,8 @@ says, check by check, whether that level operates on it.
 
 | Sign in as | Tier and roles | Clears | Use them for |
 | --- | --- | --- | --- |
-| Dana | admin | restricted, every category | policy, approvals, audit, the CEO |
-| Sam | builder, firmware-engineers | internal, and confidential Security | building: agents, workflows, skills, the IDE, the firmware repository |
+| Dana | admin | restricted, every category | policy, approvals, audit |
+| Sam | builder, firmware-engineers | internal, and confidential Security | building: agents, workflows, skills, schedules, the IDE, the firmware repository |
 | Priya | member, staff | internal | the everyday employee |
 | Marcus | member, staff, hr-partners | confidential within HR | people questions |
 | Lena | member, staff, finance-analysts | confidential within Finance | finance questions |
@@ -375,6 +403,15 @@ record, the access review and the revoke call together exceed 4096 tokens.
 4. Admin → Audit, filter `tools.approval`: requested, granted, with the approver as actor and the
    arguments hash. Point out `tools.fragment.yaml` in the pack: three lines made this tool
    approval-gated for every agent that has it.
+5. Optional, the card outlives a restart (it restarts the host, so do it last; measured: pending). Ask
+   step 2's question again in a new chat and leave the card open. Quit AI Stackops and start it again.
+   The chat stops with the server; the card does not. Approvals still lists it: *Approve*. Within
+   about two minutes (the old process's hold on the run lapses after 90 seconds, then a sweep picks it
+   up) the run carries on as Dana: the function runs once, and the agent's answer appears in that
+   conversation, marked *Finished after your approval, while the server restarted.* Admin → Audit,
+   `run.resumed`: Dana, the agent, the checkpoint and the approval id. Say: a run waiting on a person
+   is kept in the database, sealed, so an upgrade or a crash at the wrong moment loses nothing and
+   never runs the call twice.
 
 **Land:** agents can be given real actions because the action waits for a person, the arguments cannot
 change between approval and execution, and both halves are on the record.
@@ -477,34 +514,39 @@ arrived.*
 3. Read the brief aloud: what happened, what was done, what is open.
 
 **Land:** this is how the platform composes specialists into a process with a deterministic spine.
-The agents are the same ones people chat with; the workflow is the management layer.
+The agents are the same ones people chat with; the workflow is the management layer. Scenario 42 puts
+the same two specialists under an agent that decides for itself whom to ask: show both when someone
+asks which to build.
 
 ---
 
-## 12. An organisation run by an agent CEO
-**Level:** Standard.
+## 12. Work on a schedule
+**Level:** Essentials.
 
 
-*Tickets, a team of agents, and a CEO that triages and delegates on a heartbeat.*
+*An agent that runs on its own, as the person who set it up, and stops when that person goes.*
 
-**You are** Dana. Organisations → Meridian Works. *Needs room:* the CEO's prompt carries the whole
-organisation (chart, open tickets, ten organisation tools), about 4,000 tokens before it says a word,
-so this scenario needs the 16K engine; at 4096 the heartbeat fails with a context-length error, which
-the CEO runs list shows as a failed run.
+**You are** Sam in one window, Dana in the other.
 
-1. Open the board: eight tickets across backlog, to do, in progress, in review, blocked, done, each
-   assigned to an agent: the helpdesk, the writer, the security lead.
-2. Open a ticket: description, priority, activity. Create a new one: **"Riverside test rig guard
-   interlock trips twice a shift"**, priority high, unassigned.
-3. Press *Wake CEO* (the CEO's manual heartbeat). Watch Activity: the `meridian-ceo` agent reads
-   the org context, the open tickets and the team, decides who should own the new ticket, updates
-   statuses, and writes its reasoning as comments. The CEO run appears under CEO runs with its
-   token count and cost.
-4. Show the heartbeat schedule (every 30 minutes by default, off until an admin enables it) and the
-   `org-ceo` skill that shapes how the CEO triages.
+1. As Sam, Agents → `helpdesk` → *Schedule…* in the chat header (or Activity → Schedules → *New
+   schedule*). Name **"Weekly VPN digest"**; *What to ask it*: **"Write this week's helpdesk digest:
+   how to reset a VPN certificate, in three bullet points from the IT runbooks."**; *Every week*,
+   Monday, 09:00, your time zone. *Create schedule*. Activity → Schedules lists it: *Mondays at
+   09:00*, when it runs next, *Active*.
+2. *Run now* (the bolt). Activity → Runs shows a `helpdesk` run under Sam. When it ends the row says
+   *Last: Completed*; open the row for its run history, and *Open in Activity* for the digest, built
+   from the VPN runbook.
+3. As Dana, Admin → People → Users → Sam → disable. Activity → Schedules → *Everyone's* → Sam's
+   schedule → *Run now*. The run is *Skipped*: its owner is disabled. It never runs as Dana, and
+   never as the system. Enable Sam again.
+4. As Dana, Admin → Audit, filter `schedules.`: `schedules.create` and `schedules.run_now` by Sam,
+   `schedules.run_now` by Dana, and `schedules.run` as Sam twice: the run that completed, then the
+   skip with its reason.
+5. As Sam, delete the schedule (it asks first); its run history goes with it.
 
-**Land:** the organisation object is where agents stop being chat windows and become a team with a
-backlog, an owner and a cadence, with every decision written down.
+**Land:** a timer here is not a service account. A schedule acts as the person who saved it, with
+their access, limits and approvals, checked again every time it fires, and every change and every
+firing is in the audit log.
 
 ---
 
@@ -580,6 +622,12 @@ default.* Stronger with a cloud key on the host (Anthropic, or OpenRouter — `p
    budget and pricing as for any cloud entry. Say: the model runs in the organisation's own tenant
    under its own agreement; with managed identity there is no key to leak. The steps that follow
    read the same with the Azure entry.
+
+   *Also possible, not tested here* (no account on the demo Mac): an entry on **Amazon Bedrock**
+   (`provider: bedrock`, a `region`; a Bedrock API key or the host's AWS credentials), on **Google
+   Vertex AI** (`provider: vertex`, `project` and `region`; a service-account key held in the secret
+   store), or on OpenAI's **Responses API** (`api: responses` on an OpenAI or Azure entry). Each takes
+   the same access, ceiling, budget and pricing as the entry above.
 2. Agents → *New agent* `board-analyst`: model `cloud`, tool `knowledge:handbook`, prompt "You are a
    concise business analyst." Save.
 3. As Jordan, `board-analyst`: **"Summarise our values in one line."** Refused before anything is
@@ -723,6 +771,10 @@ security review or an auditor asks for, produced by the platform.*
    packs, the limits, the usage totals, the development projects and the audit rows. Open it and
    show the signature block.
 5. Admin → Estate → *Estate report*: nodes and active people, signed the same way.
+6. Mention, don't show: Admin → Settings → **Tracing** sends runs, model calls and tool calls as
+   OpenTelemetry spans to the organisation's own collector. It is off until an admin names one, and the
+   spans carry no prompts or answers unless *Capture content* is turned on, which is itself audited.
+   The demo Mac has no collector, so this was not run.
 
 **Land:** nothing here was assembled by hand for the meeting. The evidence a control framework asks
 for is a download, and it is tamper-evident.
@@ -1542,7 +1594,8 @@ key, because the refusal comes before anything is dialled. Measured on Qwen 3.5 
 
 
 *A person keeps their own documents in one place and chats with them. The platform decides which models
-may read them, how much the space may hold, and that nobody else sees any of it.*
+may read them and how much the space may hold. Nobody else sees any of it unless its owner shares it
+(scenario 40).*
 
 **You are** Sam in one window, Dana in the other. Sam uploads three files from the pack's `space-files`
 folder (`<workspace>/bundles/aiso-demo-pack/space-files/`): a Word file carrying the Purview label
@@ -1571,11 +1624,14 @@ folder (`<workspace>/bundles/aiso-demo-pack/space-files/`): a Word file carrying
    never a name or a word of the space.
 6. As Dana, **Spaces** lists only her own. Admin → Data → **Spaces**: how many spaces, people,
    documents and megabytes, nothing more. Admin → Audit, `space.upload`: ids, levels and sizes, and the
-   refused upload with its reason. Say: the one route by which an admin reaches a space is the
-   subject-access export of the whole account (scenario 19), and that export is on the record.
+   refused upload with its reason. Say: an admin reaches a space only if its owner shares it with them
+   (scenario 40), or through the subject-access export of the whole account (scenario 19), and that
+   export is on the record.
 
 **Land:** people get a private place to work with their own documents, and the organisation still
-decides which models read them, how much goes in, and that none of it reaches anyone else.
+decides which models read them and how much goes in. Sharing is the owner's choice, made by name: it is
+on by default (Admin → Data → **Spaces**: *Allow sharing spaces*, up to 25 people per space), and
+while classification is enforced a person not cleared for the space's level cannot open it.
 
 ---
 
@@ -1636,6 +1692,149 @@ and every document knows where it came from.
 
 ---
 
+## 40. A space for the team
+**Level:** Essentials: Chat on the local model, no new agent. Measured: pending (new in 1.16.0); its bench check is
+`space-shared`.
+
+
+*A person shares their space with named colleagues. Each one still has to be cleared for what is in it,
+and nobody reads anyone else's conversations.*
+
+**You are** Sam in one window, Dana in the other; Priya for step 3. Sam's `Riverside rig trips` space from
+scenario 37 (the Word file and his notes; confidential), or make it again.
+
+1. As Dana, Admin → Policy → Classification → Enforcement: **Enforce** (as in scenario 4). This step
+   matters: the clearance check on a shared space is the same one every store gets, so with enforcement
+   *Off*, as the pack ships, a person below the space's level is let in and reads its documents (with
+   *Monitor*, let in and recorded). Sharing itself has nothing to switch on: Admin → Data → **Spaces**
+   shows *Allow sharing spaces* on by default, up to 25 people per space.
+2. As Sam, Spaces → `Riverside rig trips` → **Share**. Username **dana**, *As* **Member** → Share. Then
+   **priya.nair@meridianworks.example**, Member → Share. The dialog takes a username or an email exactly
+   (there is no directory to search) and says at once: *They are not cleared for confidential, so they
+   cannot open it until their clearance changes or the level comes down.* Priya's row reads *Not cleared
+   for confidential: cannot open it*. (The dialog says this whatever the enforcement mode; it holds
+   only under *Enforce*, which is why step 1 comes first.)
+3. As Priya, Spaces → **Shared with you**: *sam's · you can read · above your clearance*. It doesn't open,
+   and a chat in it is refused: *This space holds documents at confidential, above what you are cleared
+   for, so you cannot open it or chat in it.* Admin → Audit, `classification.refused`: Priya, the space
+   id, the level. Say: sharing gives a person a place in the space, never a level they do not have.
+4. As Dana, Spaces → Shared with you → the space: the two documents, read-only. **Chat in this space**,
+   **"Which sensor caused most of the rig trips, and what does the analysis recommend doing about
+   it?"** Sensor GS-2, 29 of the 41 trips, from Sam's Word file. Her conversation is hers: Sam's list of
+   conversations in the space doesn't show it, and hers doesn't show his.
+5. As Dana, try to write the space's instructions: refused, *This space was shared with you to read and
+   chat in.* As Sam, Share → Dana's row → **Editor**. Dana writes the instructions: **"Answer for the
+   Riverside maintenance team: name the sensor tag and the trip count."** An editor can also upload and
+   replace documents; one that would raise the level above someone it is shared with asks first and
+   says how many people would lose access. What she adds is Sam's and counts toward his limits.
+6. As Sam, **Remove** Priya. As Dana, **Leave**: the space is gone from her list, and her conversation in
+   it stays hers but can't go on. Admin → Audit, `space.share` and `space.unshare`: the space id, the
+   member's id, the role and whether it was added, changed or left; never a name, a file name or a word
+   of the space.
+
+**Land:** a space can be a team's working set without becoming a way around the policy. The owner
+chooses the people by name, the clearance check still runs for each of them, and every share and
+every refusal is on the record.
+
+---
+
+## 41. Plan first, then the change
+**Level:** Standard: the `runbook-editor` agent, five tools (the runbook search, three sandbox file
+tools and a to-do list). Measured: pending (new in 1.16.0); its bench check is `plan-first`.
+
+
+*An agent that can change files shows its plan first, works through a to-do list once the plan is
+approved, and its changes can be taken back by rewinding the conversation.*
+
+**You are** Sam. The sandbox file tools work only under `/tmp` on the host; this scenario writes
+`/tmp/meridian/halden-outage-checklist.md`.
+
+1. Agents → `runbook-editor`. The header says **Plans first**: its definition has `planMode: required`.
+   Ask: **"Turn the plant network outage runbook into a checklist for the Halden night shift, saved as
+   /tmp/meridian/halden-outage-checklist.md."** The agent searches the runbooks and replies with a plan:
+   numbered steps, which tool each uses, what could go wrong. Nothing is written yet: during the planning
+   turn the tools that change things (`sandbox_file_write`, `sandbox_file_patch`) are withheld. The card
+   under the reply reads *A plan, not yet carried out*.
+2. **Approve and run.** The next turn runs with every tool and the plan in the agent's instructions. Its
+   to-do list shows in the reply and ticks off as it goes; it writes the file: call the plant
+   supervisor first, check the fibre link and the floor cabinet UPS. Admin → Audit, `plan.approved`.
+3. **"Add a step before calling the supervisor: write the time of the outage in the shift log."** It plans
+   again (this agent plans every request); approve. It reads the file and changes it with
+   `sandbox_file_patch`, a list of exact edits that is applied whole or not at all.
+4. Rewind the conversation to before step 3. The Studio has no Rewind control yet (measured: pending);
+   the route is `POST /api/transcripts/<conversation id>/rewind` with `{"at": <seq>}`, the last message to
+   keep. The conversation loses step 3's turns, the model forgets them, and the file is put back as step
+   2 left it: before the patch, AI Stackops had kept what the file held. Admin → Audit, `transcript.rewind`
+   and `sandbox.restore`: the paths and counts, never the content.
+
+**Land:** an agent that changes things can be made to show its working first, and what it changed can be
+undone with the conversation. It edits only inside the sandbox, never the host's own files.
+
+---
+
+## 42. Sub-agents, decided by the model
+**Level:** Standard: the `incident-coordinator` agent, administrators only, with `security-lead` and
+`helpdesk` as its sub-agents. Measured: pending (new in 1.16.0); its bench check is `subagents`.
+
+
+*The same two specialists as scenario 11, but an agent decides whom to ask, and each one works with a
+fresh context of its own.*
+
+**You are** Dana; Sam in the second window.
+
+1. Agents → `incident-coordinator` → its definition: no stores of its own, and `subagents: { enabled:
+   true, agents: [security-lead, helpdesk], maxParallel: 2 }`. That gives it one tool, `task`.
+2. Ask: **"Brief me on INC-2026-021: what happened, what is still open, and what the runbooks say about
+   the plant network side."** Two `task` calls in the reply, one to each specialist, running at once. Each
+   child starts with only its question, uses its own tools, and has its own answer checked. The
+   coordinator writes one brief and names where each part came from.
+3. Admin → Audit, `agents.task`: one row per child, with Dana as the actor, the child agent as the
+   target, the parent, the depth and how long it took. A child is checked against Dana's access as if
+   she had asked it herself, and never gets more than she has.
+4. As Sam (a builder): `incident-coordinator` is not in his list; through the API it answers *open to
+   the admin tier and above*.
+5. Put it beside scenario 11. The workflow always runs both branches and its merge guard fails the run if
+   one is missing. The coordinator decides for itself whom to ask, and says so when a specialist can't
+   answer. Say: a workflow when the steps are known, sub-agents when the question decides them.
+
+**Land:** an agent can split a question among specialists the way a person would, while every child run
+stays inside the asker's access and is on the record.
+
+---
+
+## 43. An outside tool that asks first
+**Level:** Full: the `change-desk` MCP server (a small Node script in the pack, no dependencies, nothing
+on the network) and the `change-clerk` agent. **Needs:** Node on the server's path, as `demo-data`
+needs `npx`. Measured: pending (new in 1.16.0); its bench checks are `elicitation` and `sampling-off`.
+
+
+*An outside system can stop and ask the person something while it works, and can ask for a model's help,
+but only if an admin allowed it.*
+
+**You are** Sam; Dana for steps 4 and 5.
+
+1. As Sam, `change-clerk`: **"File a change on MW-300 Halden line 2: set the interlock timer back to
+   400 ms, because the 250 ms setting caused nuisance trips."** The clerk calls the desk's
+   `request_change`, and the desk asks Sam directly: a card in the reply with a box to tick (*File this
+   change request*) and a change window. Only Sam sees it, and it waits five minutes.
+2. Tick the box, pick *Saturday 06:00*, submit. The desk files it and the clerk gives the ticket number,
+   CHG-2026-0521 or the next one. Ask again and **Decline** the card: nothing is filed, and the clerk
+   says so. Say: what Sam typed went to that tool only and is not kept.
+3. **"Summarise the change log of MW-300 Halden line 2."** The desk asks AI Stackops for a model to write
+   the summary, and is refused: the pack ships the server with `sampling: { allow: false }`. The clerk
+   returns the log as it is, four tickets from CHG-2026-0412 to CHG-2026-0503.
+4. As Dana, IDE tab → `mcp.json` → the `change-desk` entry: `"sampling": { "allow": true, "maxTokens": 512 }`.
+   Save (it needs permission to manage MCP servers). As Sam, ask for the summary again: this time it is
+   written, by the default chat model, as Sam: his access, his budget, his clearance.
+5. Admin → Audit: `mcp.elicitation` (asked, with the field names), `mcp.elicitation.answered` (the answer,
+   never the values), `mcp.sampling` denied with its reason, then `mcp.sampling` success with the model
+   entry and the token counts, never the text. Set `allow` back to `false`.
+
+**Land:** outside tools can hold a real conversation with the person and borrow a model, and each of those
+is something the organisation switched on, answered by the right person, and recorded.
+
+---
+
 ## The 60-minute tour
 
 | Minute | Scenario | Why here |
@@ -1653,19 +1852,22 @@ and every document knows where it came from.
 On Standard or Full, swap scenario 21 for 9 (the playbook with its sign-off). Keep 5, 10, 12 and 23
 ready as follow-ups for the technical people in the room, 24 and 31–33 for engineering leaders, 25–27
 for whoever owns data classification, 26, 29 and 30 for the data team, 28 for whoever signs off a
-model change, 14 for a commercial audience, 20 for whoever runs more than one site, 38 and 39 after 37
-for anyone asking what people do with it day to day, and 19 for anyone with a privacy remit.
+model change, 14 for a commercial audience, 20 for whoever runs more than one site, 38, 39 and 40 after 37
+for anyone asking what people do with it day to day, 19 for anyone with a privacy remit, and 7's
+restart step, 41, 42 and 43 for whoever compares agent frameworks.
 
 ## Reset between runs
 
 - Scenario 1: the classifier model stays set; later scenarios (5, 26) use it. While it is set, a
   document indexed or re-indexed waits for it (pending) before anyone below the top level sees it.
 - Scenario 4: set enforcement back to *Off* (Admin → Policy → Classification).
+- Scenario 7: a revoke approved in step 5 is recorded again; nothing to undo (the function changes nothing).
 - Scenario 5: the classified notes stay classified; to repeat, uninstall and reinstall the pack, or
   reindex `site-notes` after deleting its rows under Sources (classify each back to internal, then
   approve the lowerings).
 - Scenario 9: delete the filed notice from `scratchpad` (Sources) or leave it as a talking point.
-- Scenario 12: the CEO's ticket changes stay; add a fresh ticket next time.
+- Scenario 12: as Sam, delete *Weekly VPN digest* if a run stopped before step 5, and enable Sam if
+  step 3 left him disabled.
 - Scenario 13: Priya → Account → *Forget*.
 - Scenario 15: leave the entry; delete `board-analyst` if you prefer a clean agent list. After
   step 8, restart the host without `EGRESS_ALLOW_FRONTIER=false`.
@@ -1704,6 +1906,12 @@ for anyone asking what people do with it day to day, and 19 for anyone with a pr
 - Scenario 38: Lena and Priya → Account → *Personal instructions* → *Delete* (or save an empty text).
 - Scenario 39: Lena → Spaces → `Board prep` → *Delete*, unless scenario 19 comes next (it deletes it
   under the hold). Delete it while no hold is active, or it is only hidden until the hold is cleared.
+- Scenario 40: enforcement back to *Off*; Sam removes anyone still in the space's Share list (or deletes
+  the space, as for 37). Dana's and Priya's conversations in it go when it is deleted.
+- Scenario 41: delete `/tmp/meridian/halden-outage-checklist.md` on the host; the agent has no delete
+  tool. A plan left unapproved is dropped with its conversation.
+- Scenario 43: `mcp.json` → `change-desk` → `"sampling": { "allow": false, … }` if step 5 did not get
+  there. Filed change requests live only in the desk's memory and go when the server restarts.
 
-A full reset is Packs → uninstall → install: accounts (with their spaces and instructions), stores, policy
-and the organisation return to the starting state, with new passwords.
+A full reset is Packs → uninstall → install: accounts (with their spaces, instructions and schedules), stores and policy
+return to the starting state, with new passwords.

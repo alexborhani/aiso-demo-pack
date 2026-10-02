@@ -254,7 +254,7 @@ SPACE_FILES = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'da
 def stream_full(path, body, who, timeout=900):
     """A Studio chat stream (an agent's or a model's, in a space or not): the text, the tool calls, the answer record."""
     req = urllib.request.Request(B + path, method='POST', data=json.dumps(body).encode(), headers={'Content-Type': 'application/json', 'Cookie': people[who], 'Origin': B})
-    res = {'out': '', 'tools': [], 'prov': None, 'error': None}
+    res = {'out': '', 'tools': [], 'prov': None, 'error': None, 'plan': None}
     try:
         with urllib.request.urlopen(req, timeout=timeout) as r:
             for line in r:
@@ -266,7 +266,8 @@ def stream_full(path, body, who, timeout=900):
                 if t == 'content': res['out'] += e.get('content') or ''
                 elif t == 'tool_start': res['tools'].append((e.get('tool'), e.get('input') or e.get('args')))
                 elif t == 'provenance': res['prov'] = e
-                elif t == 'error': res['error'] = e.get('error') or e.get('message')
+                elif t == 'plan': res['plan'] = e
+                elif t == 'error' or ('error' in e and not t): res['error'] = e.get('error') or e.get('message')
     except urllib.error.HTTPError as e:
         res['error'] = f'HTTP {e.code} {e.read().decode(errors="replace")[:120]}'
     return res
@@ -312,6 +313,75 @@ def c_save_to_space(i):
     doc = (saved or {}).get('document', {}) if isinstance(saved, dict) else {}
     return has(content, r'41\.2') and st == 201 and doc.get('level') == 'confidential' and doc.get('classifiedBy') == 'source', f"save={st} level={doc.get('level')}/{doc.get('classifiedBy')} " + content[:50].replace('\n', ' ')
 
+def c_schedule_run(i):
+    body = {'name': f'Weekly VPN digest (bench {i})', 'agentName': 'helpdesk', 'cron': '0 9 * * 1', 'timezone': 'Europe/London',
+            'prompt': "Write this week's helpdesk digest: how to reset a VPN certificate, in three bullet points from the IT runbooks."}
+    st, s = call('POST', '/api/schedules', body, people['sam'])
+    if st != 201: return False, f'create HTTP {st} {s}'
+    try:
+        st, r = call('POST', f"/api/schedules/{s['id']}/run-now", {}, people['sam'])
+        run = (r or {}).get('run', {}) if isinstance(r, dict) else {}
+        for _ in range(200):
+            st, rs = call('GET', f"/api/schedules/{s['id']}/runs", cookie=people['sam'])
+            run = next((x for x in (rs.get('runs', []) if isinstance(rs, dict) else []) if x['id'] == run.get('id')), run)
+            if run.get('status') not in ('queued', 'running'): break
+            time.sleep(3)
+        out = ''
+        if run.get('taskId'):
+            st, task = call('GET', f"/api/tasks/{run['taskId']}", cookie=people['sam'])
+            res = task.get('result') if isinstance(task, dict) else None
+            out = str(res.get('output', '') if isinstance(res, dict) else res or '')
+        rows = audit_since('schedules.run', 'sam', run.get('startedAt', '9'))
+        return run.get('status') == 'completed' and has(out, r'vpn', r'certificat') and any(x.get('targetId') == s['id'] and x['outcome'] == 'success' for x in rows), f"run={run.get('status')} {run.get('reason') or ''} " + out[:70].replace('\n', ' ')
+    finally:
+        call('DELETE', f"/api/schedules/{s['id']}", cookie=people['sam'])
+
+# ── Harness depth (1.16.0): a shared space (40), plan mode (41), sub-agents (42), a tool that asks first (43) ──
+def c_space_shared(i):
+    sid = bench_space('sam', 'Riverside rig trips (bench)', ['riverside-interlock-trips.docx', 'rig-trip-working-notes.md'])
+    call('POST', f'/api/spaces/{sid}/members', {'user': 'dana', 'role': 'member'}, people['sam'])
+    call('POST', f'/api/spaces/{sid}/members', {'user': 'priya', 'role': 'member'}, people['sam'])
+    enforce('enforce')
+    st, _ = call('GET', f'/api/spaces/{sid}', cookie=people['priya'])
+    r = stream_full('/api/agents/chat/stream', {'input': {'query': 'Which sensor caused most of the rig trips, and what does the analysis recommend doing about it?'}, 'sessionId': f'b-ss-{i}-{STAMP}', 'spaceId': sid}, 'dana')
+    return st == 403 and not r['error'] and has(r['out'], r'GS-2') and has(r['out'], r'\b29\b|twenty-nine'), f'priya HTTP {st} ' + (r['error'] or '') + r['out'][:70]
+def c_plan_first(i):
+    # The file is read through the agent's own sandbox_file_read result, so the bench also works against a remote host.
+    # Each run names its own file: a file left by an earlier run would be patched rather than written, as it should be.
+    sess = f'b-pl-{i}-{STAMP}'
+    plan_file = f'/tmp/meridian/halden-outage-checklist-{i}-{STAMP}.md'
+    r = stream_full('/api/agents/runbook-editor/stream', {'input': {'query': f'Turn the plant network outage runbook into a checklist for the Halden night shift, saved as {plan_file}.'}, 'sessionId': sess}, 'sam')
+    p = r['plan'] or {}
+    planned = p.get('kept') is True and 'sandbox_file_write' in (p.get('withheld') or []) and not any(t in ('sandbox_file_write', 'sandbox_file_patch') for t, _ in r['tools'])
+    if not planned: return False, f"plan={ {k: p.get(k) for k in ('kept', 'withheld')} } tools={[t for t, _ in r['tools']]} " + (r['error'] or '') + r['out'][:60]
+    r2 = stream_full('/api/agents/runbook-editor/stream', {'input': {'query': 'Go ahead with the plan.'}, 'sessionId': sess, 'plan': 'approve'}, 'sam')
+    wrote = [x for t, x in r2['tools'] if t == 'sandbox_file_write' and isinstance(x, dict)]
+    body = (wrote[-1].get('content') or '') if wrote else ''
+    return not r2['error'] and bool(wrote) and has(body, r'supervisor') and has(body, r'UPS'), f"tools={[t for t, _ in r2['tools']]} " + (r2['error'] or '') + body[:60].replace('\n', ' ')
+def c_subagents(i):
+    r = stream_full('/api/agents/incident-coordinator/stream', {'input': {'query': 'Brief me on INC-2026-021: what happened, what is still open, and what the runbooks say about the plant network side.'}, 'sessionId': f'b-sa-{i}-{STAMP}'}, 'dana')
+    agents = {(x or {}).get('agent') for t, x in r['tools'] if t == 'task' and isinstance(x, dict)}
+    return not r['error'] and {'security-lead', 'helpdesk'} <= agents and has(r['out'], r'INC-2026-021|USB|4471'), f'children={sorted(a for a in agents if a)} ' + (r['error'] or '') + r['out'][:60]
+def c_elicitation(i):
+    import threading
+    seen = {}; done = threading.Event()
+    def answer():
+        while not done.is_set():
+            st, q = call('GET', '/api/elicitations', cookie=people['sam'])
+            for x in (q.get('elicitations', []) if isinstance(q, dict) else []):
+                st2, _ = call('POST', f"/api/elicitations/{x['id']}", {'action': 'accept', 'content': {'confirm': True, 'window': 'Saturday 06:00'}}, people['sam']); seen['answered'] = st2; return
+            done.wait(2)
+    th = threading.Thread(target=answer, daemon=True); th.start()
+    r = stream_full('/api/agents/change-clerk/stream', {'input': {'query': 'File a change on MW-300 Halden line 2: set the interlock timer back to 400 ms, because the 250 ms setting caused nuisance trips.'}, 'sessionId': f'b-el-{i}-{STAMP}'}, 'sam')
+    done.set(); th.join(timeout=10)
+    return not r['error'] and seen.get('answered') == 200 and has(r['out'], r'CHG-2026-0\d{3}'), f"card={'answered' if seen.get('answered') == 200 else 'none'} " + (r['error'] or '') + r['out'][:60]
+def c_sampling_off(i):
+    t0 = time.strftime('%Y-%m-%dT%H:%M:%S', time.gmtime())
+    r = stream_full('/api/agents/change-clerk/stream', {'input': {'query': 'Summarise the change log of MW-300 Halden line 2.'}, 'sessionId': f'b-so-{i}-{STAMP}'}, 'sam')
+    st, a = call('GET', '/api/admin/audit?action=mcp.sampling&limit=20', cookie=ADMIN)
+    refused = [e for e in (a.get('entries', []) if isinstance(a, dict) else []) if e['ts'] >= t0 and e.get('outcome') == 'denied']
+    return not r['error'] and bool(refused) and has(r['out'], r'CHG-2026-0412|CHG-2026-0471'), f'refused rows={len(refused)} ' + (r['error'] or '') + r['out'][:60]
+
 CHECKS = [
     ('runbook', 'essentials', 2, 'helpdesk answers Priya from the IT runbooks', c_runbook),
     ('handoff-refused', 'essentials', 2, 'a contractor\'s pay question is not handed to the people partner', c_handoff_refused),
@@ -324,6 +394,7 @@ CHECKS = [
     ('chat-refused', 'essentials', 21, 'Chat refuses a contractor\'s holiday question by name and offers to ask', c_chat_refused),
     ('chat-works', 'essentials', 21, 'Chat hands an HR partner\'s holiday question to the people partner', c_chat_works),
     ('chat-request', 'essentials', 21, 'a yes in Chat files an access request the admins see', c_chat_request),
+    ('schedule-run', 'essentials', 12, 'Sam\'s schedule runs the helpdesk as Sam and writes the VPN digest from the runbook', c_schedule_run),
     ('counsel', 'essentials', 8, 'counsel answers the admin on a restricted matter', c_counsel),
     ('finance', 'essentials', 6, 'the finance analyst answers a finance analyst', c_finance),
     ('answer-grade', 'essentials', 22, 'a finance answer is labelled documents, its figures found in sources, graded high or medium', c_answer_grade),
@@ -333,11 +404,16 @@ CHECKS = [
     ('owner-grant', 'essentials', 21, 'a contractor\'s request reaches the agent\'s owner, whose grant opens the agent', c_owner_grant),
     ('space-answer', 'essentials', 37, 'Chat in a person\'s own confidential space answers from its document, every figure found in it', c_space_answer),
     ('instructions', 'essentials', 38, 'a person\'s own instructions shape Chat\'s answer (German for Lena)', c_instructions),
+    ('space-shared', 'essentials', 40, 'a member of Sam\'s shared space is answered from its document; Priya, below its level, is refused it', c_space_shared),
     ('save-to-space', 'essentials', 39, 'a brief drafted on the canvas from the close package is saved to a space at confidential, set by the conversation', c_save_to_space),
     ('presenter-start', 'standard', 4, 'the presenter starts a scenario through its tool', c_presenter),
     ('playbook-asks', 'standard', 9, 'the writer asks for the playbook\'s missing date and files nothing', c_playbook_asks),
     ('playbook-signoff', 'standard', 9, 'filing the notice waits for an admin\'s approval, then files', c_playbook_signoff),
+    ('plan-first', 'standard', 41, 'the runbook editor plans with its write tools withheld, then writes the checklist once the plan is approved', c_plan_first),
+    ('subagents', 'standard', 42, 'the incident coordinator hands the question to the security lead and the helpdesk with task', c_subagents),
     ('skill-evals', 'standard', 23, 'the playbook\'s own evals pass on the host\'s model', c_skill_evals),
+    ('elicitation', 'full', 43, 'the change desk asks Sam on a card before it files; his answer files the change', c_elicitation),
+    ('sampling-off', 'full', 43, 'with sampling off the desk is refused a model and returns the log as it is', c_sampling_off),
     ('data-answer', 'full', 22, 'a data answer through the demo-data MCP server carries a label and a grade', c_data_answer),
 ]
 RANK = {'essentials': 0, 'standard': 1, 'full': 2}

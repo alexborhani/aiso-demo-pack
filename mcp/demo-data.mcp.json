@@ -86,6 +86,26 @@
         "intervalHours": 24,
         "classify": false
       }
+    },
+    "change-desk": {
+      "description": "Meridian's change desk (scenario 43): files plant change requests after the person confirms (MCP elicitation) and asks the host's model for change-log summaries (MCP sampling, off until an admin allows it). A Node script in the pack, no dependencies, nothing on the network.",
+      "command": "node",
+      "args": [
+        "server.mjs"
+      ],
+      "cwd": "bundles/aiso-demo-pack/change-desk",
+      "classification": {
+        "level": "internal"
+      },
+      "elicitation": {
+        "timeoutSeconds": 300
+      },
+      "sampling": {
+        "allow": false,
+        "maxTokens": 512
+      },
+      "timeout": 30000,
+      "callTimeout": 330000
     }
   }
 }

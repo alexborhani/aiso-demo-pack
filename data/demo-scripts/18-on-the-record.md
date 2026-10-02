@@ -30,6 +30,10 @@ security review or an auditor asks for, produced by the platform.*
    packs, the limits, the usage totals, the development projects and the audit rows. Open it and
    show the signature block.
 5. Admin → Estate → *Estate report*: nodes and active people, signed the same way.
+6. Mention, don't show: Admin → Settings → **Tracing** sends runs, model calls and tool calls as
+   OpenTelemetry spans to the organisation's own collector. It is off until an admin names one, and the
+   spans carry no prompts or answers unless *Capture content* is turned on, which is itself audited.
+   The demo Mac has no collector, so this was not run.
 
 **Land:** nothing here was assembled by hand for the meeting. The evidence a control framework asks
 for is a download, and it is tamper-evident.

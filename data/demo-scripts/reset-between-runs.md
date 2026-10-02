@@ -6,11 +6,13 @@ tags: []
 - Scenario 1: the classifier model stays set; later scenarios (5, 26) use it. While it is set, a
   document indexed or re-indexed waits for it (pending) before anyone below the top level sees it.
 - Scenario 4: set enforcement back to *Off* (Admin → Policy → Classification).
+- Scenario 7: a revoke approved in step 5 is recorded again; nothing to undo (the function changes nothing).
 - Scenario 5: the classified notes stay classified; to repeat, uninstall and reinstall the pack, or
   reindex `site-notes` after deleting its rows under Sources (classify each back to internal, then
   approve the lowerings).
 - Scenario 9: delete the filed notice from `scratchpad` (Sources) or leave it as a talking point.
-- Scenario 12: the CEO's ticket changes stay; add a fresh ticket next time.
+- Scenario 12: as Sam, delete *Weekly VPN digest* if a run stopped before step 5, and enable Sam if
+  step 3 left him disabled.
 - Scenario 13: Priya → Account → *Forget*.
 - Scenario 15: leave the entry; delete `board-analyst` if you prefer a clean agent list. After
   step 8, restart the host without `EGRESS_ALLOW_FRONTIER=false`.
@@ -18,7 +20,8 @@ tags: []
   `deepseek-flash` USD / day back to 1 (or, without a key, the pricing removed from `mlx-serve`).
   Leave the entry: the next run needs it.
 - Scenario 17: restore the runbook and reindex.
-- Scenario 19: reinstall the pack to bring Jordan back (Packs → uninstall → install).
+- Scenario 19: *Delete disabled accounts* back to *Never* (People → Users) if the scenario did not end
+  there; the legal hold cleared; reinstall the pack to bring Jordan back (Packs → uninstall → install).
 - Scenario 20: revoke the enrollment on the hub and stop the spoke process.
 - Scenario 21: Marcus → Account → *Access you granted* → *Revoke*, if the scenario did not end there.
 - Scenario 22: Answer checks → *Clarifying questions* back to Off; kept answers stay (Account →
@@ -42,6 +45,18 @@ tags: []
 - Scenario 32: Admin → Policy → Packs → switch the hook off.
 - Scenario 34: Lena and Marcus → Account → *Connected services* → **Disconnect**.
 - Scenario 35: uninstall the community pack; *Minimum tier to install* back to what it was.
+- Scenario 37: as Sam, Spaces → `Riverside rig trips` → *Delete* (its documents and conversations go with
+  it). Spaces are personal: only the person who made one can delete it, and uninstalling the pack
+  deletes the accounts and their spaces with them.
+- Scenario 38: Lena and Priya → Account → *Personal instructions* → *Delete* (or save an empty text).
+- Scenario 39: Lena → Spaces → `Board prep` → *Delete*, unless scenario 19 comes next (it deletes it
+  under the hold). Delete it while no hold is active, or it is only hidden until the hold is cleared.
+- Scenario 40: enforcement back to *Off*; Sam removes anyone still in the space's Share list (or deletes
+  the space, as for 37). Dana's and Priya's conversations in it go when it is deleted.
+- Scenario 41: delete `/tmp/meridian/halden-outage-checklist.md` on the host; the agent has no delete
+  tool. A plan left unapproved is dropped with its conversation.
+- Scenario 43: `mcp.json` → `change-desk` → `"sampling": { "allow": false, … }` if step 5 did not get
+  there. Filed change requests live only in the desk's memory and go when the server restarts.
 
-A full reset is Packs → uninstall → install: accounts, stores, policy and the organisation return to
-the starting state, with new passwords.
+A full reset is Packs → uninstall → install: accounts (with their spaces, instructions and schedules), stores and policy
+return to the starting state, with new passwords.

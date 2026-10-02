@@ -21,6 +21,8 @@ arrived.*
 3. Read the brief aloud: what happened, what was done, what is open.
 
 **Land:** this is how the platform composes specialists into a process with a deterministic spine.
-The agents are the same ones people chat with; the workflow is the management layer.
+The agents are the same ones people chat with; the workflow is the management layer. Scenario 42 puts
+the same two specialists under an agent that decides for itself whom to ask: show both when someone
+asks which to build.
 
 ---
