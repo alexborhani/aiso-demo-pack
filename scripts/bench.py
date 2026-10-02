@@ -267,7 +267,7 @@ def stream_full(path, body, who, timeout=900):
                 elif t == 'tool_start': res['tools'].append((e.get('tool'), e.get('input') or e.get('args')))
                 elif t == 'provenance': res['prov'] = e
                 elif t == 'plan': res['plan'] = e
-                elif t == 'error': res['error'] = e.get('error') or e.get('message')
+                elif t == 'error' or ('error' in e and not t): res['error'] = e.get('error') or e.get('message')
     except urllib.error.HTTPError as e:
         res['error'] = f'HTTP {e.code} {e.read().decode(errors="replace")[:120]}'
     return res
