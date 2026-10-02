@@ -10,9 +10,9 @@ same at every level, so a story told at Essentials reads the same at Full.
 
 | Level | Model it was measured on | What it adds | Scenarios |
 | --- | --- | --- | --- |
-| **Essentials** | Qwen 3.5 9B (4-bit) on MLX Serve, 32K context, on a 24 GB Mac | the nine Meridian agents with one to three tools each, the nine stores the scripts use, the labelled files, the files for a person's own space | 1–8, 12, 13, 14, 16, 18, 19, 21, 22 (part one), 25 (steps 1–6), 37–39; 35 (needs an unsigned pack repository, not built; not tested) |
-| **Standard** | DeepSeek V4.1 Flash through OpenRouter for the writer, canvas and helpdesk, standing in for a 27B-class local model | the presenter, the writer with its customer-notice playbook, canvas, the two workflows, the evals, the demo scripts | 0, 9–11, 15, 17, 23, 27; 34 (needs Snowflake or Databricks, not tested); 36 (needs a Microsoft 365 tenant, not tested) |
-| **Full** | Gemini 3.7 Flash through OpenRouter for the librarian, the data analyst and Claude Code, standing in for a 70B-class model or a frontier provider | the sample workshop agents, the sample stores, the demo-data and demo-sql MCP servers and the column catalog, the firmware docs and the safety review skill | 20, 22 (part two), 24, 26, 28–30, 31–33 (with Claude Code, continuing from 24; 32 also needs a pack with a pre-send hook, not tested), and the builder workshop |
+| **Essentials** | Qwen 3.5 9B (4-bit) on MLX Serve, 32K context, on a 24 GB Mac | the nine Meridian agents with one to three tools each, the nine stores the scripts use, the labelled files, the files for a person's own space | 1–8, 12, 13, 14, 16, 18, 19, 21, 22 (part one), 25 (steps 1–6), 37–40; 35 (needs an unsigned pack repository, not built; not tested) |
+| **Standard** | DeepSeek V4.1 Flash through OpenRouter for the writer, canvas and helpdesk, standing in for a 27B-class local model | the presenter, the writer with its customer-notice playbook, canvas, the two workflows, the evals, the demo scripts, the runbook editor (plan mode) and the incident coordinator (sub-agents) | 0, 9–11, 15, 17, 23, 27, 41, 42; 34 (needs Snowflake or Databricks, not tested); 36 (needs a Microsoft 365 tenant, not tested) |
+| **Full** | Gemini 3.7 Flash through OpenRouter for the librarian, the data analyst and Claude Code, standing in for a 70B-class model or a frontier provider | the sample workshop agents, the sample stores, the demo-data and demo-sql MCP servers and the column catalog, the change desk MCP server and its clerk, the firmware docs and the safety review skill | 20, 22 (part two), 24, 26, 28–30, 43, 31–33 (with Claude Code, continuing from 24; 32 also needs a pack with a pre-send hook, not tested), and the builder workshop |
 
 **Measured on 2026-09-29/30.** Essentials: every scenario in the row ran end to end three times
 in a row on the 9B with every step passing, and `scripts/bench.py --level essentials` passed all 18
@@ -34,6 +34,16 @@ scenarios were not re-run for 1.14.0. Spaces at Standard and Full: measured: pen
 row on the 9B with every step passing (one install, the schedule deleted at the end of each pass), and
 the new bench check `schedule-run` passed 10 of 10. Nothing else was re-run for 1.15.0: the release
 removes the organisation and its two CEO agents and adds no other agent, store or step.
+
+**1.16.0 (2026-10-02): measured: pending.** This release adds scenarios for the harness work in AI
+Stackops (main 222c921): 7's step 5 (an approval card that outlives a restart), 40 (a shared space),
+41 (plan mode, a to-do list, sandbox files and a rewind), 42 (sub-agents) and 43 (an MCP server that
+asks the person, and asks the host's model). None of them, and none of the earlier scenarios, has been
+run on the reference models for this release. Every result above was measured before the answer
+checks moved into turn hooks, before context was counted in tokens and before conversations moved into
+the database; they describe the product as it was on those dates. The harness scripts and bench checks
+for the new scenarios exist (`space-shared`, `plan-first`, `subagents`, `elicitation`,
+`sampling-off`); their results on the Essentials, Standard and Full models are still to come.
 
 The boundaries come from measurement, not taste: on a 9B a single tool with ten actions was
 already unreliable, so nothing at Essentials has more than three one-action tools, and the

@@ -57,14 +57,8 @@ memory: true
 #    pollInterval: 30
 #    folder: INBOX
 
-#triggers:
-#  - type: cron
-#    schedule: "0 16 * * 1-5"
-#    input:
-#      query: |
-#        Run your daily tech market briefing.
-#        Search for today's market data, compile the summary, then send it via email
-#        to emails you find in your memory tool.
+# A daily run is a schedule now (Activity → Schedules, as the person it runs as; scenario 12): cron
+# triggers in agent files are retired.
 
 output:
   format: text

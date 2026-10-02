@@ -9,7 +9,8 @@ key, because the refusal comes before anything is dialled. Measured on Qwen 3.5 
 
 
 *A person keeps their own documents in one place and chats with them. The platform decides which models
-may read them, how much the space may hold, and that nobody else sees any of it.*
+may read them and how much the space may hold. Nobody else sees any of it unless its owner shares it
+(scenario 40).*
 
 **You are** Sam in one window, Dana in the other. Sam uploads three files from the pack's `space-files`
 folder (`<workspace>/bundles/aiso-demo-pack/space-files/`): a Word file carrying the Purview label
@@ -38,10 +39,13 @@ folder (`<workspace>/bundles/aiso-demo-pack/space-files/`): a Word file carrying
    never a name or a word of the space.
 6. As Dana, **Spaces** lists only her own. Admin → Data → **Spaces**: how many spaces, people,
    documents and megabytes, nothing more. Admin → Audit, `space.upload`: ids, levels and sizes, and the
-   refused upload with its reason. Say: the one route by which an admin reaches a space is the
-   subject-access export of the whole account (scenario 19), and that export is on the record.
+   refused upload with its reason. Say: an admin reaches a space only if its owner shares it with them
+   (scenario 40), or through the subject-access export of the whole account (scenario 19), and that
+   export is on the record.
 
 **Land:** people get a private place to work with their own documents, and the organisation still
-decides which models read them, how much goes in, and that none of it reaches anyone else.
+decides which models read them and how much goes in. Sharing is the owner's choice, made by name: it is
+on by default (Admin → Data → **Spaces**: *Allow sharing spaces*, up to 25 people per space), and
+while classification is enforced a person not cleared for the space's level cannot open it.
 
 ---

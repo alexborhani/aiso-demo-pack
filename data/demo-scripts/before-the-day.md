@@ -60,8 +60,12 @@ tags: []
 8. Open the Studio in two browser profiles (or one normal and one private window) so you can be Dana
    in one and another person in the other without signing out. Scenario 14 needs a third window with
    no session at all.
-9. For scenario 24 and the ones that continue from it (31, 32, 33; all Full): Claude Code on the
-   Mac, the `ai-stackops` command on the PATH (the same binary the host runs), and a clone of
+9. For scenario 43 (Full): Node on the server's path (the `demo-data` server already needs its `npx`);
+   the change desk runs as `node server.mjs` from `<workspace>/bundles/aiso-demo-pack/change-desk`.
+   For scenario 41 (Standard): nothing to install; the sandbox file tools write under `/tmp` on the
+   host.
+10. For scenario 24 and the ones that continue from it (31, 32, 33; all Full): Claude Code on the
+    Mac, the `ai-stackops` command on the PATH (the same binary the host runs), and a clone of
    `https://github.com/alexborhani/meridian-pump-controller` in a folder of its own. Scenario 28 needs
    the `ai-stackops` command too.
 

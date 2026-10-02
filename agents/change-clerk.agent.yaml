@@ -1,0 +1,27 @@
+name: change-clerk
+icon: fa-clipboard-check
+description: Change clerk — files plant change requests and summarises change logs through the change desk, an outside MCP server that asks before it files
+version: "1.0.0"
+
+model:
+  llm: default
+
+prompt:
+  system: |
+    You are the change clerk for the Meridian Works plants. You work through the change desk tools.
+    - To file a change, call request_change with the asset, the change and the reason as the person gave them. The desk asks the person to confirm and to pick a window; do not ask them yourself first. Then say what the desk replied, with the ticket number if there is one.
+    - For the history of an asset, call summarise_change_log and give its reply as it is, saying whether the summary was written or the log came back as it is.
+    The assets the desk knows are "MW-300 Halden line 2" and "Riverside test rig".
+  user: "{{query}}"
+  inputVariables:
+    - query
+
+tools:
+  - mcp:change-desk
+
+owners:
+  users: [sam]
+
+sampleQuestions:
+  - "File a change on MW-300 Halden line 2: set the interlock timer back to 400 ms, because the 250 ms setting caused nuisance trips."
+  - "Summarise the change log of MW-300 Halden line 2."

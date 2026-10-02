@@ -6,6 +6,7 @@ tags: []
 - Scenario 1: the classifier model stays set; later scenarios (5, 26) use it. While it is set, a
   document indexed or re-indexed waits for it (pending) before anyone below the top level sees it.
 - Scenario 4: set enforcement back to *Off* (Admin → Policy → Classification).
+- Scenario 7: a revoke approved in step 5 is recorded again; nothing to undo (the function changes nothing).
 - Scenario 5: the classified notes stay classified; to repeat, uninstall and reinstall the pack, or
   reindex `site-notes` after deleting its rows under Sources (classify each back to internal, then
   approve the lowerings).
@@ -50,6 +51,12 @@ tags: []
 - Scenario 38: Lena and Priya → Account → *Personal instructions* → *Delete* (or save an empty text).
 - Scenario 39: Lena → Spaces → `Board prep` → *Delete*, unless scenario 19 comes next (it deletes it
   under the hold). Delete it while no hold is active, or it is only hidden until the hold is cleared.
+- Scenario 40: enforcement back to *Off*; Sam removes anyone still in the space's Share list (or deletes
+  the space, as for 37). Dana's and Priya's conversations in it go when it is deleted.
+- Scenario 41: delete `/tmp/meridian/halden-outage-checklist.md` on the host; the agent has no delete
+  tool. A plan left unapproved is dropped with its conversation.
+- Scenario 43: `mcp.json` → `change-desk` → `"sampling": { "allow": false, … }` if step 5 did not get
+  there. Filed change requests live only in the desk's memory and go when the server restarts.
 
 A full reset is Packs → uninstall → install: accounts (with their spaces, instructions and schedules), stores and policy
 return to the starting state, with new passwords.

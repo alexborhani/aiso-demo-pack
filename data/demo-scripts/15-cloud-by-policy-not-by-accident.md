@@ -28,6 +28,12 @@ default.* Stronger with a cloud key on the host (Anthropic, or OpenRouter — `p
    budget and pricing as for any cloud entry. Say: the model runs in the organisation's own tenant
    under its own agreement; with managed identity there is no key to leak. The steps that follow
    read the same with the Azure entry.
+
+   *Also possible, not tested here* (no account on the demo Mac): an entry on **Amazon Bedrock**
+   (`provider: bedrock`, a `region`; a Bedrock API key or the host's AWS credentials), on **Google
+   Vertex AI** (`provider: vertex`, `project` and `region`; a service-account key held in the secret
+   store), or on OpenAI's **Responses API** (`api: responses` on an OpenAI or Azure entry). Each takes
+   the same access, ceiling, budget and pricing as the entry above.
 2. Agents → *New agent* `board-analyst`: model `cloud`, tool `knowledge:handbook`, prompt "You are a
    concise business analyst." Save.
 3. As Jordan, `board-analyst`: **"Summarise our values in one line."** Refused before anything is

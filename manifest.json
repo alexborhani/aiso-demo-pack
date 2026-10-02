@@ -1,7 +1,7 @@
 {
   "id": "aiso-demo-pack",
   "name": "AI Stackops demo pack",
-  "version": "1.15.0",
+  "version": "1.16.0",
   "publisher": "AI Stack Ops",
   "tier": "certified",
   "description": "Meridian Works, a fictional company, for evaluating the whole platform as different people: six accounts with different tiers, roles and clearances, a classification policy, knowledge stores at every level, agents scoped to them, an all-hands store with notices at every level for the classification demo (enforcement starts off: switch to monitor, then enforce), an unlabelled site-notes store for the classifier, a presenter agent that runs the scripts aloud in a chosen or lent voice, routing objectives, a tool that needs approval, evals — plus the former sample agents, stores, functions, skills and workflows. Nothing in it is real.",
@@ -34,7 +34,10 @@
       "agents/support.agent.yaml",
       "agents/presenter.agent.yaml",
       "agents/data-analyst.agent.yaml",
-      "agents/board-brief.agent.yaml"
+      "agents/board-brief.agent.yaml",
+      "agents/runbook-editor.agent.yaml",
+      "agents/incident-coordinator.agent.yaml",
+      "agents/change-clerk.agent.yaml"
     ],
     "knowledge": [
       "knowledge/all-hands.knowledge.yaml",
@@ -79,7 +82,8 @@
       "data/toolbox",
       "data/column-catalog",
       "data/firmware-docs",
-      "data/space-files"
+      "data/space-files",
+      "mcp/change-desk"
     ],
     "workflows": [
       "workflows/customer-notice.workflow.yaml",
@@ -264,7 +268,7 @@
     {
       "id": "essentials",
       "label": "Essentials",
-      "description": "The nine Meridian Works agents with one to three tools each, the ten stores the scripts use (one of Word, Excel, PowerPoint and PDF files carrying Purview labels), the files for a person's own space, the people, roles and policy. Measured on Qwen 3.5 9B. Scenarios 1–8, 12, 13, 14, 16, 18, 19, 21, 22, 25, 37–39.",
+      "description": "The nine Meridian Works agents with one to three tools each, the ten stores the scripts use (one of Word, Excel, PowerPoint and PDF files carrying Purview labels), the files for a person's own space, the people, roles and policy. Measured on Qwen 3.5 9B. Scenarios 1–8, 12, 13, 14, 16, 18, 19, 21, 22, 25, 37–40 (7's restart step and 40: measured: pending).",
       "requires": {
         "modelClass": "small",
         "contextTokens": 16384
@@ -273,7 +277,7 @@
     {
       "id": "standard",
       "label": "Standard",
-      "description": "Adds the presenter, the writer with its customer-notice playbook, canvas, the two workflows, the evals and the demo scripts. Measured on Claude Haiku 4.5 standing in for a 27B-class model. Scenarios 0, 9–11, 15, 17, 23.",
+      "description": "Adds the presenter, the writer with its customer-notice playbook, canvas, the two workflows, the evals, the demo scripts, the runbook editor (plan mode, a to-do list, sandbox files) and the incident coordinator (sub-agents). Measured on DeepSeek V4.1 Flash standing in for a 27B-class model. Scenarios 0, 9–11, 15, 17, 23, 41, 42 (41 and 42: measured: pending).",
       "requires": {
         "modelClass": "standard",
         "contextTokens": 32768
@@ -282,7 +286,9 @@
         "agents": [
           "agents/presenter.agent.yaml",
           "agents/writer.agent.yaml",
-          "agents/canvas.agent.yaml"
+          "agents/canvas.agent.yaml",
+          "agents/runbook-editor.agent.yaml",
+          "agents/incident-coordinator.agent.yaml"
         ],
         "knowledge": [
           "knowledge/demo-scripts.knowledge.yaml",
@@ -310,7 +316,7 @@
     {
       "id": "full",
       "label": "Full",
-      "description": "Adds the sample workshop agents and stores, the demo-data MCP server (MCP Toolbox over the music-store and pet-store databases) with its column-tag catalog server, the demo-sql server (one free-SQL tool over a copy of the music store) and the data-analyst agent that uses it, the firmware docs and the safety change review skill for coding agents. Measured on Claude Haiku 4.5. Scenarios 20, 22 (part two), 24, 26, 29, 30 and the builder workshop.",
+      "description": "Adds the sample workshop agents and stores, the demo-data MCP server (MCP Toolbox over the music-store and pet-store databases) with its column-tag catalog server, the demo-sql server (one free-SQL tool over a copy of the music store) and the data-analyst agent that uses it, the change desk (an MCP server that asks the person before it files, and asks the host's model for summaries) with the change clerk, the firmware docs and the safety change review skill for coding agents. Measured on Gemini 3.7 Flash. Scenarios 20, 22 (part two), 24, 26, 29, 30, 43 (measured: pending) and the builder workshop.",
       "requires": {
         "modelClass": "large",
         "contextTokens": 32768
@@ -331,7 +337,8 @@
           "agents/voice-clone.agent.yaml",
           "agents/web-engineer.agent.yaml",
           "agents/web-pilot.agent.yaml",
-          "agents/data-analyst.agent.yaml"
+          "agents/data-analyst.agent.yaml",
+          "agents/change-clerk.agent.yaml"
         ],
         "knowledge": [
           "knowledge/music-store.knowledge.yaml",
@@ -350,7 +357,8 @@
           "data/transcripts",
           "data/toolbox",
           "data/column-catalog",
-          "data/firmware-docs"
+          "data/firmware-docs",
+          "mcp/change-desk"
         ],
         "workflows": [
           "workflows/example.workflow.yaml",
@@ -373,11 +381,11 @@
       }
     }
   ],
-  "integrity": "sha256-63de789d398c179c04dc3221710430da83a2b9d40b159d95b9d5b842bd886c06",
+  "integrity": "sha256-c9b89b53f2a7b74ece63f6e4fe427e3f14a0d3aeb772f70d51fff7848fc4f715",
   "signature": {
     "alg": "ed25519",
     "keyId": "a4470c96bdcc103c",
     "publicKey": "q2F/I5FwWGRdIG/Jhwgl6eGo1WMy0DKS0U05m0ROSIA=",
-    "signature": "07YrgToT45AGf3kvLiM9JpDl1DBniR5+KoAGCrLVIptTU3QcmIbAFlPKHAYtfOKwYhHjsjIU/jKxzYAQYHuZBw=="
+    "signature": "0xD/+pSUBn02fJWmeKkjxnkgSo3+2QLsg/euuhw1+QNs6+cNuobSDlh5IMSS/77dxC/epD+sOAN+9qj5YaOUAw=="
   }
 }
